@@ -37,8 +37,8 @@
         <h2>Upload language OTA</h2>
         <div style="text-align: center; margin-top: 1em;">
           <select id="languageFileSelect">
-            <option value="firmware/nvs-lang-pl.bin">nvs-lang-pl.bin</option>
-            <option value="firmware/nvs-lang-en.bin">nvs-lang-en.bin</option>
+            <option value="lang/nvs-lang-pl.bin">Polish</option>
+            <option value="lang/nvs-lang-en.bin">English</option>
           </select></div>
         <div style="text-align: center; margin-top: 1em;"><button id="uploadLanguageBtn" class="uploadBtn">Connect & Upload</button></div>
       </div>
@@ -46,7 +46,7 @@
         <h2>Upload intentions OTA</h2>
         <div style="text-align: center; margin-top: 1em;">
           <select id="intentionsFileSelect">
-            <option value="firmware/nvs-intentions-pl-2025.bin">nvs-intentions-pl-2025.bin</option>
+            <option value="intentions/nvs-intentions-pmkdus-2025.bin">Żywy Różaniec 2025 (PMK Düsseldorf)</option>
             <!--<option value="firmware/nvs-intentions-pl-2024.bin">nvs-intentions-pl-2024.bin</option>-->
           </select></div>
         <div style="text-align: center; margin-top: 1em;"><button id="uploadIntentionsBtn" class="uploadBtn">Connect & Upload</button></div>
@@ -116,7 +116,7 @@
       function updateProgress(sent,total){progressBar.max=total;progressBar.value=sent;progressText.textContent=Math.round(sent/total*100)+'%';progressChunks.textContent=`(${sent}/${total} Bytes)`;}
 
       async function startFirmwareOTA(){
-        const resp = await fetch('firmware/firmware.bin'); if(!resp.ok)return;
+        const resp = await fetch('firmware/app.bin'); if(!resp.ok)return;
         const data = new Uint8Array(await resp.arrayBuffer());
         await connectBLE(SERVICE_UUID,FIRMWARE_CHAR_UUID);
         // send 4-byte size header
