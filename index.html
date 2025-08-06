@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>SmartRosary Web Installer</title>
+    <meta name="description" content="Easily install SmartRosary firmware on the web." />
+    <meta name="viewport" content="width=device-width" />
+    <meta name="color-scheme" content="dark light" />
+    <style>
+      body { font-family: -apple-system, system-ui, BlinkMacSystemFont, "Segoe UI", Roboto, Ubuntu, sans-serif; padding: 0; margin: 0; line-height: 1.4; }
+      .content { max-width: 600px; margin: 0 auto; padding: 12px; }
+      h1 { margin-top: 1em; text-align: center; }
+      h2 { margin-top: 1em; text-align: center; }
+      a { color: #03a9f4; }
+      .uploadBox { border-top: 1px solid #ccc; padding-bottom: 20px; }
+      .uploadUSBBox { padding-bottom: 20px; }
+      .uploadBtn { cursor: pointer; font-size: 14px; font-weight: 500; padding: 10px 24px; color: #fff; background-color: #03a9f4; border: none; border-radius: 9999px; }
+      .footer{text-align: center;}
+      #ProgressContainer { display: none; }
+      #log { white-space: pre-wrap; background: #000; color: #fff; padding: 1em; height: 100px; overflow-y: scroll; margin-top:20px; display:none; }
+    </style>
+    <script type="module" src="https://unpkg.com/esp-web-tools@10.1.0/dist/web/install-button.js"></script>
+  </head>
+  <body>
+    <div class="content">
+      <h1>SmartRosary Web Installer</h1>
+      <div class="uploadBox">
+        <h2>Upload firmware v0.4 USB</h2>
+        <p align="center"><esp-web-install-button manifest="manifest.json"></esp-web-install-button></p>
+        <div class="footer">USB Installer powered by <a href="https://esphome.github.io/esp-web-tools/">ESP Web Tools</a>.</div>
+      </div>
+      <div class="uploadBox">
+        <h2>Upload firmware v0.4 OTA</h2>
+        <div style="text-align: center; margin-top: 1em;"><button id="uploadFirmwareBtn" class="uploadBtn">Connect & Upload</button></div>
+      </div>
+      <div class="uploadBox">
+        <h2>Upload language OTA</h2>
+        <div style="text-align: center; margin-top: 1em;">
+          <select id="languageFileSelect">
+            <option value="firmware/nvs-lang-pl.bin">nvs-lang-pl.bin</option>
+            <option value="firmware/nvs-lang-de.bin">nvs-lang-en.bin</option>
+          </select></div>
+        <div style="text-align: center; margin-top: 1em;"><button id="uploadLanguageBtn" class="uploadBtn">Connect & Upload</button></div>
+      </div>
+      <div class="uploadBox">
+        <h2>Upload intentions OTA</h2>
+        <div style="text-align: center; margin-top: 1em;">
+          <select id="intentionsFileSelect">
+            <option value="firmware/nvs-intentions-pl-2025.bin">nvs-intentions-pl-2025.bin</option>
+            <!--<option value="firmware/nvs-intentions-pl-2024.bin">nvs-intentions-pl-2024.bin</option>-->
+          </select></div>
+        <div style="text-align: center; margin-top: 1em;"><button id="uploadIntentionsBtn" class="uploadBtn">Connect & Upload</button></div>
+      </div>
+      <div id="ProgressContainer"><progress id="progressBar" value="0" max="0" style="width:100%; margin:1em 0; height: 30px;"></progress><div style="display: flex; justify-content: center; align-items: center;"><span id="progressText">0%</span><span style="margin-left: 5px;" id="progressChunks">(0/0 Bytes)</span></div></div>
+      <div id="log"></div>
+    </div>
+<script src="https://lib.arvancloud.ir/nosleep/0.9.0/NoSleep.min.js"></script>
+<script>
+  // 1) Screen Wake Lock API approach (modern browsers)
+  let wakeLock = null;
+  async function enableWakeLock() {
+    try {
+      if ('wakeLock' in navigator) {
+        wakeLock = await navigator.wakeLock.request('screen');
+        wakeLock.addEventListener('release', () => {
+          console.log('Screen Wake Lock was released');
+        });
+        console.log('Screen Wake Lock is active');
+      }
+    } catch (err) {
+      console.error('WakeLock error:', err.name, err.message);
+    }
+  }
+
+  // 2) NoSleep.js fallback for older Android WebViews / browsers
+  const noSleep = new NoSleep();
+  function enableNoSleep() {
+    noSleep.enable();
+    console.log('NoSleep enabled');
+  }
+
+  // Master switch: call this in a user gesture (e.g. button click)
+  function preventStandby() {
+    enableWakeLock();
+    enableNoSleep();
+  }
+
+  // Optional: re-acquire on page visibility change
+  document.addEventListener('visibilitychange', () => {
+    if (wakeLock !== null && document.visibilityState === 'visible') {
+      enableWakeLock();
+    }
+  });
+</script>
+<script>
+      const SERVICE_UUID       = '12345678-1234-5678-1234-56789abcdef0';
+      const FIRMWARE_CHAR_UUID = '12345678-1234-5678-1234-56789abcdef1';
+      const INTENTS_CHAR_UUID  = '12345678-1234-5678-1234-56789abcde10';
+      const LANG_CHAR_UUID     = '12345678-1234-5678-1234-56789abcde20';
+      const STATUS_CHAR_UUID   = '12345678-1234-5678-1234-56789abcdef2';
+
+      let device, writeChar, statusChar;
+      let ready = true;
+      const progressBar    = document.getElementById('progressBar');
+      const progressText   = document.getElementById('progressText');
+      const progressChunks = document.getElementById('progressChunks');
+
+      document.getElementById('uploadFirmwareBtn').addEventListener('click', () => {preventStandby(); startFirmwareOTA();});
+      document.getElementById('uploadIntentionsBtn').addEventListener('click', () => {preventStandby(); startIntentionsOTA();});
+      document.getElementById('uploadLanguageBtn').addEventListener('click', () => {preventStandby(); startLanguageOTA();});
+
+      function showProgressContainer() { document.getElementById('ProgressContainer').style.display = 'block'; }
+      function hideProgressContainer() { document.getElementById('ProgressContainer').style.display = 'none'; }
+      function crc32(buf) { let crc=0xFFFFFFFF; for(let b of buf){crc^=b; for(let i=0;i<8;i++) crc=(crc>>>1)^(0xEDB88320&-(crc&1));} return (crc^0xFFFFFFFF)>>>0; }
+      async function waitReady(){while(!ready) await new Promise(r=>setTimeout(r,50)); ready=false;}
+      function updateProgress(sent,total){progressBar.max=total;progressBar.value=sent;progressText.textContent=Math.round(sent/total*100)+'%';progressChunks.textContent=`(${sent}/${total} Bytes)`;}
+
+      async function startFirmwareOTA(){
+        const resp = await fetch('firmware/firmware.bin'); if(!resp.ok)return;
+        const data = new Uint8Array(await resp.arrayBuffer());
+        await connectBLE(SERVICE_UUID,FIRMWARE_CHAR_UUID);
+        showProgressContainer(); updateProgress(0,data.length);
+        // send 4-byte size header
+        const sizeBuf = new ArrayBuffer(4);
+        new DataView(sizeBuf).setUint32(0,data.length,true);
+        await writeChar.writeValue(sizeBuf);
+        await waitReady();
+        // send chunks
+        let offset=0, chunkSize=512-4;
+        while(offset<data.length){
+          const len=Math.min(chunkSize,data.length-offset);
+          const chunk=data.slice(offset,offset+len);
+          const crc=crc32(chunk);
+          const packet=new Uint8Array(len+4);
+          packet.set(chunk);
+          new DataView(packet.buffer).setUint32(len,crc,true);
+          await writeChar.writeValue(packet);
+          await waitReady();
+          offset+=len; updateProgress(offset,data.length);
+        }
+        hideProgressContainer(); console.log('Firmware upload complete.');
+      }
+
+      async function startIntentionsOTA(){
+        const path=document.getElementById('intentionsFileSelect').value;
+        const resp=await fetch(path); if(!resp.ok)return;
+        const data=new Uint8Array(await resp.arrayBuffer());
+        const filename = path.split('/').pop();
+        await sendNVS(data,SERVICE_UUID,INTENTS_CHAR_UUID,filename);
+      }
+
+      async function startLanguageOTA(){
+        const path=document.getElementById('languageFileSelect').value;
+        const resp=await fetch(path); if(!resp.ok)return;
+        const data=new Uint8Array(await resp.arrayBuffer());
+        const filename = path.split('/').pop();
+        await sendNVS(data,SERVICE_UUID,LANG_CHAR_UUID,filename);
+      }
+
+      async function sendNVS(data,svcUuid,charUuid,partition){
+        showProgressContainer(); updateProgress(0,data.length);
+        await connectBLE(svcUuid,charUuid);
+        // send filename header
+        const name=new TextEncoder().encode(partition);
+        await writeChar.writeValue(name);
+        await waitReady();
+        let offset=0, chunkSize=320;
+        while(offset<data.length){
+          const len=Math.min(chunkSize,data.length-offset);
+          const chunk=data.slice(offset,offset+len);
+          const crc=crc32(chunk);
+          const packet=new Uint8Array(len+4);
+          packet.set(chunk);
+          new DataView(packet.buffer).setUint32(len,crc,true);
+          await writeChar.writeValue(packet);
+          await waitReady();
+          offset+=len; updateProgress(offset,data.length);
+        }
+        hideProgressContainer(); console.log(`${partition} upload complete.`);
+      }
+
+      async function connectBLE(svcUuid,charUuid){
+        device=await navigator.bluetooth.requestDevice({filters:[{namePrefix:'rosary'}],optionalServices:[svcUuid]});
+        const srv=await device.gatt.connect();
+        const svc=await srv.getPrimaryService(svcUuid);
+        writeChar=await svc.getCharacteristic(charUuid);
+        statusChar=await svc.getCharacteristic(STATUS_CHAR_UUID);
+        statusChar.addEventListener('characteristicvaluechanged',()=>ready=true);
+        await statusChar.startNotifications();
+      }
+    </script>
+  </body>
+</html>
