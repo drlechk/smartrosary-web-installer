@@ -119,12 +119,12 @@
         const resp = await fetch('firmware/firmware.bin'); if(!resp.ok)return;
         const data = new Uint8Array(await resp.arrayBuffer());
         await connectBLE(SERVICE_UUID,FIRMWARE_CHAR_UUID);
-        showProgressContainer(); updateProgress(0,data.length);
         // send 4-byte size header
         const sizeBuf = new ArrayBuffer(4);
         new DataView(sizeBuf).setUint32(0,data.length,true);
         await writeChar.writeValue(sizeBuf);
         await waitReady();
+        showProgressContainer(); updateProgress(0,data.length);
         // send chunks
         let offset=0, chunkSize=512-4;
         while(offset<data.length){
@@ -158,12 +158,12 @@
       }
 
       async function sendNVS(data,svcUuid,charUuid,partition){
-        showProgressContainer(); updateProgress(0,data.length);
         await connectBLE(svcUuid,charUuid);
         // send filename header
         const name=new TextEncoder().encode(partition);
         await writeChar.writeValue(name);
         await waitReady();
+        showProgressContainer(); updateProgress(0,data.length);
         let offset=0, chunkSize=320;
         while(offset<data.length){
           const len=Math.min(chunkSize,data.length-offset);
