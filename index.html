@@ -136,11 +136,11 @@
 
         // these are your on‐disk locations under the project root:
         const firmwareParts = [
-          { path: "firmware/bootloader.bin", offset: 0x000000 },
-          { path: "firmware/partitions.bin", offset: 0x008000 },
-          { path: "firmware/boot_app0.bin",  offset: 0x00E000 },
-          { path: "firmware/firmware.bin",   offset: 0x010000 },
-          { path: "spiffs/wallpaper.bin",    offset: 0x2DF000 }
+          { path: "smartrosary-web-installer/firmware/bootloader.bin", offset: 0x000000 },
+          { path: "smartrosary-web-installer/firmware/partitions.bin", offset: 0x008000 },
+          { path: "smartrosary-web-installer/firmware/boot_app0.bin",  offset: 0x00E000 },
+          { path: "smartrosary-web-installer/firmware/firmware.bin",   offset: 0x010000 },
+          { path: "smartrosary-web-installer/spiffs/wallpaper.bin",    offset: 0x2DF000 }
         ];
 
         const languages = {
@@ -152,7 +152,7 @@
           none: null,
           rosary: {
             name: "Żywy Różaniec 2025",
-            path: "intentions/nvs-intentions-pmkdus-2025.bin",
+            path: "smartrosary-web-installer/intentions/nvs-intentions-pmkdus-2025.bin",
             offset: 0x2D0000
           }
         };
