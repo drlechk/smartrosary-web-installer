@@ -45,6 +45,7 @@
           <select id="language">
             <option value="pl">Polski</option>
             <option value="en">English</option>
+            <option value="de">Deutsch</option>
           </select>
         </td>
       </tr>
@@ -70,8 +71,9 @@
         <h2>Upload language via OTA</h2>
         <div style="text-align: center; margin-top: 1em;">
           <select id="languageFileSelect">
-            <option value="lang/nvs-lang-pl.bin">Polish</option>
+            <option value="lang/nvs-lang-pl.bin">Polski</option>
             <option value="lang/nvs-lang-en.bin">English</option>
+            <option value="lang/nvs-lang-cd.bin">Deutsch</option>
           </select></div>
         <div style="text-align: center; margin-top: 1em;"><button id="uploadLanguageBtn" class="uploadBtn">Connect & Upload</button></div>
       </div>
@@ -144,8 +146,9 @@
         ];
 
         const languages = {
-          pl: { name: "Polish", path: "smartrosary-web-installer/lang/nvs-lang-pl.bin", offset: 0x2D5000 },
+          pl: { name: "Polski", path: "smartrosary-web-installer/lang/nvs-lang-pl.bin", offset: 0x2D5000 },
           en: { name: "English", path: "smartrosary-web-installer/lang/nvs-lang-en.bin", offset: 0x2D5000 }
+          de: { name: "Deutsch", path: "smartrosary-web-installer/lang/nvs-lang-de.bin", offset: 0x2D5000 }
         };
 
         const intentions = {
