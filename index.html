@@ -1,219 +1,333 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
   <head>
     <meta charset="utf-8" />
-    <title>SmartRosary Web Installer</title>
+    <title>SmartRosary Installer</title>
     <meta name="description" content="Easily install SmartRosary firmware on the web." />
     <meta name="viewport" content="width=device-width" />
     <meta name="color-scheme" content="dark light" />
     <style>
       body { font-family: -apple-system, system-ui, BlinkMacSystemFont, "Segoe UI", Roboto, Ubuntu, sans-serif; padding: 0; margin: 0; line-height: 1.4; }
       .content { max-width: 600px; margin: 0 auto; padding: 12px; }
-      h1 { margin-top: 1em; text-align: center; }
-      h2 { margin-top: 1em; text-align: center; }
+      h1 { margin-top: 0.6em; text-align: center; }
+      h2 { margin-top: 1.0em; text-align: center; }
       a { color: #03a9f4; }
       .uploadBox { border-top: 1px solid #ccc; padding-bottom: 20px; }
-      .uploadUSBBox { padding-bottom: 20px; }
       .uploadBtn { cursor: pointer; font-size: 14px; font-weight: 500; padding: 10px 24px; color: #fff; background-color: #03a9f4; border: none; border-radius: 9999px; }
       .footer{text-align: center;}
       .controls-container {display: flex; justify-content: center; margin-bottom: 1rem;}
       .controls-table {border-collapse: collapse;}
-      .controls-table td {border: none;padding: 0.3rem 0.5rem;
-      vertical-align: middle;
-    }
+      .controls-table td {border: none; padding: 0.3rem 0.5rem; vertical-align: middle;}
+      label { display: inline-block; width: 120px; }
+      .langRow { text-align:center; padding: 10px 0 0; }
+      .langRow select { font-size: 14px; padding: 6px 10px; }
 
-    /* Fixed label width for alignment */
-    label {
-      display: inline-block;
-      width: 100px;
-    }
-      #ProgressContainer { display: none; }
-      #log { white-space: pre-wrap; background: #000; color: #fff; padding: 1em; height: 100px; overflow-y: scroll; margin-top:20px; display:none; }
+      /* Movable progress container */
+      #ProgressContainer { display: none; padding: 12px 12px 16px; margin-top: 10px; margin-bottom: 8px; border-radius: 10px; background: #f1f5f9; border: 1px solid #cbd5e1; }
+      #progressTitle { font-size: 14px; font-weight: 600; margin-bottom: 6px; text-align:center; }
+      #progressRow { display:flex; flex-direction:column; align-items:center; gap:6px; }
+      #progressBar { width:100%; height: 30px; }
+      #progressText { font-weight: 600; }
+
+      /* Horizontal line under progress */
+      .sep { display:none; border:0; border-top:1px solid #cbd5e1; margin: 10px 0 16px; }
+
+      @media (prefers-color-scheme: dark) {
+        #ProgressContainer { background: #0f172a; border-color: #334155; }
+        #progressTitle { color: #cbd5e1; }
+        .sep { border-top-color: #334155; }
+      }
     </style>
     <script type="module" src="https://unpkg.com/esp-web-tools@10.1.0/dist/web/install-button.js"></script>
   </head>
   <body>
     <div class="content">
-      <h1>SmartRosary Web Installer</h1>
-      <div class="uploadBox">
-        <h2>Upload firmware v0.6 via USB</h2>
-  <div class="controls-container">
-    <table class="controls-table">
-      <tr>
-        <td><label for="language">Language:</label></td>
-        <td>
-          <select id="language">
-            <option value="pl">Polski</option>
-            <option value="en">English</option>
-            <option value="de">Deutsch</option>
-          </select>
-        </td>
-      </tr>
-      <tr>
-        <td><label for="intentions">Intentions:</label></td>
-        <td>
-          <select id="intentions">
-            <option value="none">None</option>
-            <option value="rosary">Żywy Różaniec 2025 (PMK Düsseldorf)</option>
-          </select>
-        </td>
-      </tr>
-    </table>
-  </div>
+
+      <!-- Language selector (UI only) -->
+      <div class="langRow">
+        <label for="uiLangSelect">🌐 <span id="uiLangLabel">Language</span>:</label>
+        <select id="uiLangSelect">
+          <option value="pl">Polski</option>
+          <option value="de">Deutsch</option>
+          <option value="en" selected>English</option>
+        </select>
+      </div>
+
+      <h1 id="title">SmartRosary Web Installer</h1>
+
+      <!-- USB -->
+      <div class="uploadBox" id="usbBox">
+        <h2 id="usbTitle">Upload firmware v0.6 via USB</h2>
+        <div class="controls-container">
+          <table class="controls-table">
+            <tr>
+              <td><label for="language" id="fwLangLabel">Language (firmware data):</label></td>
+              <td>
+                <select id="language">
+                  <option value="pl">Polski</option>
+                  <option value="en">English</option>
+                  <option value="de">Deutsch</option>
+                </select>
+              </td>
+            </tr>
+            <tr>
+              <td><label for="intentions" id="intentionsLabel">Intentions:</label></td>
+              <td>
+                <select id="intentions">
+                  <option value="none">None</option>
+                  <option value="rosary">Żywy Różaniec 2025 (PMK Düsseldorf)</option>
+                </select>
+              </td>
+            </tr>
+          </table>
+        </div>
         <p align="center"><esp-web-install-button></esp-web-install-button></p>
         <div class="footer">USB Installer powered by <a href="https://esphome.github.io/esp-web-tools/">ESP Web Tools</a>.</div>
       </div>
-      <div class="uploadBox">
-        <h2>Upload firmware v0.6 via OTA</h2>
-        <div style="text-align: center; margin-top: 1em;"><button id="uploadFirmwareBtn" class="uploadBtn">Connect & Upload</button></div>
+
+      <!-- OTA: Firmware -->
+      <div class="uploadBox" id="otaFwBox">
+        <h2 id="otaTitle">Upload firmware v0.6 via OTA</h2>
+        <div style="text-align: center; margin-top: 1em;">
+          <button id="uploadFirmwareBtn" class="uploadBtn">Connect & Upload</button>
+        </div>
       </div>
-      <div class="uploadBox">
-        <h2>Upload language via OTA</h2>
+
+      <!-- OTA: Language -->
+      <div class="uploadBox" id="otaLangBox">
+        <h2 id="langTitle">Upload language via OTA</h2>
         <div style="text-align: center; margin-top: 1em;">
           <select id="languageFileSelect">
             <option value="lang/nvs-lang-pl.bin">Polski</option>
             <option value="lang/nvs-lang-en.bin">English</option>
             <option value="lang/nvs-lang-de.bin">Deutsch</option>
-          </select></div>
-        <div style="text-align: center; margin-top: 1em;"><button id="uploadLanguageBtn" class="uploadBtn">Connect & Upload</button></div>
+          </select>
+        </div>
+        <div style="text-align: center; margin-top: 1em;">
+          <button id="uploadLanguageBtn" class="uploadBtn">Connect & Upload</button>
+        </div>
       </div>
-      <div class="uploadBox">
-        <h2>Upload intentions via OTA</h2>
+
+      <!-- OTA: Intentions -->
+      <div class="uploadBox" id="otaIntsBox">
+        <h2 id="intentsTitle">Upload intentions via OTA</h2>
         <div style="text-align: center; margin-top: 1em;">
           <select id="intentionsFileSelect">
             <option value="intentions/nvs-intentions-pmkdus-2025.bin">Żywy Różaniec 2025 (PMK Düsseldorf)</option>
-            <!--<option value="firmware/nvs-intentions-pl-2024.bin">nvs-intentions-pl-2024.bin</option>-->
-          </select></div>
-        <div style="text-align: center; margin-top: 1em;"><button id="uploadIntentionsBtn" class="uploadBtn">Connect & Upload</button></div>
+          </select>
+        </div>
+        <div style="text-align: center; margin-top: 1em;">
+          <button id="uploadIntentionsBtn" class="uploadBtn">Connect & Upload</button>
+        </div>
       </div>
-      <div id="ProgressContainer"><progress id="progressBar" value="0" max="0" style="width:100%; margin:1em 0; height: 30px;"></progress><div style="display: flex; justify-content: center; align-items: center;"><span id="progressText">0%</span><span style="margin-left: 5px;" id="progressChunks">(0/0 Bytes)</span></div></div>
-      <div id="log"></div>
+
+      <!-- Movable Progress (will be inserted under active box only AFTER connection) -->
+      <div id="ProgressContainer">
+        <div id="progressTitle">Uploading…</div>
+        <div id="progressRow">
+          <progress id="progressBar" value="0" max="0"></progress>
+          <div>
+            <span id="progressText">0%</span>
+            <span style="margin-left: 5px;" id="progressChunks">(0/0 Bytes)</span>
+          </div>
+        </div>
+      </div>
+      <hr id="ProgressHR" class="sep" />
+
+      <div id="log" style="display:none;"></div>
     </div>
-<script src="https://lib.arvancloud.ir/nosleep/0.9.0/NoSleep.min.js"></script>
-<script>
-  // 1) Screen Wake Lock API approach (modern browsers)
-  let wakeLock = null;
-  async function enableWakeLock() {
-    try {
-      if ('wakeLock' in navigator) {
-        wakeLock = await navigator.wakeLock.request('screen');
-        wakeLock.addEventListener('release', () => {
-          console.log('Screen Wake Lock was released');
-        });
-        console.log('Screen Wake Lock is active');
+
+    <!-- Wake lock helpers -->
+    <script src="https://lib.arvancloud.ir/nosleep/0.9.0/NoSleep.min.js"></script>
+    <script>
+      // ---------- 0) Firmware version (single source of truth) ----------
+      const FW_VERSION = "v0.6";  // <- change once here
+
+      // ---------- 1) UI i18n (hint removed) ----------
+      const i18n = {
+        pl: {
+          langLabel: "Język",
+          title: "SmartRosary Instalator",
+          usbTitle: `Wgraj firmware ${FW_VERSION} przez USB`,
+          otaTitle: `Wgraj firmware ${FW_VERSION} przez OTA`,
+          langTitle: "Wgraj język przez OTA",
+          intentsTitle: "Wgraj intencje przez OTA",
+          connectUpload: "Połącz i wgraj",
+          fwLangLabel: "Język (dane fw):",
+          intentionsLabel: "Intencje:"
+        },
+        de: {
+          langLabel: "Sprache",
+          title: "SmartRosary Installer",
+          usbTitle: `Firmware ${FW_VERSION} per USB hochladen`,
+          otaTitle: `Firmware ${FW_VERSION} per OTA hochladen`,
+          langTitle: "Sprache per OTA hochladen",
+          intentsTitle: "Intentionen per OTA hochladen",
+          connectUpload: "Verbinden & Hochladen",
+          fwLangLabel: "Sprache (FW-Daten):",
+          intentionsLabel: "Intentionen:"
+        },
+        en: {
+          langLabel: "Language",
+          title: "SmartRosary Installer",
+          usbTitle: `Upload firmware ${FW_VERSION} via USB`,
+          otaTitle: `Upload firmware ${FW_VERSION} via OTA`,
+          langTitle: "Upload language via OTA",
+          intentsTitle: "Upload intentions via OTA",
+          connectUpload: "Connect & Upload",
+          fwLangLabel: "Language (firmware data):",
+          intentionsLabel: "Intentions:"
+        }
+      };
+
+      function setLanguage(lang) {
+        const t = i18n[lang] || i18n.en;
+        document.getElementById("uiLangLabel").textContent = t.langLabel;
+        document.getElementById("title").textContent       = t.title;
+        document.getElementById("usbTitle").textContent    = t.usbTitle;
+        document.getElementById("otaTitle").textContent    = t.otaTitle;
+        document.getElementById("langTitle").textContent   = t.langTitle;
+        document.getElementById("intentsTitle").textContent= t.intentsTitle;
+        document.getElementById("fwLangLabel").textContent = t.fwLangLabel;
+        document.getElementById("intentionsLabel").textContent = t.intentionsLabel;
+        document.querySelectorAll(".uploadBtn").forEach(btn => btn.textContent = t.connectUpload);
       }
-    } catch (err) {
-      console.error('WakeLock error:', err.name, err.message);
-    }
-  }
 
-  // 2) NoSleep.js fallback for older Android WebViews / browsers
-  const noSleep = new NoSleep();
-  function enableNoSleep() {
-    noSleep.enable();
-    console.log('NoSleep enabled');
-  }
+      const uiLangSelect = document.getElementById("uiLangSelect");
+      uiLangSelect.addEventListener("change", e => setLanguage(e.target.value));
+      setLanguage(uiLangSelect.value);
 
-  // Master switch: call this in a user gesture (e.g. button click)
-  function preventStandby() {
-    enableWakeLock();
-    enableNoSleep();
-  }
-
-  // Optional: re-acquire on page visibility change
-  document.addEventListener('visibilitychange', () => {
-    if (wakeLock !== null && document.visibilityState === 'visible') {
-      enableWakeLock();
-    }
-  });
-</script>
-
-<script>
-    document.addEventListener("DOMContentLoaded", () => {
-      customElements.whenDefined("esp-web-install-button").then(() => {
-        const btn     = document.querySelector("esp-web-install-button");
-        const selLang = document.getElementById("language");
-        const selInt  = document.getElementById("intentions");
-        const origin  = window.location.origin;  // e.g. "http://127.0.0.1:5501"
-
-        // these are your on‐disk locations under the project root:
-        const firmwareParts = [
-          { path: "smartrosary-web-installer/firmware/bootloader.bin", offset: 0x000000 },
-          { path: "smartrosary-web-installer/firmware/partitions.bin", offset: 0x008000 },
-          { path: "smartrosary-web-installer/firmware/boot_app0.bin",  offset: 0x00E000 },
-          { path: "smartrosary-web-installer/firmware/firmware.bin",   offset: 0x010000 },
-          { path: "smartrosary-web-installer/spiffs/wallpaper.bin",    offset: 0x2DF000 }
-        ];
-
-        const languages = {
-          pl: { name: "Polski", path: "smartrosary-web-installer/lang/nvs-lang-pl.bin", offset: 0x2D5000 },
-          en: { name: "English", path: "smartrosary-web-installer/lang/nvs-lang-en.bin", offset: 0x2D5000 },
-          de: { name: "Deutsch", path: "smartrosary-web-installer/lang/nvs-lang-de.bin", offset: 0x2D5000 }
-        };
-
-        const intentions = {
-          none: null,
-          rosary: {
-            name: "Żywy Różaniec 2025",
-            path: "smartrosary-web-installer/intentions/nvs-intentions-pmkdus-2025.bin",
-            offset: 0x2D0000
+      // ---------- 2) Screen wake-lock ----------
+      let wakeLock = null;
+      async function enableWakeLock() {
+        try {
+          if ('wakeLock' in navigator) {
+            wakeLock = await navigator.wakeLock.request('screen');
+            wakeLock.addEventListener('release', () => console.log('Screen Wake Lock released'));
           }
-        };
+        } catch (err) {
+          console.warn('WakeLock error:', err.name, err.message);
+        }
+      }
+      const noSleep = new NoSleep();
+      function preventStandby() {
+        enableWakeLock();
+        try { noSleep.enable(); } catch {}
+      }
+      document.addEventListener('visibilitychange', () => {
+        if (wakeLock !== null && document.visibilityState === 'visible') enableWakeLock();
+      });
 
-        function buildManifest() {
-          // revoke old blob
-          if (btn._blobUrl) URL.revokeObjectURL(btn._blobUrl);
+      // ---------- 3) Movable progress container helpers ----------
+      const progressContainer = document.getElementById('ProgressContainer');
+      const progressHR        = document.getElementById('ProgressHR');
+      const progressTitle     = document.getElementById('progressTitle');
+      const progressBar       = document.getElementById('progressBar');
+      const progressText      = document.getElementById('progressText');
+      const progressChunks    = document.getElementById('progressChunks');
 
-          // start with firmware bits
-          const rawParts = [...firmwareParts];
+      function showProgressContainer(anchorBox, title) {
+        progressTitle.textContent = title || 'Uploading…';
+        progressBar.value = 0;
+        progressBar.max   = 0;
+        progressText.textContent = '0%';
+        progressChunks.textContent = '(0/0 Bytes)';
+        progressContainer.style.display = 'block';
+        progressHR.style.display = 'block';
+        // Move container & HR directly below the active upload box
+        anchorBox.insertAdjacentElement('afterend', progressContainer);
+        progressContainer.insertAdjacentElement('afterend', progressHR);
+        // Scroll it into view
+        window.scrollTo({ top: progressContainer.offsetTop - 16, behavior: 'smooth' });
+      }
+      function hideProgressContainer() {
+        progressContainer.style.display = 'none';
+        progressHR.style.display = 'none';
+      }
+      function updateProgress(sent, total) {
+        progressBar.max = total;
+        progressBar.value = sent;
+        progressText.textContent = Math.round((sent / total) * 100) + '%';
+        progressChunks.textContent = `(${sent}/${total} Bytes)`;
+      }
+    </script>
 
-          // splice in language
-          const lang = languages[selLang.value];
-          rawParts.splice(1, 0, { path: lang.path, offset: lang.offset });
+    <!-- USB manifest + OTA logic -->
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        customElements.whenDefined("esp-web-install-button").then(() => {
+          const btn     = document.querySelector("esp-web-install-button");
+          const selLang = document.getElementById("language");
+          const selInt  = document.getElementById("intentions");
+          const origin  = window.location.origin;
 
-          // append intention if any
-          const intent = intentions[selInt.value];
-          if (intent) rawParts.push({ path: intent.path, offset: intent.offset });
+          // On-disk locations (adjust to your structure)
+          const firmwareParts = [
+            { path: "smartrosary-web-installer/firmware/bootloader.bin", offset: 0x000000 },
+            { path: "smartrosary-web-installer/firmware/partitions.bin", offset: 0x008000 },
+            { path: "smartrosary-web-installer/firmware/boot_app0.bin",  offset: 0x00E000 },
+            { path: "smartrosary-web-installer/firmware/firmware.bin",   offset: 0x010000 },
+            { path: "smartrosary-web-installer/spiffs/wallpaper.bin",    offset: 0x2DF000 }
+          ];
 
-          // convert every path into an absolute HTTP URL
-          const parts = rawParts.map(p => ({
-            offset: p.offset,
-            path: p.path.startsWith("http")
-              ? p.path
-              : `${origin}/${p.path}`
-          }));
-
-          const manifest = {
-            name:                     `SmartRosary (${lang.name}${intent ? " / " + intent.name : ""})`,
-            version:                  "v0.6",
-            funding_url:              "", 
-            new_install_prompt_erase: true,
-            builds: [
-              {
-                chipFamily: "ESP32-C3",
-                improv:     false,
-                parts
-              }
-            ]
+          const languages = {
+            pl: { name: "Polski",  path: "smartrosary-web-installer/lang/nvs-lang-pl.bin", offset: 0x2D5000 },
+            en: { name: "English", path: "smartrosary-web-installer/lang/nvs-lang-en.bin", offset: 0x2D5000 },
+            de: { name: "Deutsch", path: "smartrosary-web-installer/lang/nvs-lang-de.bin", offset: 0x2D5000 }
           };
 
-          const blobUrl = URL.createObjectURL(
-            new Blob([JSON.stringify(manifest)], { type: "application/json" })
-          );
+          const intentions = {
+            none: null,
+            rosary: {
+              name: "Żywy Różaniec 2025",
+              path: "smartrosary-web-installer/intentions/nvs-intentions-pmkdus-2025.bin",
+              offset: 0x2D0000
+            }
+          };
 
-          btn._blobUrl = blobUrl;
-          btn.manifest = blobUrl;
-          console.log("Using manifest blob URL:", blobUrl);
-        }
+          function buildManifest() {
+            if (btn._blobUrl) URL.revokeObjectURL(btn._blobUrl);
 
-        selLang.addEventListener("change", buildManifest);
-        selInt .addEventListener("change", buildManifest);
-        buildManifest();
+            const rawParts = [...firmwareParts];
+
+            // include chosen language
+            const lang = languages[selLang.value];
+            rawParts.splice(1, 0, { path: lang.path, offset: lang.offset });
+
+            // include chosen intentions (optional)
+            const intent = intentions[selInt.value];
+            if (intent) rawParts.push({ path: intent.path, offset: intent.offset });
+
+            // absolute URLs
+            const parts = rawParts.map(p => ({
+              offset: p.offset,
+              path: p.path.startsWith("http") ? p.path : `${origin}/${p.path}`
+            }));
+
+            const manifest = {
+              name:    `SmartRosary (${lang.name}${intent ? " / " + intent.name : ""})`,
+              version: FW_VERSION,     // <-- uses single version variable
+              funding_url: "",
+              new_install_prompt_erase: true,
+              builds: [{ chipFamily: "ESP32-C3", improv: false, parts }]
+            };
+
+            const blobUrl = URL.createObjectURL(new Blob([JSON.stringify(manifest)], { type: "application/json" }));
+            btn._blobUrl = blobUrl;
+            btn.manifest = blobUrl;
+            console.log("Using manifest blob URL:", blobUrl);
+          }
+
+          selLang.addEventListener("change", buildManifest);
+          selInt .addEventListener("change", buildManifest);
+          buildManifest();
+        });
       });
-    });
-  </script>
+    </script>
 
-<script>
+    <!-- OTA uploader (firmware / lang / intentions) -->
+    <script>
+      // UUIDs — MUST match firmware (lowercase)
       const SERVICE_UUID       = '12345678-1234-5678-1234-56789abcdef0';
       const FIRMWARE_CHAR_UUID = '12345678-1234-5678-1234-56789abcdef1';
       const INTENTS_CHAR_UUID  = '12345678-1234-5678-1234-56789abcde10';
@@ -222,31 +336,59 @@
 
       let device, writeChar, statusChar;
       let ready = true;
-      const progressBar    = document.getElementById('progressBar');
-      const progressText   = document.getElementById('progressText');
-      const progressChunks = document.getElementById('progressChunks');
 
-      document.getElementById('uploadFirmwareBtn').addEventListener('click', () => {preventStandby(); startFirmwareOTA();});
-      document.getElementById('uploadIntentionsBtn').addEventListener('click', () => {preventStandby(); startIntentionsOTA();});
-      document.getElementById('uploadLanguageBtn').addEventListener('click', () => {preventStandby(); startLanguageOTA();});
+      document.getElementById('uploadFirmwareBtn').addEventListener('click', (ev) => { preventStandby(); startFirmwareOTA(ev.currentTarget); });
+      document.getElementById('uploadIntentionsBtn').addEventListener('click', (ev) => { preventStandby(); startIntentionsOTA(ev.currentTarget); });
+      document.getElementById('uploadLanguageBtn').addEventListener('click', (ev) => { preventStandby(); startLanguageOTA(ev.currentTarget); });
 
-      function showProgressContainer() { document.getElementById('ProgressContainer').style.display = 'block'; }
-      function hideProgressContainer() { document.getElementById('ProgressContainer').style.display = 'none'; }
-      function crc32(buf) { let crc=0xFFFFFFFF; for(let b of buf){crc^=b; for(let i=0;i<8;i++) crc=(crc>>>1)^(0xEDB88320&-(crc&1));} return (crc^0xFFFFFFFF)>>>0; }
-      async function waitReady(){while(!ready) await new Promise(r=>setTimeout(r,50)); ready=false;}
-      function updateProgress(sent,total){progressBar.max=total;progressBar.value=sent;progressText.textContent=Math.round(sent/total*100)+'%';progressChunks.textContent=`(${sent}/${total} Bytes)`;}
+      async function waitReady(){ while(!ready) await new Promise(r=>setTimeout(r,50)); ready=false; }
 
-      async function startFirmwareOTA(){
-        const resp = await fetch('firmware/firmware.bin'); if(!resp.ok)return;
+      // More robust BLE discovery: prefer service filter, fallback to acceptAllDevices
+      async function connectBLE(svcUuid, charUuid){
+        try {
+          device = await navigator.bluetooth.requestDevice({
+            filters: [{ services: [svcUuid] }],
+            optionalServices: [svcUuid]
+          });
+        } catch (e) {
+          device = await navigator.bluetooth.requestDevice({
+            acceptAllDevices: true,
+            optionalServices: [svcUuid]
+          });
+          if (!device.name || !device.name.toLowerCase().startsWith('rosary')) {
+            throw new Error('Picked device is not a rosary (name check failed).');
+          }
+        }
+        const srv = await device.gatt.connect();
+        const svc = await srv.getPrimaryService(svcUuid);
+        writeChar  = await svc.getCharacteristic(charUuid);
+        try {
+          statusChar = await svc.getCharacteristic(STATUS_CHAR_UUID);
+          statusChar.addEventListener('characteristicvaluechanged', () => { ready = true; });
+          await statusChar.startNotifications();
+        } catch { /* optional */ }
+      }
+
+      function setProgress(sent,total){
+        updateProgress(sent,total);
+      }
+
+      async function startFirmwareOTA(btn){
+        const resp = await fetch('firmware/firmware.bin'); if(!resp.ok){ alert('firmware.bin not found'); return; }
         const data = new Uint8Array(await resp.arrayBuffer());
+
+        // Connect first, then show progress
         await connectBLE(SERVICE_UUID,FIRMWARE_CHAR_UUID);
-        // send 4-byte size header
+        const box = btn.closest('.uploadBox') || document.getElementById('otaFwBox');
+        showProgressContainer(box, 'Firmware OTA');
+
+        // 4-byte size header (little-endian)
         const sizeBuf = new ArrayBuffer(4);
         new DataView(sizeBuf).setUint32(0,data.length,true);
         await writeChar.writeValue(sizeBuf);
         await waitReady();
-        showProgressContainer(); updateProgress(0,data.length);
-        // send chunks
+
+        // chunks (MTU 517 -> safe payload 512; minus 4 for CRC)
         let offset=0, chunkSize=512-4;
         while(offset<data.length){
           const len=Math.min(chunkSize,data.length-offset);
@@ -257,35 +399,50 @@
           new DataView(packet.buffer).setUint32(len,crc,true);
           await writeChar.writeValue(packet);
           await waitReady();
-          offset+=len; updateProgress(offset,data.length);
+          offset+=len; setProgress(offset,data.length);
         }
-        hideProgressContainer(); console.log('Firmware upload complete.');
+        hideProgressContainer();
       }
 
-      async function startIntentionsOTA(){
+      async function startIntentionsOTA(btn){
         const path=document.getElementById('intentionsFileSelect').value;
-        const resp=await fetch(path); if(!resp.ok)return;
+        const resp=await fetch(path); if(!resp.ok){ alert('Intentions file not found'); return; }
         const data=new Uint8Array(await resp.arrayBuffer());
         const filename = path.split('/').pop();
-        await sendNVS(data,SERVICE_UUID,INTENTS_CHAR_UUID,filename);
+
+        // Connect first, then show progress
+        await connectBLE(SERVICE_UUID,INTENTS_CHAR_UUID);
+        const box = btn.closest('.uploadBox') || document.getElementById('otaIntsBox');
+        showProgressContainer(box, 'Intentions OTA');
+
+        await sendNVS(data,filename);
+        hideProgressContainer();
       }
 
-      async function startLanguageOTA(){
+      async function startLanguageOTA(btn){
         const path=document.getElementById('languageFileSelect').value;
-        const resp=await fetch(path); if(!resp.ok)return;
+        const resp=await fetch(path); if(!resp.ok){ alert('Language file not found'); return; }
         const data=new Uint8Array(await resp.arrayBuffer());
         const filename = path.split('/').pop();
-        await sendNVS(data,SERVICE_UUID,LANG_CHAR_UUID,filename);
+
+        // Connect first, then show progress
+        await connectBLE(SERVICE_UUID,LANG_CHAR_UUID);
+        const box = btn.closest('.uploadBox') || document.getElementById('otaLangBox');
+        showProgressContainer(box, 'Language OTA');
+
+        await sendNVS(data,filename);
+        hideProgressContainer();
       }
 
-      async function sendNVS(data,svcUuid,charUuid,partition){
-        await connectBLE(svcUuid,charUuid);
-        // send filename header
-        const name=new TextEncoder().encode(partition);
+      function crc32(buf) { let crc=0xFFFFFFFF; for(let b of buf){crc^=b; for(let i=0;i<8;i++) crc=(crc>>>1)^(0xEDB88320&-(crc&1));} return (crc^0xFFFFFFFF)>>>0; }
+
+      async function sendNVS(data,filename){
+        // filename header
+        const name=new TextEncoder().encode(filename);
         await writeChar.writeValue(name);
         await waitReady();
-        showProgressContainer(); updateProgress(0,data.length);
-        let offset=0, chunkSize=320;
+
+        let offset=0, chunkSize=320; // a bit smaller than firmware chunks
         while(offset<data.length){
           const len=Math.min(chunkSize,data.length-offset);
           const chunk=data.slice(offset,offset+len);
@@ -297,17 +454,6 @@
           await waitReady();
           offset+=len; updateProgress(offset,data.length);
         }
-        hideProgressContainer(); console.log(`${partition} upload complete.`);
-      }
-
-      async function connectBLE(svcUuid,charUuid){
-        device=await navigator.bluetooth.requestDevice({filters:[{namePrefix:'rosary'}],optionalServices:[svcUuid]});
-        const srv=await device.gatt.connect();
-        const svc=await srv.getPrimaryService(svcUuid);
-        writeChar=await svc.getCharacteristic(charUuid);
-        statusChar=await svc.getCharacteristic(STATUS_CHAR_UUID);
-        statusChar.addEventListener('characteristicvaluechanged',()=>ready=true);
-        await statusChar.startNotifications();
       }
     </script>
   </body>
