@@ -58,7 +58,7 @@
 
       <!-- USB -->
       <div class="uploadBox" id="usbBox">
-        <h2 id="usbTitle">Upload firmware v0.9 via USB</h2>
+        <h2 id="usbTitle">Upload firmware v0.91 via USB</h2>
         <div class="controls-container">
           <table class="controls-table">
             <tr>
@@ -88,7 +88,7 @@
 
       <!-- OTA: Firmware -->
       <div class="uploadBox" id="otaFwBox">
-        <h2 id="otaTitle">Upload firmware v0.9 via OTA</h2>
+        <h2 id="otaTitle">Upload firmware v0.91 via OTA</h2>
         <div style="text-align: center; margin-top: 1em;">
           <button id="uploadFirmwareBtn" class="uploadBtn">Connect & Upload</button>
         </div>
@@ -139,10 +139,10 @@
     </div>
 
     <!-- Wake lock helpers -->
-    <script src="https://lib.arvancloud.ir/nosleep/0.9.0/NoSleep.min.js"></script>
+    <script src="https://lib.arvancloud.ir/nosleep/0.91.0/NoSleep.min.js"></script>
     <script>
       // ---------- 0) Firmware version (single source of truth) ----------
-      const FW_VERSION = "v0.9";  // <- change once here
+      const FW_VERSION = "v0.91";  // <- change once here
 
       // ---------- 1) UI i18n (hint removed) ----------
       const i18n = {
@@ -334,40 +334,110 @@
       const INTENTS_CHAR_UUID  = '12345678-1234-5678-1234-56789abcde10';
       const LANG_CHAR_UUID     = '12345678-1234-5678-1234-56789abcde20';
       const STATUS_CHAR_UUID   = '12345678-1234-5678-1234-56789abcdef2';
+      const INFO_CTRL_UUID     = 'b8a7a0e2-1a5d-4c1e-9d93-2c9e2b9e10ff';  // <— ADD THIS
+      
 
       let device, writeChar, statusChar;
       let ready = true;
 
-      document.getElementById('uploadFirmwareBtn').addEventListener('click', (ev) => { preventStandby(); startFirmwareOTA(ev.currentTarget); });
-      document.getElementById('uploadIntentionsBtn').addEventListener('click', (ev) => { preventStandby(); startIntentionsOTA(ev.currentTarget); });
-      document.getElementById('uploadLanguageBtn').addEventListener('click', (ev) => { preventStandby(); startLanguageOTA(ev.currentTarget); });
+      document.getElementById('uploadFirmwareBtn').addEventListener('click', async (ev) => {
+        preventStandby();
+        try { await startFirmwareOTA(ev.currentTarget); }
+        catch (e) { alert(e.message || 'Firmware OTA failed.'); }
+      });
+      document.getElementById('uploadIntentionsBtn').addEventListener('click', async (ev) => {
+        preventStandby();
+        try { await startIntentionsOTA(ev.currentTarget); }
+        catch (e) { alert(e.message || 'Intentions OTA failed.'); }
+      });
+      document.getElementById('uploadLanguageBtn').addEventListener('click', async (ev) => {
+        preventStandby();
+        try { await startLanguageOTA(ev.currentTarget); }
+        catch (e) { alert(e.message || 'Language OTA failed.'); }
+      });
+
+      async function helloAndAwaitConsent(svc) {
+        // Get control + status characteristics
+        const ctrlChar  = await svc.getCharacteristic(INFO_CTRL_UUID);
+        const statChar  = await svc.getCharacteristic(STATUS_CHAR_UUID);
+
+        // Start notifications (we’ll also keep this statusChar as the global one)
+        await statChar.startNotifications();
+
+        // Wait for 0xA1 (allow) or 0xA0 (deny)
+        const allowed = await new Promise(async (resolve) => {
+          const onStatus = (ev) => {
+            const v = new Uint8Array(ev.target.value.buffer)[0];
+            if (v === 0xA1 || v === 0xA0) {
+              statChar.removeEventListener('characteristicvaluechanged', onStatus);
+              resolve(v === 0xA1);
+            }
+          };
+          statChar.addEventListener('characteristicvaluechanged', onStatus);
+
+          // Send HELLO_WEB (0x41) to pop consent on the device
+          await ctrlChar.writeValue(Uint8Array.of(0x41));
+
+          // Hard timeout to avoid hanging forever
+          setTimeout(() => {
+            try { statChar.removeEventListener('characteristicvaluechanged', onStatus); } catch {}
+            resolve(false);
+          }, 25000);
+        });
+
+        return allowed;
+      }
 
       async function waitReady(){ while(!ready) await new Promise(r=>setTimeout(r,50)); ready=false; }
 
       // More robust BLE discovery: prefer service filter, fallback to acceptAllDevices
       async function connectBLE(svcUuid, charUuid){
+        // 1) Pick device (prefer service filter; fallback acceptAllDevices)
         try {
           device = await navigator.bluetooth.requestDevice({
             filters: [{ services: [svcUuid] }],
-            optionalServices: [svcUuid]
+            optionalServices: [svcUuid, SERVICE_UUID] // ensure our main service is always discoverable
           });
         } catch (e) {
           device = await navigator.bluetooth.requestDevice({
             acceptAllDevices: true,
-            optionalServices: [svcUuid]
+            optionalServices: [svcUuid, SERVICE_UUID]
           });
           if (!device.name || !device.name.toLowerCase().startsWith('rosary')) {
             throw new Error('Picked device is not a rosary (name check failed).');
           }
         }
-        const srv = await device.gatt.connect();
-        const svc = await srv.getPrimaryService(svcUuid);
+
+        // 2) Connect
+        const gatt = await device.gatt.connect();
+
+        // 3) Always get the main OTA service (it contains STATUS + INFO_CTRL)
+        const svc = await gatt.getPrimaryService(SERVICE_UUID);
+
+        // 4) Ask for consent (HELLO_WEB -> LVGL “Allow Web” modal on device)
+        const consent = await helloAndAwaitConsent(svc);
+        if (!consent) {
+          try {
+            // optional: tell device we’re backing out
+            const ctrl = await svc.getCharacteristic(INFO_CTRL_UUID);
+            await ctrl.writeValue(Uint8Array.of(0x42)); // CANCEL_WEB
+          } catch {}
+          throw new Error('Device denied consent or timed out. Please tap "Allow" on the device and try again.');
+        }
+
+        // 5) Now it’s safe to use your target write characteristic
+        //    (firmware / language / intentions are separate chars under the same service)
         writeChar  = await svc.getCharacteristic(charUuid);
+
+        // 6) Keep a global statusChar for “ready/ACK” pacing (also used above in consent)
         try {
           statusChar = await svc.getCharacteristic(STATUS_CHAR_UUID);
           statusChar.addEventListener('characteristicvaluechanged', () => { ready = true; });
+          // It’s already started in helloAndAwaitConsent, but starting again is harmless
           await statusChar.startNotifications();
-        } catch { /* optional */ }
+        } catch {
+          // optional
+        }
       }
 
       function setProgress(sent,total){
