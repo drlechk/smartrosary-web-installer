@@ -48,9 +48,9 @@
       <div class="langRow">
         <label for="uiLangSelect">🌐 <span id="uiLangLabel">Language</span>:</label>
         <select id="uiLangSelect">
-          <option value="pl">Polski</option>
+          <option value="pl" selected>Polski</option>
           <option value="de">Deutsch</option>
-          <option value="en" selected>English</option>
+          <option value="en">English</option>
         </select>
       </div>
 
@@ -65,7 +65,7 @@
               <td><label for="language" id="fwLangLabel">Language (firmware data):</label></td>
               <td>
                 <select id="language">
-                  <option value="pl">Polski</option>
+                  <option value="pl" selected>Polski</option>
                   <option value="en">English</option>
                   <option value="de">Deutsch</option>
                 </select>
@@ -99,7 +99,7 @@
         <h2 id="langTitle">Upload language via OTA</h2>
         <div style="text-align: center; margin-top: 1em;">
           <select id="languageFileSelect">
-            <option value="lang/nvs-lang-pl.bin">Polski</option>
+            <option value="lang/nvs-lang-pl.bin" selected>Polski</option>
             <option value="lang/nvs-lang-en.bin">English</option>
             <option value="lang/nvs-lang-de.bin">Deutsch</option>
           </select>
@@ -141,10 +141,10 @@
     <!-- Wake lock helpers -->
     <script src="https://lib.arvancloud.ir/nosleep/0.91.0/NoSleep.min.js"></script>
     <script>
-      // ---------- 0) Firmware version (single source of truth) ----------
-      const FW_VERSION = "v1.0";  // <- change once here
+      // ---------- 0) Firmware version ----------
+      const FW_VERSION = "v1.0";
 
-      // ---------- 1) UI i18n (hint removed) ----------
+      // ---------- 1) UI i18n ----------
       const i18n = {
         pl: {
           langLabel: "Język",
@@ -218,39 +218,52 @@
       document.addEventListener('visibilitychange', () => {
         if (wakeLock !== null && document.visibilityState === 'visible') enableWakeLock();
       });
+    </script>
 
-      // ---------- 3) Movable progress container helpers ----------
-      const progressContainer = document.getElementById('ProgressContainer');
-      const progressHR        = document.getElementById('ProgressHR');
-      const progressTitle     = document.getElementById('progressTitle');
-      const progressBar       = document.getElementById('progressBar');
-      const progressText      = document.getElementById('progressText');
-      const progressChunks    = document.getElementById('progressChunks');
-
-      function showProgressContainer(anchorBox, title) {
-        progressTitle.textContent = title || 'Uploading…';
-        progressBar.value = 0;
-        progressBar.max   = 0;
-        progressText.textContent = '0%';
-        progressChunks.textContent = '(0/0 Bytes)';
-        progressContainer.style.display = 'block';
-        progressHR.style.display = 'block';
-        // Move container & HR directly below the active upload box
-        anchorBox.insertAdjacentElement('afterend', progressContainer);
-        progressContainer.insertAdjacentElement('afterend', progressHR);
-        // Scroll it into view
-        window.scrollTo({ top: progressContainer.offsetTop - 16, behavior: 'smooth' });
+    <!-- ---------- 3) Progress helpers (safe) ---------- -->
+    <script>
+    (() => {
+      const S = {};
+      function refs() {
+        if (!S.container) {
+          S.container = document.getElementById('ProgressContainer');
+          S.hr        = document.getElementById('ProgressHR');
+          S.title     = document.getElementById('progressTitle');
+          S.bar       = document.getElementById('progressBar');
+          S.txt       = document.getElementById('progressText');
+          S.chunks    = document.getElementById('progressChunks');
+        }
+        return S;
       }
-      function hideProgressContainer() {
-        progressContainer.style.display = 'none';
-        progressHR.style.display = 'none';
+      function _show(anchorBox, title) {
+        const R = refs();
+        if (R.title)  R.title.textContent = title || 'Uploading…';
+        if (R.bar)   { R.bar.value = 0; R.bar.max = 0; }
+        if (R.txt)    R.txt.textContent = '0%';
+        if (R.chunks) R.chunks.textContent = '(0/0 Bytes)';
+        if (R.container) R.container.style.display = 'block';
+        if (R.hr)        R.hr.style.display = 'block';
+        if (anchorBox && R.container) {
+          anchorBox.insertAdjacentElement('afterend', R.container);
+          if (R.hr) R.container.insertAdjacentElement('afterend', R.hr);
+          try { window.scrollTo({ top: R.container.offsetTop - 16, behavior: 'smooth' }); } catch {}
+        }
       }
-      function updateProgress(sent, total) {
-        progressBar.max = total;
-        progressBar.value = sent;
-        progressText.textContent = Math.round((sent / total) * 100) + '%';
-        progressChunks.textContent = `(${sent}/${total} Bytes)`;
+      function _hide() {
+        const R = refs();
+        if (R.container) R.container.style.display = 'none';
+        if (R.hr)        R.hr.style.display = 'none';
       }
+      function _update(sent, total) {
+        const R = refs();
+        if (R.bar) { R.bar.max = total; R.bar.value = sent; }
+        if (R.txt)    R.txt.textContent = Math.round((sent / (total || 1)) * 100) + '%';
+        if (R.chunks) R.chunks.textContent = `(${sent}/${total} Bytes)`;
+      }
+      window.showProgressContainer = _show;
+      window.hideProgressContainer = _hide;
+      window.updateProgress        = _update;
+    })();
     </script>
 
     <!-- USB manifest + OTA logic -->
