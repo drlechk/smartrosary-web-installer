@@ -71,7 +71,6 @@
     <header class="header-with-lang">
       <h1 id="title">SmartRosary Web Installer</h1>
       <div class="lang">
-        <label for="uiLangSelect"><span id="uiLangLabel">Language</span>:</label>
         <select id="uiLangSelect">
           <option value="pl" selected>Polski</option>
           <option value="de">Deutsch</option>
@@ -208,7 +207,6 @@
 
       function setLanguage(lang) {
         const t = i18n[lang] || i18n.en;
-        document.getElementById("uiLangLabel").textContent = t.langLabel;
         document.getElementById("title").textContent       = t.title;
         document.getElementById("usbTitle").textContent    = t.usbTitle;
         document.getElementById("otaTitle").textContent    = t.otaTitle;
