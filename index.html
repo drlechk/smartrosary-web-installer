@@ -8,53 +8,78 @@
     <meta name="color-scheme" content="dark light" />
     <link rel="icon" type="image/svg+xml" href="favicon.svg">
     <style>
-      body { font-family: -apple-system, system-ui, BlinkMacSystemFont, "Segoe UI", Roboto, Ubuntu, sans-serif; padding: 0; margin: 0; line-height: 1.4; }
-      .content { max-width: 600px; margin: 0 auto; padding: 12px; }
-      h1 { margin-top: 0.6em; text-align: center; }
+      :root {
+        /* Landing/dashboard palette */
+        --bg: linear-gradient(180deg, #0f5aa0 0%, #0b4f8f 55%, #09457e 100%);
+        --text: #eaf0f6;
+        --muted: #95a7ba;
+        --card: #101722;
+        --border: #172231;
+        --accent: #0974cc;
+        --accent-contrast: #ffffff;
+        --bar: #0b4f8f;
+      }
+
+      html { min-height: 100%; background: var(--bg); }
+      body { font-family: -apple-system, system-ui, BlinkMacSystemFont, "Segoe UI", Roboto, Ubuntu, sans-serif; padding: 0; margin: 0; line-height: 1.4; background: var(--bg); color: var(--text); min-height: 100vh; min-height: 100dvh; display: flex; flex-direction: column; }
+      a { color: var(--accent); }
+
+      /* Header bar */
+      .header-with-lang { position: sticky; top: 0; z-index: 1000; display:flex; align-items:center; justify-content:center; gap:12px; padding: 14px 12px; background: var(--bar); border-bottom: 1px solid #b7d6f533; }
+      .header-with-lang h1 { margin:0; font-size: 20px; font-weight: 700; }
+      .header-with-lang .lang { position:absolute; right:12px; display:inline-flex; align-items:center; gap:6px; color:#fff; }
+      .header-with-lang select { font-size: 14px; padding: 6px 10px; background: #0f1720; color: #eaf0f6; border: 1px solid #1f2b3a; border-radius: 8px; }
+
+      /* Layout */
+      .content { max-width: 720px; margin: 0 auto; padding: 12px; flex: 1; }
       h2 { margin-top: 1.0em; text-align: center; }
-      a { color: #03a9f4; }
-      .uploadBox { border-top: 1px solid #ccc; padding-bottom: 20px; }
-      .uploadBtn { cursor: pointer; font-size: 14px; font-weight: 500; padding: 10px 24px; color: #fff; background-color: #03a9f4; border: none; border-radius: 9999px; }
+
+      /* Cards */
+      .uploadBox { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 14px; margin-top: 14px; box-shadow: 0 6px 24px rgba(0,0,0,.25); }
       .footer{text-align: center;}
+
+      /* Controls */
       .controls-container {display: flex; justify-content: center; margin-bottom: 1rem;}
       .controls-table {border-collapse: collapse;}
       .controls-table td {border: none; padding: 0.3rem 0.5rem; vertical-align: middle;}
-      label { display: inline-block; width: 120px; }
-      .langRow { text-align:center; padding: 10px 0 0; }
-      .langRow select { font-size: 14px; padding: 6px 10px; }
+      label { display: inline-block; width: 160px; }
+      .content select { padding: 8px 10px; background:#101b2c; color:#eaf0f6; border:1px solid #233144; border-radius:8px; }
+
+      /* Buttons */
+      .uploadBtn { cursor: pointer; font-size: 14px; font-weight: 600; padding: 10px 16px; color: var(--accent-contrast); background-color: var(--accent); border: none; border-radius: 10px; transition: transform .05s ease; }
+      .uploadBtn:active { transform: scale(0.98); }
 
       /* Movable progress container */
-      #ProgressContainer { display: none; padding: 12px 12px 16px; margin-top: 10px; margin-bottom: 8px; border-radius: 10px; background: #f1f5f9; border: 1px solid #cbd5e1; }
+      #ProgressContainer { display: none; padding: 12px 12px 16px; margin-top: 10px; margin-bottom: 8px; border-radius: 10px; background: #0d131c; border: 1px solid var(--border); color: var(--text); }
       #progressTitle { font-size: 14px; font-weight: 600; margin-bottom: 6px; text-align:center; }
       #progressRow { display:flex; flex-direction:column; align-items:center; gap:6px; }
-      #progressBar { width:100%; height: 30px; }
+      #progressBar { width:100%; height: 18px; border-radius: 999px; }
       #progressText { font-weight: 600; }
 
       /* Horizontal line under progress */
-      .sep { display:none; border:0; border-top:1px solid #cbd5e1; margin: 10px 0 16px; }
+      .sep { display:none; border:0; border-top:1px solid var(--border); margin: 10px 0 16px; }
 
-      @media (prefers-color-scheme: dark) {
-        #ProgressContainer { background: #0f172a; border-color: #334155; }
-        #progressTitle { color: #cbd5e1; }
-        .sep { border-top-color: #334155; }
-      }
+      /* Native progress color */
+      progress { width: 100%; height: 12px; background: #0d131c; border: 1px solid #172231; border-radius: 999px; overflow: hidden; }
+      progress::-webkit-progress-bar { background: #0d131c; }
+      progress::-webkit-progress-value { background: var(--accent); }
+      progress::-moz-progress-bar { background: var(--accent); }
     </style>
     <script type="module" src="https://unpkg.com/esp-web-tools@10.1.0/dist/web/install-button.js"></script>
   </head>
   <body>
-    <div class="content">
-
-      <!-- Language selector (UI only) -->
-      <div class="langRow">
-        <label for="uiLangSelect">🌐 <span id="uiLangLabel">Language</span>:</label>
+    <header class="header-with-lang">
+      <h1 id="title">SmartRosary Web Installer</h1>
+      <div class="lang">
+        <label for="uiLangSelect"><span id="uiLangLabel">Language</span>:</label>
         <select id="uiLangSelect">
           <option value="pl" selected>Polski</option>
           <option value="de">Deutsch</option>
           <option value="en">English</option>
         </select>
       </div>
-
-      <h1 id="title">SmartRosary Web Installer</h1>
+    </header>
+    <div class="content">
 
       <!-- USB -->
       <div class="uploadBox" id="usbBox">
