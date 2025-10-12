@@ -55,6 +55,7 @@
       html { min-height: 100%; background: var(--bg); }
       body { font-family: -apple-system, system-ui, BlinkMacSystemFont, "Segoe UI", Roboto, Ubuntu, sans-serif; padding: 0; margin: 0; line-height: 1.4; background: var(--bg); color: var(--text); min-height: 100vh; min-height: 100dvh; display: flex; flex-direction: column; }
       a { color: var(--accent); }
+      *, *::before, *::after { box-sizing: border-box; }
 
       /* Header bar */
       .top-shell { position: sticky; top: 0; z-index: 1000; background: var(--bar); width: 100%; }
@@ -93,7 +94,7 @@
       .toolbar-progress.is-active { opacity: 1; }
 
       /* Layout */
-      .content { max-width: 720px; margin: 0 auto; padding: 12px; flex: 1; }
+      .content { max-width: 720px; margin: 0 auto; padding: 12px; flex: 1; width: 100%; }
       h2 { margin-top: 1.0em; text-align: center; }
 
       /* Cards */
@@ -101,11 +102,19 @@
       .footer{text-align: center;}
 
       /* Controls */
-      .controls-container {display: flex; justify-content: center; margin-bottom: 1rem;}
-      .controls-table {border-collapse: collapse;}
+      .controls-container {display: flex; justify-content: center; margin-bottom: 1rem; width: 100%;}
+      .controls-table {border-collapse: collapse; width: 100%; table-layout: fixed;}
       .controls-table td {border: none; padding: 0.3rem 0.5rem; vertical-align: middle;}
-      label { display: inline-block; width: 160px; }
-      .content select { padding: 8px 10px; background: var(--control-bg); color: var(--control-text); border:1px solid var(--control-border); border-radius:8px; }
+      label { display: inline-block; width: 160px; max-width: 100%; }
+      .content select { padding: 8px 10px; background: var(--control-bg); color: var(--control-text); border:1px solid var(--control-border); border-radius:8px; width: 100%; max-width: 100%; }
+
+      /* Mobile: stack labels and inputs to avoid overflow */
+      @media (max-width: 560px) {
+        .controls-container { padding: 0 2px; }
+        .controls-table, .controls-table tr, .controls-table td { display: block; width: 100%; }
+        .controls-table tr { margin-bottom: 10px; }
+        label { width: 100%; margin-bottom: 6px; }
+      }
 
       /* Buttons */
       .uploadBtn { cursor: pointer; font-size: 14px; font-weight: 600; padding: 10px 16px; color: var(--accent-contrast); background-color: var(--accent); border: none; border-radius: 10px; transition: transform .05s ease; }
