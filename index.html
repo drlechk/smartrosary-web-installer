@@ -9,6 +9,7 @@
     <link rel="icon" type="image/svg+xml" href="favicon.svg">
     <style>
       :root {
+        color-scheme: dark;
         /* Landing/dashboard palette */
         --bg: linear-gradient(180deg, #0f5aa0 0%, #0b4f8f 55%, #09457e 100%);
         --text: #eaf0f6;
@@ -18,6 +19,36 @@
         --accent: #0974cc;
         --accent-contrast: #ffffff;
         --bar: #0b4f8f;
+        --top-border: rgba(183, 214, 245, 0.25);
+        --toolbar-track: rgba(18, 34, 52, 0.55);
+        --header-button-bg: #1f2937;
+        --header-button-border: #263244;
+        --header-button-text: #eaf0f6;
+        --control-bg: #101b2c;
+        --control-border: #233144;
+        --control-text: #eaf0f6;
+        --progress-bg: #0d131c;
+      }
+
+      html.theme-light {
+        color-scheme: light;
+        --bg: linear-gradient(180deg, #f5f9ff 0%, #e9f1ff 55%, #dde9ff 100%);
+        --text: #0f172a;
+        --muted: #64748b;
+        --card: #ffffffcc;
+        --border: #cbd5f5;
+        --accent: #1d4ed8;
+        --accent-contrast: #ffffff;
+        --bar: #dbeafe;
+        --top-border: rgba(148, 163, 184, 0.35);
+        --toolbar-track: rgba(191, 209, 231, 0.6);
+        --header-button-bg: #f1f5f9;
+        --header-button-border: #cbd5f5;
+        --header-button-text: #1e3a8a;
+        --control-bg: #ffffff;
+        --control-border: #cbd5f5;
+        --control-text: #0f172a;
+        --progress-bg: #e2e8f0;
       }
 
       html { min-height: 100%; background: var(--bg); }
@@ -25,17 +56,45 @@
       a { color: var(--accent); }
 
       /* Header bar */
-      .header-with-lang { position: sticky; top: 0; z-index: 1000; display:flex; align-items:center; justify-content:center; gap:12px; padding: 14px 12px; background: var(--bar); border-bottom: 1px solid #b7d6f533; }
-      .header-with-lang h1 { margin:0; font-size: 20px; font-weight: 700; }
-      .header-with-lang .lang { position:absolute; right:12px; display:inline-flex; align-items:center; gap:6px; color:#fff; }
-      .header-with-lang select { font-size: 14px; padding: 6px 10px; background: #0f1720; color: #eaf0f6; border: 1px solid #1f2b3a; border-radius: 8px; }
+      .top-shell { position: sticky; top: 0; z-index: 1000; background: var(--bar); }
+      .header-with-lang {
+        position: relative;
+        display:flex;
+        align-items:center;
+        justify-content:center;
+        padding: 18px 12px 16px;
+        background: var(--bar);
+        border-bottom: 1px solid var(--top-border);
+      }
+      .header-with-lang h1 { margin:0; font-size: 20px; font-weight: 700; text-align:center; }
+      .header-controls { position:absolute; right:12px; display:flex; align-items:center; gap:8px; }
+      #themeToggle { padding: 8px 14px; border-radius: 10px; border: 1px solid var(--header-button-border); background: var(--header-button-bg); color: var(--header-button-text); font-weight: 600; cursor: pointer; transition: transform .05s ease; }
+      #themeToggle:active { transform: scale(0.98); }
+      .header-with-lang select { font-size: 14px; padding: 6px 10px; background: var(--control-bg); color: var(--control-text); border: 1px solid var(--control-border); border-radius: 8px; }
+      .toolbar-wrap { padding: 8px 12px 14px; }
+      .toolbar { max-width: 720px; margin: 0 auto; display:flex; flex-direction:column; align-items:center; gap:6px; }
+      .toolbar-status { font-size: 12px; color: var(--muted); text-align:center; letter-spacing: .02em; }
+      .toolbar-progress {
+        position: absolute;
+        left: 0;
+        bottom: 0;
+        width: 100%;
+        height: 6px;
+        background: var(--toolbar-track);
+        overflow: hidden;
+        transition: opacity .2s ease;
+        opacity: .45;
+        pointer-events: none;
+      }
+      .toolbar-progress .bar { height: 100%; width: 0%; background: var(--accent); transition: width .2s ease; }
+      .toolbar-progress.is-active { opacity: 1; }
 
       /* Layout */
       .content { max-width: 720px; margin: 0 auto; padding: 12px; flex: 1; }
       h2 { margin-top: 1.0em; text-align: center; }
 
       /* Cards */
-      .uploadBox { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 14px; margin-top: 14px; box-shadow: 0 6px 24px rgba(0,0,0,.25); }
+      .uploadBox { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 14px; margin-top: 14px; box-shadow: 0 12px 28px rgba(9, 17, 28, 0.18); }
       .footer{text-align: center;}
 
       /* Controls */
@@ -43,41 +102,133 @@
       .controls-table {border-collapse: collapse;}
       .controls-table td {border: none; padding: 0.3rem 0.5rem; vertical-align: middle;}
       label { display: inline-block; width: 160px; }
-      .content select { padding: 8px 10px; background:#101b2c; color:#eaf0f6; border:1px solid #233144; border-radius:8px; }
+      .content select { padding: 8px 10px; background: var(--control-bg); color: var(--control-text); border:1px solid var(--control-border); border-radius:8px; }
 
       /* Buttons */
       .uploadBtn { cursor: pointer; font-size: 14px; font-weight: 600; padding: 10px 16px; color: var(--accent-contrast); background-color: var(--accent); border: none; border-radius: 10px; transition: transform .05s ease; }
       .uploadBtn:active { transform: scale(0.98); }
 
-      /* Movable progress container */
-      #ProgressContainer { display: none; padding: 12px 12px 16px; margin-top: 10px; margin-bottom: 8px; border-radius: 10px; background: #0d131c; border: 1px solid var(--border); color: var(--text); }
-      #progressTitle { font-size: 14px; font-weight: 600; margin-bottom: 6px; text-align:center; }
-      #progressRow { display:flex; flex-direction:column; align-items:center; gap:6px; }
-      #progressBar { width:100%; height: 18px; border-radius: 999px; }
-      #progressText { font-weight: 600; }
-
-      /* Horizontal line under progress */
-      .sep { display:none; border:0; border-top:1px solid var(--border); margin: 10px 0 16px; }
-
-      /* Native progress color */
-      progress { width: 100%; height: 12px; background: #0d131c; border: 1px solid #172231; border-radius: 999px; overflow: hidden; }
-      progress::-webkit-progress-bar { background: #0d131c; }
-      progress::-webkit-progress-value { background: var(--accent); }
-      progress::-moz-progress-bar { background: var(--accent); }
+      html.theme-light body { color: var(--text); }
+      html.theme-light .header-with-lang h1 { color: #1e3a8a; }
+      html.theme-light a { color: #1d4ed8; }
+      html.theme-light label { color: var(--text); }
     </style>
+    <script>
+      (function applyStoredThemeEarly() {
+        try {
+          const key = 'dashboard-theme';
+          const stored = localStorage.getItem(key);
+          const prefersLight = window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches;
+          const choice = stored === 'light' || stored === 'dark'
+            ? stored
+            : (prefersLight ? 'light' : 'light');
+          if (choice === 'light') {
+            document.documentElement.classList.add('theme-light');
+          }
+        } catch {
+          /* ignore storage issues */
+        }
+      })();
+    </script>
+    <script>
+      const GlobalUI = (() => {
+        const STATUS_IDLE = 'Ready.';
+        let statusEl = null;
+        let progressWrap = null;
+        let progressBar = null;
+        let currentTitle = null;
+        let resetTimer = null;
+
+        const refs = () => {
+          if (!statusEl) statusEl = document.getElementById('globalStatus');
+          if (!progressWrap) progressWrap = document.getElementById('globalProg');
+          if (!progressBar && progressWrap) progressBar = progressWrap.querySelector('.bar');
+        };
+
+        const setStatus = (text) => {
+          refs();
+          if (statusEl) statusEl.textContent = text || STATUS_IDLE;
+        };
+
+        const showProgress = (title) => {
+          refs();
+          clearTimeout(resetTimer);
+          resetTimer = null;
+          currentTitle = title || null;
+          if (progressWrap) progressWrap.classList.add('is-active');
+          if (progressBar) progressBar.style.width = '0%';
+          if (title) setStatus(`${title}…`);
+          else setStatus();
+        };
+
+        const updateProgress = (sent, total) => {
+          refs();
+          if (!progressBar) return;
+          const pct = total ? Math.min(100, Math.round((sent / total) * 100)) : 0;
+          progressBar.style.width = `${pct}%`;
+          if (currentTitle) setStatus(`${currentTitle} — ${pct}%`);
+        };
+
+        const hideProgress = () => {
+          refs();
+          if (progressWrap) progressWrap.classList.remove('is-active');
+          if (progressBar) progressBar.style.width = '0%';
+          currentTitle = null;
+        };
+
+        const reset = () => {
+          hideProgress();
+          setStatus();
+          clearTimeout(resetTimer);
+          resetTimer = null;
+        };
+
+        const announce = (message, delay = 3500) => {
+          hideProgress();
+          if (message) setStatus(message);
+          clearTimeout(resetTimer);
+          resetTimer = null;
+          if (delay && delay > 0) {
+            resetTimer = window.setTimeout(() => reset(), delay);
+          }
+        };
+
+        const error = (message) => {
+          hideProgress();
+          if (message) setStatus(message);
+          clearTimeout(resetTimer);
+          resetTimer = null;
+        };
+
+        return { setStatus, showProgress, updateProgress, hideProgress, reset, announce, error };
+      })();
+      window.GlobalUI = GlobalUI;
+      document.addEventListener('DOMContentLoaded', () => GlobalUI.reset());
+    </script>
     <script type="module" src="https://unpkg.com/esp-web-tools@10.1.0/dist/web/install-button.js"></script>
   </head>
   <body>
     <header class="header-with-lang">
       <h1 id="title">SmartRosary Web Installer</h1>
-      <div class="lang">
-        <select id="uiLangSelect">
+      <div class="header-controls">
+        <button id="themeToggle" type="button" aria-pressed="false" title="Switch to light mode">Light</button>
+        <select id="uiLangSelect" aria-label="Interface language">
           <option value="pl" selected>Polski</option>
           <option value="de">Deutsch</option>
           <option value="en">English</option>
         </select>
       </div>
     </header>
+    <div class="top-shell">
+      <div class="toolbar-wrap">
+        <div class="toolbar">
+          <div class="toolbar-status" id="globalStatus">Ready.</div>
+        </div>
+      </div>
+      <div id="globalProg" class="toolbar-progress">
+        <div class="bar"></div>
+      </div>
+    </div>
     <div class="content">
 
       <!-- USB -->
@@ -146,24 +297,56 @@
         </div>
       </div>
 
-      <!-- Movable Progress (will be inserted under active box only AFTER connection) -->
-      <div id="ProgressContainer">
-        <div id="progressTitle">Uploading…</div>
-        <div id="progressRow">
-          <progress id="progressBar" value="0" max="0"></progress>
-          <div>
-            <span id="progressText">0%</span>
-            <span style="margin-left: 5px;" id="progressChunks">(0/0 Bytes)</span>
-          </div>
-        </div>
-      </div>
-      <hr id="ProgressHR" class="sep" />
-
       <div id="log" style="display:none;"></div>
     </div>
 
     <!-- Wake lock helpers -->
     <script src="https://lib.arvancloud.ir/nosleep/0.91.0/NoSleep.min.js"></script>
+    <script>
+      (() => {
+        const THEME_KEY = 'dashboard-theme';
+
+        const readStoredTheme = () => {
+          try {
+            const stored = localStorage.getItem(THEME_KEY);
+            return stored === 'light' || stored === 'dark' ? stored : null;
+          } catch {
+            return null;
+          }
+        };
+
+        const writeStoredTheme = (value) => {
+          try { localStorage.setItem(THEME_KEY, value); } catch {}
+        };
+
+        const applyTheme = (mode) => {
+          const isLight = mode === 'light';
+          const toggle = document.getElementById('themeToggle');
+          document.body.classList.toggle('theme-light', isLight);
+          document.documentElement.classList.toggle('theme-light', isLight);
+          if (toggle) {
+            toggle.textContent = isLight ? 'Dark' : 'Light';
+            toggle.title = isLight ? 'Switch to dark mode' : 'Switch to light mode';
+            toggle.setAttribute('aria-pressed', String(isLight));
+          }
+        };
+
+        document.addEventListener('DOMContentLoaded', () => {
+          const prefersLight = window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches;
+          let theme = readStoredTheme() ?? (prefersLight ? 'light' : 'light');
+          applyTheme(theme);
+
+          const toggle = document.getElementById('themeToggle');
+          if (toggle) {
+            toggle.addEventListener('click', () => {
+              theme = theme === 'light' ? 'dark' : 'light';
+              applyTheme(theme);
+              writeStoredTheme(theme);
+            });
+          }
+        });
+      })();
+    </script>
     <script>
       // ---------- 0) Firmware version ----------
       const FW_VERSION = "v1.0";
@@ -242,53 +425,6 @@
         if (wakeLock !== null && document.visibilityState === 'visible') enableWakeLock();
       });
     </script>
-
-    <!-- ---------- 3) Progress helpers (safe) ---------- -->
-    <script>
-    (() => {
-      const S = {};
-      function refs() {
-        if (!S.container) {
-          S.container = document.getElementById('ProgressContainer');
-          S.hr        = document.getElementById('ProgressHR');
-          S.title     = document.getElementById('progressTitle');
-          S.bar       = document.getElementById('progressBar');
-          S.txt       = document.getElementById('progressText');
-          S.chunks    = document.getElementById('progressChunks');
-        }
-        return S;
-      }
-      function _show(anchorBox, title) {
-        const R = refs();
-        if (R.title)  R.title.textContent = title || 'Uploading…';
-        if (R.bar)   { R.bar.value = 0; R.bar.max = 0; }
-        if (R.txt)    R.txt.textContent = '0%';
-        if (R.chunks) R.chunks.textContent = '(0/0 Bytes)';
-        if (R.container) R.container.style.display = 'block';
-        if (R.hr)        R.hr.style.display = 'block';
-        if (anchorBox && R.container) {
-          anchorBox.insertAdjacentElement('afterend', R.container);
-          if (R.hr) R.container.insertAdjacentElement('afterend', R.hr);
-          try { window.scrollTo({ top: R.container.offsetTop - 16, behavior: 'smooth' }); } catch {}
-        }
-      }
-      function _hide() {
-        const R = refs();
-        if (R.container) R.container.style.display = 'none';
-        if (R.hr)        R.hr.style.display = 'none';
-      }
-      function _update(sent, total) {
-        const R = refs();
-        if (R.bar) { R.bar.max = total; R.bar.value = sent; }
-        if (R.txt)    R.txt.textContent = Math.round((sent / (total || 1)) * 100) + '%';
-        if (R.chunks) R.chunks.textContent = `(${sent}/${total} Bytes)`;
-      }
-      window.showProgressContainer = _show;
-      window.hideProgressContainer = _hide;
-      window.updateProgress        = _update;
-    })();
-    </script>
-
     <!-- USB manifest + OTA logic -->
     <script>
       document.addEventListener("DOMContentLoaded", () => {
@@ -379,17 +515,26 @@
       document.getElementById('uploadFirmwareBtn').addEventListener('click', async (ev) => {
         preventStandby();
         try { await startFirmwareOTA(ev.currentTarget); }
-        catch (e) { alert(e.message || 'Firmware OTA failed.'); }
+        catch (e) {
+          if (window.GlobalUI) GlobalUI.error(e.message || 'Firmware OTA failed.');
+          alert(e.message || 'Firmware OTA failed.');
+        }
       });
       document.getElementById('uploadIntentionsBtn').addEventListener('click', async (ev) => {
         preventStandby();
         try { await startIntentionsOTA(ev.currentTarget); }
-        catch (e) { alert(e.message || 'Intentions OTA failed.'); }
+        catch (e) {
+          if (window.GlobalUI) GlobalUI.error(e.message || 'Intentions OTA failed.');
+          alert(e.message || 'Intentions OTA failed.');
+        }
       });
       document.getElementById('uploadLanguageBtn').addEventListener('click', async (ev) => {
         preventStandby();
         try { await startLanguageOTA(ev.currentTarget); }
-        catch (e) { alert(e.message || 'Language OTA failed.'); }
+        catch (e) {
+          if (window.GlobalUI) GlobalUI.error(e.message || 'Language OTA failed.');
+          alert(e.message || 'Language OTA failed.');
+        }
       });
 
       async function helloAndAwaitConsent(svc) {
@@ -428,6 +573,7 @@
 
       // More robust BLE discovery: prefer service filter, fallback to acceptAllDevices
       async function connectBLE(svcUuid, charUuid){
+        if (window.GlobalUI) GlobalUI.setStatus('Connecting…');
         // 1) Pick device (prefer service filter; fallback acceptAllDevices)
         try {
           device = await navigator.bluetooth.requestDevice({
@@ -474,20 +620,25 @@
         } catch {
           // optional
         }
+        if (window.GlobalUI) GlobalUI.setStatus('Connected. Preparing transfer…');
       }
 
       function setProgress(sent,total){
-        updateProgress(sent,total);
+        if (window.GlobalUI) GlobalUI.updateProgress(sent,total);
       }
 
       async function startFirmwareOTA(btn){
-        const resp = await fetch('firmware/firmware.bin'); if(!resp.ok){ alert('firmware.bin not found'); return; }
+        const resp = await fetch('firmware/firmware.bin');
+        if(!resp.ok){
+          if (window.GlobalUI) GlobalUI.error('Firmware package not found.');
+          alert('firmware.bin not found');
+          return;
+        }
         const data = new Uint8Array(await resp.arrayBuffer());
 
         // Connect first, then show progress
         await connectBLE(SERVICE_UUID,FIRMWARE_CHAR_UUID);
-        const box = btn.closest('.uploadBox') || document.getElementById('otaFwBox');
-        showProgressContainer(box, 'Firmware OTA');
+        if (window.GlobalUI) GlobalUI.showProgress('Firmware OTA');
 
         // 4-byte size header (little-endian)
         const sizeBuf = new ArrayBuffer(4);
@@ -508,37 +659,45 @@
           await waitReady();
           offset+=len; setProgress(offset,data.length);
         }
-        hideProgressContainer();
+        if (window.GlobalUI) GlobalUI.announce('Firmware OTA complete.');
       }
 
       async function startIntentionsOTA(btn){
         const path=document.getElementById('intentionsFileSelect').value;
-        const resp=await fetch(path); if(!resp.ok){ alert('Intentions file not found'); return; }
+        const resp=await fetch(path);
+        if(!resp.ok){
+          if (window.GlobalUI) GlobalUI.error('Intentions file not found.');
+          alert('Intentions file not found');
+          return;
+        }
         const data=new Uint8Array(await resp.arrayBuffer());
         const filename = path.split('/').pop();
 
         // Connect first, then show progress
         await connectBLE(SERVICE_UUID,INTENTS_CHAR_UUID);
-        const box = btn.closest('.uploadBox') || document.getElementById('otaIntsBox');
-        showProgressContainer(box, 'Intentions OTA');
+        if (window.GlobalUI) GlobalUI.showProgress('Intentions OTA');
 
         await sendNVS(data,filename);
-        hideProgressContainer();
+        if (window.GlobalUI) GlobalUI.announce('Intentions OTA complete.');
       }
 
       async function startLanguageOTA(btn){
         const path=document.getElementById('languageFileSelect').value;
-        const resp=await fetch(path); if(!resp.ok){ alert('Language file not found'); return; }
+        const resp=await fetch(path);
+        if(!resp.ok){
+          if (window.GlobalUI) GlobalUI.error('Language file not found.');
+          alert('Language file not found');
+          return;
+        }
         const data=new Uint8Array(await resp.arrayBuffer());
         const filename = path.split('/').pop();
 
         // Connect first, then show progress
         await connectBLE(SERVICE_UUID,LANG_CHAR_UUID);
-        const box = btn.closest('.uploadBox') || document.getElementById('otaLangBox');
-        showProgressContainer(box, 'Language OTA');
+        if (window.GlobalUI) GlobalUI.showProgress('Language OTA');
 
         await sendNVS(data,filename);
-        hideProgressContainer();
+        if (window.GlobalUI) GlobalUI.announce('Language OTA complete.');
       }
 
       function crc32(buf) { let crc=0xFFFFFFFF; for(let b of buf){crc^=b; for(let i=0;i<8;i++) crc=(crc>>>1)^(0xEDB88320&-(crc&1));} return (crc^0xFFFFFFFF)>>>0; }
@@ -559,7 +718,7 @@
           new DataView(packet.buffer).setUint32(len,crc,true);
           await writeChar.writeValue(packet);
           await waitReady();
-          offset+=len; updateProgress(offset,data.length);
+          offset+=len; setProgress(offset,data.length);
         }
       }
     </script>
