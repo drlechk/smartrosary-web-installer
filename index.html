@@ -63,13 +63,13 @@
         position: relative;
         display:flex;
         align-items:center;
-        justify-content:center;
+        justify-content:flex-start;
         padding: 18px 12px 16px;
         background: var(--bar);
         border-bottom: 1px solid var(--top-border);
         width: 100%;
       }
-      .header-with-lang h1 { margin:0; font-size: 20px; font-weight: 700; text-align:center; }
+      .header-with-lang h1 { margin:0; font-size: 20px; font-weight: 700; text-align:left; }
       .header-controls { position:absolute; right:12px; display:flex; align-items:center; gap:8px; }
       #themeToggle { padding: 8px 14px; border-radius: 10px; border: 1px solid var(--header-button-border); background: var(--header-button-bg); color: var(--header-button-text); font-weight: 600; cursor: pointer; transition: transform .05s ease; }
       #themeToggle:active { transform: scale(0.98); }
@@ -245,9 +245,9 @@
       <div class="header-controls">
         <button id="themeToggle" type="button" aria-pressed="false" title="Switch to light mode">Light</button>
         <select id="uiLangSelect" aria-label="Interface language">
-          <option value="pl" selected>Polski</option>
-          <option value="de">Deutsch</option>
-          <option value="en">English</option>
+          <option value="pl" selected>PL</option>
+          <option value="en">EN</option>
+          <option value="de">DE</option>
         </select>
       </div>
     </header>
