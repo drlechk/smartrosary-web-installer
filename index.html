@@ -33,16 +33,16 @@
 
       html.theme-light {
         color-scheme: light;
-        --bg: linear-gradient(180deg, #f5f9ff 0%, #e9f1ff 55%, #dde9ff 100%);
+        --bg: linear-gradient(180deg, #0f5aa0 0%, #0b4f8f 55%, #09457e 100%);
         --text: #0f172a;
         --muted: #64748b;
         --card: #ffffffcc;
         --border: #cbd5f5;
-        --accent: #1d4ed8;
+        --accent: #0974cc;
         --accent-contrast: #ffffff;
-        --bar: #dbeafe;
-        --top-border: rgba(148, 163, 184, 0.35);
-        --toolbar-track: rgba(191, 209, 231, 0.6);
+        --bar: #0b4f8f;
+        --top-border: rgba(183, 214, 245, 0.25);
+        --toolbar-track: rgba(18, 34, 52, 0.55);
         --header-button-bg: #f1f5f9;
         --header-button-border: #cbd5f5;
         --header-button-text: #1e3a8a;
@@ -121,7 +121,8 @@
       .uploadBtn:active { transform: scale(0.98); }
 
       html.theme-light body { color: var(--text); }
-      html.theme-light .header-with-lang h1 { color: #1e3a8a; }
+      html.theme-light .header-with-lang h1 { color: var(--accent-contrast); }
+      html.theme-light .toolbar-status { color: var(--accent-contrast); }
       html.theme-light a { color: #1d4ed8; }
       html.theme-light label { color: var(--text); }
 
@@ -265,7 +266,7 @@
 
       <!-- USB -->
       <div class="uploadBox" id="usbBox">
-        <h2 id="usbTitle">Upload firmware v1.0 via USB</h2>
+        <h2 id="usbTitle">Upload firmware v1.1 via USB</h2>
         <div class="controls-container">
           <table class="controls-table">
             <tr>
@@ -295,7 +296,7 @@
 
       <!-- OTA: Firmware -->
       <div class="uploadBox" id="otaFwBox">
-        <h2 id="otaTitle">Upload firmware v1.0 via OTA</h2>
+        <h2 id="otaTitle">Upload firmware v1.1 via OTA</h2>
         <div style="text-align: center; margin-top: 1em;">
           <button id="uploadFirmwareBtn" class="uploadBtn">Connect & Upload</button>
         </div>
@@ -381,7 +382,7 @@
     </script>
     <script>
       // ---------- 0) Firmware version ----------
-      const FW_VERSION = "v1.0";
+      const FW_VERSION = "v1.1";
 
       // ---------- 1) UI i18n ----------
       const i18n = {
