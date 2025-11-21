@@ -119,6 +119,18 @@
       /* Buttons */
       .uploadBtn { cursor: pointer; font-size: 14px; font-weight: 600; padding: 10px 16px; color: var(--accent-contrast); background-color: var(--accent); border: none; border-radius: 10px; transition: transform .05s ease; }
       .uploadBtn:active { transform: scale(0.98); }
+      esp-web-install-button::part(button) {
+        cursor: pointer;
+        font-size: 14px;
+        font-weight: 600;
+        padding: 10px 16px;
+        color: var(--accent-contrast);
+        background-color: var(--accent);
+        border: none;
+        border-radius: 10px;
+        transition: transform .05s ease;
+      }
+      esp-web-install-button::part(button):active { transform: scale(0.98); }
 
       html.theme-light body { color: var(--text); }
       html.theme-light .header-with-lang h1 { color: var(--accent-contrast); }
@@ -164,7 +176,7 @@
     </script>
     <script>
       const GlobalUI = (() => {
-        const STATUS_IDLE = 'Ready.';
+        let statusIdle = 'Ready.';
         let statusEl = null;
         let progressWrap = null;
         let progressBar = null;
@@ -179,7 +191,7 @@
 
         const setStatus = (text) => {
           refs();
-          if (statusEl) statusEl.textContent = text || STATUS_IDLE;
+          if (statusEl) statusEl.textContent = text || statusIdle;
         };
 
         const showProgress = (title) => {
@@ -232,7 +244,12 @@
           resetTimer = null;
         };
 
-        return { setStatus, showProgress, updateProgress, hideProgress, reset, announce, error };
+        const setIdleText = (text) => {
+          statusIdle = text || 'Ready.';
+          setStatus();
+        };
+
+        return { setStatus, showProgress, updateProgress, hideProgress, reset, announce, error, setIdleText };
       })();
       window.GlobalUI = GlobalUI;
       document.addEventListener('DOMContentLoaded', () => GlobalUI.reset());
@@ -290,7 +307,12 @@
             </tr>
           </table>
         </div>
-        <p align="center"><esp-web-install-button></esp-web-install-button></p>
+        <p align="center">
+          <esp-web-install-button>
+            <button slot="activate" id="usbInstallActivate" class="uploadBtn" type="button">Connect & Upload</button>
+            <span slot="unsupported" id="ewtUnsupported">Your browser does not support installing things on ESP devices. Use Google Chrome or Microsoft Edge.</span>
+          </esp-web-install-button>
+        </p>
         <div class="footer">USB Installer powered by <a href="https://esphome.github.io/esp-web-tools/">ESP Web Tools</a>.</div>
       </div>
 
@@ -358,9 +380,13 @@
           document.body.classList.toggle('theme-light', isLight);
           document.documentElement.classList.toggle('theme-light', isLight);
           if (toggle) {
-            toggle.textContent = isLight ? 'Dark' : 'Light';
-            toggle.title = isLight ? 'Switch to dark mode' : 'Switch to light mode';
-            toggle.setAttribute('aria-pressed', String(isLight));
+            if (window.updateThemeToggleText) {
+              window.updateThemeToggleText(isLight);
+            } else {
+              toggle.textContent = isLight ? 'Dark' : 'Light';
+              toggle.title = isLight ? 'Switch to dark mode' : 'Switch to light mode';
+              toggle.setAttribute('aria-pressed', String(isLight));
+            }
           }
         };
 
@@ -390,52 +416,227 @@
           langLabel: "Język",
           title: "SmartRosary Instalator",
           usbTitle: `Wgraj firmware ${FW_VERSION} przez USB`,
-          otaTitle: `Wgraj firmware ${FW_VERSION} przez Bluetooth`,
-          langTitle: "Wgraj język przez Bluetooth",
-          intentsTitle: "Wgraj intencje przez Bluetooth",
+          otaTitle: `Wgraj firmware ${FW_VERSION} przez OTA`,
+          langTitle: "Wgraj język przez OTA",
+          intentsTitle: "Wgraj intencje przez OTA",
           connectUpload: "Połącz i wgraj",
           fwLangLabel: "Język:",
-          intentionsLabel: "Intencje:"
+          intentionsLabel: "Intencje:",
+          noneOption: "Brak",
+          statusReady: "Gotowe.",
+          statusConnecting: "Łączenie…",
+          statusPreparing: "Połączono. Przygotowywanie transferu…",
+          errorNotRosary: "Wybrane urządzenie to nie różaniec (błąd nazwy).",
+          errorConsent: "Urządzenie odmówiło zgody lub upłynął czas. Dotknij \"Allow\" i spróbuj ponownie.",
+          errorFirmwareMissing: "Nie znaleziono paczki firmware.",
+          errorIntentionsMissing: "Nie znaleziono pliku z intencjami.",
+          errorLanguageMissing: "Nie znaleziono pliku językowego.",
+          errorFirmwareFailed: "Aktualizacja firmware nie powiodła się.",
+          errorIntentionsFailed: "Aktualizacja intencji nie powiodła się.",
+          errorLanguageFailed: "Aktualizacja języka nie powiodła się.",
+          progressFirmware: "Aktualizacja firmware",
+          progressIntentions: "Aktualizacja intencji",
+          progressLanguage: "Aktualizacja języka",
+          completeFirmware: "Aktualizacja firmware zakończona.",
+          completeIntentions: "Aktualizacja intencji zakończona.",
+          completeLanguage: "Aktualizacja języka zakończona.",
+          uiLangAria: "Język interfejsu",
+          usbFooter: "Instalator USB wspierany przez",
+          themeLightLabel: "Jasny",
+          themeDarkLabel: "Ciemny",
+          themeLightTitle: "Przełącz na jasny tryb",
+          themeDarkTitle: "Przełącz na ciemny tryb"
         },
         de: {
           langLabel: "Sprache",
           title: "SmartRosary Installer",
           usbTitle: `Firmware ${FW_VERSION} per USB hochladen`,
-          otaTitle: `Firmware ${FW_VERSION} per Bluetooth hochladen`,
-          langTitle: "Sprache per Bluetooth hochladen",
-          intentsTitle: "Intentionen per Bluetooth hochladen",
+          otaTitle: `Firmware ${FW_VERSION} per OTA hochladen`,
+          langTitle: "Sprache per OTA hochladen",
+          intentsTitle: "Intentionen per OTA hochladen",
           connectUpload: "Verbinden & Hochladen",
           fwLangLabel: "Sprache:",
-          intentionsLabel: "Intentionen:"
+          intentionsLabel: "Intentionen:",
+          noneOption: "Keine",
+          statusReady: "Bereit.",
+          statusConnecting: "Verbinden…",
+          statusPreparing: "Verbunden. Übertragung wird vorbereitet…",
+          errorNotRosary: "Ausgewähltes Gerät ist kein Rosenkranz (Namensprüfung fehlgeschlagen).",
+          errorConsent: "Gerät verweigert Zustimmung oder Zeitüberschreitung. Bitte \"Allow\" am Gerät wählen und erneut versuchen.",
+          errorFirmwareMissing: "Firmware-Paket nicht gefunden.",
+          errorIntentionsMissing: "Intentionen-Datei nicht gefunden.",
+          errorLanguageMissing: "Sprachdatei nicht gefunden.",
+          errorFirmwareFailed: "Firmware-Update fehlgeschlagen.",
+          errorIntentionsFailed: "Intentionen-Update fehlgeschlagen.",
+          errorLanguageFailed: "Sprach-Update fehlgeschlagen.",
+          progressFirmware: "Firmware-Update",
+          progressIntentions: "Intentionen-Update",
+          progressLanguage: "Sprach-Update",
+          completeFirmware: "Firmware-Update abgeschlossen.",
+          completeIntentions: "Intentionen-Update abgeschlossen.",
+          completeLanguage: "Sprach-Update abgeschlossen.",
+          uiLangAria: "Interface-Sprache",
+          usbFooter: "USB-Installer bereitgestellt von",
+          themeLightLabel: "Hell",
+          themeDarkLabel: "Dunkel",
+          themeLightTitle: "Auf helles Design umschalten",
+          themeDarkTitle: "Auf dunkles Design umschalten",
+          unsupportedMsg: "Ihr Browser unterstützt die Installation auf ESP-Geräten nicht. Bitte Google Chrome oder Microsoft Edge verwenden."
         },
         en: {
           langLabel: "Language",
           title: "SmartRosary Installer",
           usbTitle: `Upload firmware ${FW_VERSION} via USB`,
-          otaTitle: `Upload firmware ${FW_VERSION} via Bluetooth`,
-          langTitle: "Upload language via Bluetooth",
-          intentsTitle: "Upload intentions via Bluetooth",
+          otaTitle: `Upload firmware ${FW_VERSION} via OTA`,
+          langTitle: "Upload language via OTA",
+          intentsTitle: "Upload intentions via OTA",
           connectUpload: "Connect & Upload",
           fwLangLabel: "Language:",
-          intentionsLabel: "Intentions:"
+          intentionsLabel: "Intentions:",
+          noneOption: "None",
+          statusReady: "Ready.",
+          statusConnecting: "Connecting…",
+          statusPreparing: "Connected. Preparing transfer…",
+          errorNotRosary: "Picked device is not a rosary (name check failed).",
+          errorConsent: "Device denied consent or timed out. Please tap \"Allow\" on the device and try again.",
+          errorFirmwareMissing: "Firmware package not found.",
+          errorIntentionsMissing: "Intentions file not found.",
+          errorLanguageMissing: "Language file not found.",
+          errorFirmwareFailed: "Firmware OTA failed.",
+          errorIntentionsFailed: "Intentions OTA failed.",
+          errorLanguageFailed: "Language OTA failed.",
+          progressFirmware: "Firmware OTA",
+          progressIntentions: "Intentions OTA",
+          progressLanguage: "Language OTA",
+          completeFirmware: "Firmware OTA complete.",
+          completeIntentions: "Intentions OTA complete.",
+          completeLanguage: "Language OTA complete.",
+          uiLangAria: "Interface language",
+          usbFooter: "USB Installer powered by",
+          themeLightLabel: "Light",
+          themeDarkLabel: "Dark",
+          themeLightTitle: "Switch to light mode",
+          themeDarkTitle: "Switch to dark mode",
+          unsupportedMsg: "Your browser does not support installing things on ESP devices. Use Google Chrome or Microsoft Edge."
+        },
+        pl: {
+          langLabel: "Język",
+          title: "SmartRosary Instalator",
+          usbTitle: `Wgraj firmware ${FW_VERSION} przez USB`,
+          otaTitle: `Wgraj firmware ${FW_VERSION} przez OTA`,
+          langTitle: "Wgraj język przez OTA",
+          intentsTitle: "Wgraj intencje przez OTA",
+          connectUpload: "Połącz i wgraj",
+          fwLangLabel: "Język:",
+          intentionsLabel: "Intencje:",
+          noneOption: "Brak",
+          statusReady: "Gotowe.",
+          statusConnecting: "Łączenie…",
+          statusPreparing: "Połączono. Przygotowywanie transferu…",
+          errorNotRosary: "Wybrane urządzenie to nie różaniec (błąd nazwy).",
+          errorConsent: "Urządzenie odmówiło zgody lub upłynął czas. Dotknij \"Allow\" i spróbuj ponownie.",
+          errorFirmwareMissing: "Nie znaleziono paczki firmware.",
+          errorIntentionsMissing: "Nie znaleziono pliku z intencjami.",
+          errorLanguageMissing: "Nie znaleziono pliku językowego.",
+          errorFirmwareFailed: "Aktualizacja firmware nie powiodła się.",
+          errorIntentionsFailed: "Aktualizacja intencji nie powiodła się.",
+          errorLanguageFailed: "Aktualizacja języka nie powiodła się.",
+          progressFirmware: "Aktualizacja firmware",
+          progressIntentions: "Aktualizacja intencji",
+          progressLanguage: "Aktualizacja języka",
+          completeFirmware: "Aktualizacja firmware zakończona.",
+          completeIntentions: "Aktualizacja intencji zakończona.",
+          completeLanguage: "Aktualizacja języka zakończona.",
+          uiLangAria: "Język interfejsu",
+          usbFooter: "Instalator USB wspierany przez",
+          themeLightLabel: "Jasny",
+          themeDarkLabel: "Ciemny",
+          themeLightTitle: "Przełącz na jasny tryb",
+          themeDarkTitle: "Przełącz na ciemny tryb",
+          unsupportedMsg: "Twoja przeglądarka nie obsługuje instalacji na urządzeniach ESP. Użyj Google Chrome lub Microsoft Edge."
         }
       };
 
-      function setLanguage(lang) {
-        const t = i18n[lang] || i18n.en;
-        document.getElementById("title").textContent       = t.title;
-        document.getElementById("usbTitle").textContent    = t.usbTitle;
-        document.getElementById("otaTitle").textContent    = t.otaTitle;
-        document.getElementById("langTitle").textContent   = t.langTitle;
-        document.getElementById("intentsTitle").textContent= t.intentsTitle;
-        document.getElementById("fwLangLabel").textContent = t.fwLangLabel;
-        document.getElementById("intentionsLabel").textContent = t.intentionsLabel;
-        document.querySelectorAll(".uploadBtn").forEach(btn => btn.textContent = t.connectUpload);
+
+      let currentLang = 'pl';
+
+      function getTranslation(langKey = currentLang) {
+        return i18n[langKey] || i18n.en;
       }
 
-      const uiLangSelect = document.getElementById("uiLangSelect");
-      uiLangSelect.addEventListener("change", e => setLanguage(e.target.value));
-      setLanguage(uiLangSelect.value);
+      function t(key) {
+        const dict = getTranslation();
+        return dict[key] || i18n.en[key] || '';
+      }
+
+      function updateThemeToggleText(isLight) {
+        const toggle = document.getElementById('themeToggle');
+        if (!toggle) return;
+        const dict = getTranslation();
+        toggle.textContent = isLight ? dict.themeDarkLabel : dict.themeLightLabel;
+        toggle.title = isLight ? dict.themeDarkTitle : dict.themeLightTitle;
+        toggle.setAttribute('aria-pressed', String(isLight));
+      }
+      window.updateThemeToggleText = updateThemeToggleText;
+
+      function setLanguage(lang) {
+        currentLang = i18n[lang] ? lang : 'en';
+        const dict = getTranslation();
+
+        document.documentElement.lang = currentLang;
+        document.title = dict.title;
+
+        const uiLangSelect = document.getElementById("uiLangSelect");
+        if (uiLangSelect) {
+          uiLangSelect.setAttribute("aria-label", dict.uiLangAria);
+          uiLangSelect.value = currentLang;
+        }
+
+        const titleEl = document.getElementById("title");
+        if (titleEl) titleEl.textContent = dict.title;
+        const usbTitle = document.getElementById("usbTitle");
+        if (usbTitle) usbTitle.textContent = dict.usbTitle;
+        const otaTitle = document.getElementById("otaTitle");
+        if (otaTitle) otaTitle.textContent = dict.otaTitle;
+        const langTitle = document.getElementById("langTitle");
+        if (langTitle) langTitle.textContent = dict.langTitle;
+        const intentsTitle = document.getElementById("intentsTitle");
+        if (intentsTitle) intentsTitle.textContent = dict.intentsTitle;
+        const fwLabel = document.getElementById("fwLangLabel");
+        if (fwLabel) fwLabel.textContent = dict.fwLangLabel;
+        const intentsLabel = document.getElementById("intentionsLabel");
+        if (intentsLabel) intentsLabel.textContent = dict.intentionsLabel;
+
+        const noneOption = document.querySelector('#intentions option[value="none"]');
+        if (noneOption) noneOption.textContent = dict.noneOption;
+
+        const statusBar = document.getElementById("globalStatus");
+        if (statusBar) statusBar.textContent = dict.statusReady;
+        if (window.GlobalUI && GlobalUI.setIdleText) GlobalUI.setIdleText(dict.statusReady);
+
+        document.querySelectorAll(".uploadBtn").forEach(btn => btn.textContent = dict.connectUpload);
+
+        const footer = document.querySelector("#usbBox .footer");
+        if (footer) {
+          const link = footer.querySelector("a");
+          footer.textContent = `${dict.usbFooter} `;
+          if (link) footer.appendChild(link);
+          footer.appendChild(document.createTextNode("."));
+        }
+
+        const unsupported = document.getElementById("ewtUnsupported");
+        if (unsupported) unsupported.textContent = dict.unsupportedMsg || i18n.en.unsupportedMsg;
+      }
+
+      document.addEventListener("DOMContentLoaded", () => {
+        const uiLangSelect = document.getElementById("uiLangSelect");
+        const initialLang = (uiLangSelect && uiLangSelect.value) ? uiLangSelect.value : currentLang;
+        setLanguage(initialLang);
+
+        if (uiLangSelect) {
+          uiLangSelect.addEventListener("change", e => setLanguage(e.target.value));
+        }
+      });
 
       // ---------- 2) Screen wake-lock ----------
       let wakeLock = null;
@@ -549,24 +750,27 @@
         preventStandby();
         try { await startFirmwareOTA(ev.currentTarget); }
         catch (e) {
-          if (window.GlobalUI) GlobalUI.error(e.message || 'Firmware OTA failed.');
-          alert(e.message || 'Firmware OTA failed.');
+          const msg = e.message || t('errorFirmwareFailed');
+          if (window.GlobalUI) GlobalUI.error(msg);
+          alert(msg);
         }
       });
       document.getElementById('uploadIntentionsBtn').addEventListener('click', async (ev) => {
         preventStandby();
         try { await startIntentionsOTA(ev.currentTarget); }
         catch (e) {
-          if (window.GlobalUI) GlobalUI.error(e.message || 'Intentions OTA failed.');
-          alert(e.message || 'Intentions OTA failed.');
+          const msg = e.message || t('errorIntentionsFailed');
+          if (window.GlobalUI) GlobalUI.error(msg);
+          alert(msg);
         }
       });
       document.getElementById('uploadLanguageBtn').addEventListener('click', async (ev) => {
         preventStandby();
         try { await startLanguageOTA(ev.currentTarget); }
         catch (e) {
-          if (window.GlobalUI) GlobalUI.error(e.message || 'Language OTA failed.');
-          alert(e.message || 'Language OTA failed.');
+          const msg = e.message || t('errorLanguageFailed');
+          if (window.GlobalUI) GlobalUI.error(msg);
+          alert(msg);
         }
       });
 
@@ -606,7 +810,7 @@
 
       // More robust BLE discovery: prefer service filter, fallback to acceptAllDevices
       async function connectBLE(svcUuid, charUuid){
-        if (window.GlobalUI) GlobalUI.setStatus('Connecting…');
+        if (window.GlobalUI) GlobalUI.setStatus(t('statusConnecting'));
         // 1) Pick device (prefer service filter; fallback acceptAllDevices)
         try {
           device = await navigator.bluetooth.requestDevice({
@@ -619,7 +823,7 @@
             optionalServices: [svcUuid, SERVICE_UUID]
           });
           if (!device.name || !device.name.toLowerCase().startsWith('rosary')) {
-            throw new Error('Picked device is not a rosary (name check failed).');
+            throw new Error(t('errorNotRosary'));
           }
         }
 
@@ -637,7 +841,7 @@
             const ctrl = await svc.getCharacteristic(INFO_CTRL_UUID);
             await ctrl.writeValue(Uint8Array.of(0x42)); // CANCEL_WEB
           } catch {}
-          throw new Error('Device denied consent or timed out. Please tap "Allow" on the device and try again.');
+          throw new Error(t('errorConsent'));
         }
 
         // 5) Now it’s safe to use your target write characteristic
@@ -653,7 +857,7 @@
         } catch {
           // optional
         }
-        if (window.GlobalUI) GlobalUI.setStatus('Connected. Preparing transfer…');
+        if (window.GlobalUI) GlobalUI.setStatus(t('statusPreparing'));
       }
 
       function setProgress(sent,total){
@@ -663,15 +867,16 @@
       async function startFirmwareOTA(btn){
         const resp = await fetch('firmware/firmware.bin');
         if(!resp.ok){
-          if (window.GlobalUI) GlobalUI.error('Firmware package not found.');
-          alert('firmware.bin not found');
+          const msg = t('errorFirmwareMissing');
+          if (window.GlobalUI) GlobalUI.error(msg);
+          alert(msg);
           return;
         }
         const data = new Uint8Array(await resp.arrayBuffer());
 
         // Connect first, then show progress
         await connectBLE(SERVICE_UUID,FIRMWARE_CHAR_UUID);
-        if (window.GlobalUI) GlobalUI.showProgress('Firmware OTA');
+        if (window.GlobalUI) GlobalUI.showProgress(t('progressFirmware'));
 
         // 4-byte size header (little-endian)
         const sizeBuf = new ArrayBuffer(4);
@@ -692,15 +897,16 @@
           await waitReady();
           offset+=len; setProgress(offset,data.length);
         }
-        if (window.GlobalUI) GlobalUI.announce('Firmware OTA complete.');
+        if (window.GlobalUI) GlobalUI.announce(t('completeFirmware'));
       }
 
       async function startIntentionsOTA(btn){
         const path=document.getElementById('intentionsFileSelect').value;
         const resp=await fetch(path);
         if(!resp.ok){
-          if (window.GlobalUI) GlobalUI.error('Intentions file not found.');
-          alert('Intentions file not found');
+          const msg = t('errorIntentionsMissing');
+          if (window.GlobalUI) GlobalUI.error(msg);
+          alert(msg);
           return;
         }
         const data=new Uint8Array(await resp.arrayBuffer());
@@ -708,18 +914,19 @@
 
         // Connect first, then show progress
         await connectBLE(SERVICE_UUID,INTENTS_CHAR_UUID);
-        if (window.GlobalUI) GlobalUI.showProgress('Intentions OTA');
+        if (window.GlobalUI) GlobalUI.showProgress(t('progressIntentions'));
 
         await sendNVS(data,filename);
-        if (window.GlobalUI) GlobalUI.announce('Intentions OTA complete.');
+        if (window.GlobalUI) GlobalUI.announce(t('completeIntentions'));
       }
 
       async function startLanguageOTA(btn){
         const path=document.getElementById('languageFileSelect').value;
         const resp=await fetch(path);
         if(!resp.ok){
-          if (window.GlobalUI) GlobalUI.error('Language file not found.');
-          alert('Language file not found');
+          const msg = t('errorLanguageMissing');
+          if (window.GlobalUI) GlobalUI.error(msg);
+          alert(msg);
           return;
         }
         const data=new Uint8Array(await resp.arrayBuffer());
@@ -727,10 +934,10 @@
 
         // Connect first, then show progress
         await connectBLE(SERVICE_UUID,LANG_CHAR_UUID);
-        if (window.GlobalUI) GlobalUI.showProgress('Language OTA');
+        if (window.GlobalUI) GlobalUI.showProgress(t('progressLanguage'));
 
         await sendNVS(data,filename);
-        if (window.GlobalUI) GlobalUI.announce('Language OTA complete.');
+        if (window.GlobalUI) GlobalUI.announce(t('completeLanguage'));
       }
 
       function crc32(buf) { let crc=0xFFFFFFFF; for(let b of buf){crc^=b; for(let i=0;i<8;i++) crc=(crc>>>1)^(0xEDB88320&-(crc&1));} return (crc^0xFFFFFFFF)>>>0; }
