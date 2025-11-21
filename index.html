@@ -650,10 +650,15 @@
           console.warn('WakeLock error:', err.name, err.message);
         }
       }
-      const noSleep = new NoSleep();
+      let noSleep = null;
       function preventStandby() {
         enableWakeLock();
-        try { noSleep.enable(); } catch {}
+        try {
+          if (!noSleep && typeof NoSleep !== 'undefined') {
+            noSleep = new NoSleep();
+          }
+          if (noSleep) noSleep.enable();
+        } catch {}
       }
       document.addEventListener('visibilitychange', () => {
         if (wakeLock !== null && document.visibilityState === 'visible') enableWakeLock();
