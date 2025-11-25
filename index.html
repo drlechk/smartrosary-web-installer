@@ -316,17 +316,17 @@
         <div class="footer">USB Installer powered by <a href="https://esphome.github.io/esp-web-tools/">ESP Web Tools</a>.</div>
       </div>
 
-      <!-- OTA: Firmware -->
+      <!-- Bluetooth: Firmware -->
       <div class="uploadBox" id="otaFwBox">
-        <h2 id="otaTitle">Upload firmware v1.1 via OTA</h2>
+        <h2 id="otaTitle">Upload firmware v1.1 via Bluetooth</h2>
         <div style="text-align: center; margin-top: 1em;">
           <button id="uploadFirmwareBtn" class="uploadBtn">Connect & Upload</button>
         </div>
       </div>
 
-      <!-- OTA: Language -->
+      <!-- Bluetooth: Language -->
       <div class="uploadBox" id="otaLangBox">
-        <h2 id="langTitle">Upload language via OTA</h2>
+        <h2 id="langTitle">Upload language via Bluetooth</h2>
         <div style="text-align: center; margin-top: 1em;">
           <select id="languageFileSelect">
             <option value="lang/nvs-lang-pl.bin" selected>Polski</option>
@@ -339,9 +339,9 @@
         </div>
       </div>
 
-      <!-- OTA: Intentions -->
+      <!-- Bluetooth: Intentions -->
       <div class="uploadBox" id="otaIntsBox">
-        <h2 id="intentsTitle">Upload intentions via OTA</h2>
+        <h2 id="intentsTitle">Upload intentions via Bluetooth</h2>
         <div style="text-align: center; margin-top: 1em;">
           <select id="intentionsFileSelect">
             <option value="intentions/nvs-intentions-pmkdus-2025.bin">Żywy Różaniec 2025 (PMK Düsseldorf)</option>
@@ -416,9 +416,9 @@
           langLabel: "Język",
           title: "SmartRosary Instalator",
           usbTitle: `Wgraj firmware ${FW_VERSION} przez USB`,
-          otaTitle: `Wgraj firmware ${FW_VERSION} przez OTA`,
-          langTitle: "Wgraj język przez OTA",
-          intentsTitle: "Wgraj intencje przez OTA",
+          otaTitle: `Wgraj firmware ${FW_VERSION} przez Bluetooth`,
+          langTitle: "Wgraj język przez Bluetooth",
+          intentsTitle: "Wgraj intencje przez Bluetooth",
           connectUpload: "Połącz i wgraj",
           fwLangLabel: "Język:",
           intentionsLabel: "Intencje:",
@@ -451,9 +451,9 @@
           langLabel: "Sprache",
           title: "SmartRosary Installer",
           usbTitle: `Firmware ${FW_VERSION} per USB hochladen`,
-          otaTitle: `Firmware ${FW_VERSION} per OTA hochladen`,
-          langTitle: "Sprache per OTA hochladen",
-          intentsTitle: "Intentionen per OTA hochladen",
+          otaTitle: `Firmware ${FW_VERSION} per Bluetooth hochladen`,
+          langTitle: "Sprache per Bluetooth hochladen",
+          intentsTitle: "Intentionen per Bluetooth hochladen",
           connectUpload: "Verbinden & Hochladen",
           fwLangLabel: "Sprache:",
           intentionsLabel: "Intentionen:",
@@ -487,9 +487,9 @@
           langLabel: "Language",
           title: "SmartRosary Installer",
           usbTitle: `Upload firmware ${FW_VERSION} via USB`,
-          otaTitle: `Upload firmware ${FW_VERSION} via OTA`,
-          langTitle: "Upload language via OTA",
-          intentsTitle: "Upload intentions via OTA",
+          otaTitle: `Upload firmware ${FW_VERSION} via Bluetooth`,
+          langTitle: "Upload language via Bluetooth",
+          intentsTitle: "Upload intentions via Bluetooth",
           connectUpload: "Connect & Upload",
           fwLangLabel: "Language:",
           intentionsLabel: "Intentions:",
@@ -502,15 +502,15 @@
           errorFirmwareMissing: "Firmware package not found.",
           errorIntentionsMissing: "Intentions file not found.",
           errorLanguageMissing: "Language file not found.",
-          errorFirmwareFailed: "Firmware OTA failed.",
-          errorIntentionsFailed: "Intentions OTA failed.",
-          errorLanguageFailed: "Language OTA failed.",
-          progressFirmware: "Firmware OTA",
-          progressIntentions: "Intentions OTA",
-          progressLanguage: "Language OTA",
-          completeFirmware: "Firmware OTA complete.",
-          completeIntentions: "Intentions OTA complete.",
-          completeLanguage: "Language OTA complete.",
+          errorFirmwareFailed: "Bluetooth firmware upload failed.",
+          errorIntentionsFailed: "Bluetooth intentions upload failed.",
+          errorLanguageFailed: "Bluetooth language upload failed.",
+          progressFirmware: "Bluetooth firmware upload",
+          progressIntentions: "Bluetooth intentions upload",
+          progressLanguage: "Bluetooth language upload",
+          completeFirmware: "Bluetooth firmware upload complete.",
+          completeIntentions: "Bluetooth intentions upload complete.",
+          completeLanguage: "Bluetooth language upload complete.",
           uiLangAria: "Interface language",
           usbFooter: "USB Installer powered by",
           themeLightLabel: "Light",
@@ -523,9 +523,9 @@
           langLabel: "Język",
           title: "SmartRosary Instalator",
           usbTitle: `Wgraj firmware ${FW_VERSION} przez USB`,
-          otaTitle: `Wgraj firmware ${FW_VERSION} przez OTA`,
-          langTitle: "Wgraj język przez OTA",
-          intentsTitle: "Wgraj intencje przez OTA",
+          otaTitle: `Wgraj firmware ${FW_VERSION} przez Bluetooth`,
+          langTitle: "Wgraj język przez Bluetooth",
+          intentsTitle: "Wgraj intencje przez Bluetooth",
           connectUpload: "Połącz i wgraj",
           fwLangLabel: "Język:",
           intentionsLabel: "Intencje:",
@@ -664,7 +664,7 @@
         if (wakeLock !== null && document.visibilityState === 'visible') enableWakeLock();
       });
     </script>
-    <!-- USB manifest + OTA logic -->
+    <!-- USB manifest + Bluetooth logic -->
     <script>
       document.addEventListener("DOMContentLoaded", () => {
         customElements.whenDefined("esp-web-install-button").then(() => {
@@ -737,7 +737,7 @@
       });
     </script>
 
-    <!-- OTA uploader (firmware / lang / intentions) -->
+    <!-- Bluetooth uploader (firmware / lang / intentions) -->
     <script>
       // UUIDs — MUST match firmware (lowercase)
       const SERVICE_UUID       = '12345678-1234-5678-1234-56789abcdef0';
@@ -753,7 +753,7 @@
 
       document.getElementById('uploadFirmwareBtn').addEventListener('click', async (ev) => {
         preventStandby();
-        try { await startFirmwareOTA(ev.currentTarget); }
+        try { await startFirmwareBluetooth(ev.currentTarget); }
         catch (e) {
           const msg = e.message || t('errorFirmwareFailed');
           if (window.GlobalUI) GlobalUI.error(msg);
@@ -762,7 +762,7 @@
       });
       document.getElementById('uploadIntentionsBtn').addEventListener('click', async (ev) => {
         preventStandby();
-        try { await startIntentionsOTA(ev.currentTarget); }
+        try { await startIntentionsBluetooth(ev.currentTarget); }
         catch (e) {
           const msg = e.message || t('errorIntentionsFailed');
           if (window.GlobalUI) GlobalUI.error(msg);
@@ -771,7 +771,7 @@
       });
       document.getElementById('uploadLanguageBtn').addEventListener('click', async (ev) => {
         preventStandby();
-        try { await startLanguageOTA(ev.currentTarget); }
+        try { await startLanguageBluetooth(ev.currentTarget); }
         catch (e) {
           const msg = e.message || t('errorLanguageFailed');
           if (window.GlobalUI) GlobalUI.error(msg);
@@ -835,7 +835,7 @@
         // 2) Connect
         const gatt = await device.gatt.connect();
 
-        // 3) Always get the main OTA service (it contains STATUS + INFO_CTRL)
+        // 3) Always get the main Bluetooth service (it contains STATUS + INFO_CTRL)
         const svc = await gatt.getPrimaryService(SERVICE_UUID);
 
         // 4) Ask for consent (HELLO_WEB -> LVGL “Allow Web” modal on device)
@@ -869,7 +869,7 @@
         if (window.GlobalUI) GlobalUI.updateProgress(sent,total);
       }
 
-      async function startFirmwareOTA(btn){
+      async function startFirmwareBluetooth(btn){
         const resp = await fetch('firmware/firmware.bin');
         if(!resp.ok){
           const msg = t('errorFirmwareMissing');
@@ -905,7 +905,7 @@
         if (window.GlobalUI) GlobalUI.announce(t('completeFirmware'));
       }
 
-      async function startIntentionsOTA(btn){
+      async function startIntentionsBluetooth(btn){
         const path=document.getElementById('intentionsFileSelect').value;
         const resp=await fetch(path);
         if(!resp.ok){
@@ -925,7 +925,7 @@
         if (window.GlobalUI) GlobalUI.announce(t('completeIntentions'));
       }
 
-      async function startLanguageOTA(btn){
+      async function startLanguageBluetooth(btn){
         const path=document.getElementById('languageFileSelect').value;
         const resp=await fetch(path);
         if(!resp.ok){
