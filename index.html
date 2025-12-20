@@ -70,6 +70,17 @@
         width: 100%;
       }
       .header-with-lang h1 { margin:0; font-size: 20px; font-weight: 700; text-align:left; }
+      .deploy-info {
+        position: absolute;
+        left: 12px;
+        top: 6px;
+        font-size: 10px;
+        letter-spacing: 0.2px;
+        color: #95a7ba;
+        opacity: 0.8;
+        pointer-events: none;
+        white-space: nowrap;
+      }
       .header-controls { position:absolute; right:12px; display:flex; align-items:center; gap:8px; }
       #themeToggle { padding: 8px 14px; border-radius: 10px; border: 1px solid var(--header-button-border); background: var(--header-button-bg); color: var(--header-button-text); font-weight: 600; cursor: pointer; transition: transform .05s ease; }
       #themeToggle:active { transform: scale(0.98); }
@@ -259,6 +270,7 @@
   <body>
     <div class="safe-top-fill" aria-hidden="true"></div>
     <header class="header-with-lang">
+      <div id="deployInfo" class="deploy-info" aria-label="Last deploy"></div>
       <h1 id="title">SmartRosary Web Installer</h1>
       <div class="header-controls">
         <button id="themeToggle" type="button" aria-pressed="false" title="Switch to light mode">Light</button>
@@ -632,6 +644,21 @@
         const uiLangSelect = document.getElementById("uiLangSelect");
         const initialLang = (uiLangSelect && uiLangSelect.value) ? uiLangSelect.value : currentLang;
         setLanguage(initialLang);
+
+        const deployInfo = document.getElementById("deployInfo");
+        if (deployInfo) {
+          const ts = new Date(document.lastModified);
+          const formatted = isNaN(ts.getTime())
+            ? ""
+            : ts.toLocaleString(undefined, {
+                year: "numeric",
+                month: "short",
+                day: "numeric",
+                hour: "2-digit",
+                minute: "2-digit"
+              });
+          deployInfo.textContent = formatted ? `Last deploy: ${formatted}` : "";
+        }
 
         if (uiLangSelect) {
           uiLangSelect.addEventListener("change", e => setLanguage(e.target.value));
