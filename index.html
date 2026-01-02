@@ -77,16 +77,14 @@
         flex: 1;
       }
       .deploy-info {
-        position: absolute;
-        left: 12px;
-        top: 6px;
         font-size: 10px;
         letter-spacing: 0.2px;
-        color: #95a7ba;
+        color: var(--muted);
         opacity: 0.8;
         pointer-events: none;
         white-space: nowrap;
       }
+      .page-footer { padding: 12px; text-align: center; }
       .header-controls { position:absolute; right:12px; display:flex; align-items:center; gap:8px; }
       #themeToggle { padding: 8px 14px; border-radius: 10px; border: 1px solid var(--header-button-border); background: var(--header-button-bg); color: var(--header-button-text); font-weight: 600; cursor: pointer; transition: transform .05s ease; }
       #themeToggle:active { transform: scale(0.98); }
@@ -273,15 +271,14 @@
     </script>
     <script type="module" src="https://unpkg.com/esp-web-tools@10.1.0/dist/web/install-button.js"></script>
   </head>
-  <body>
-    <div class="safe-top-fill" aria-hidden="true"></div>
-    <header class="header-with-lang">
-      <div id="deployInfo" class="deploy-info" aria-label="Last deploy"></div>
-      <h1 id="title">SmartRosary Web Installer</h1>
-      <div class="header-controls">
-        <button id="themeToggle" type="button" aria-pressed="false" title="Switch to light mode">Light</button>
-        <select id="uiLangSelect" aria-label="Interface language">
-          <option value="pl" selected>PL</option>
+	  <body>
+	    <div class="safe-top-fill" aria-hidden="true"></div>
+	    <header class="header-with-lang">
+	      <h1 id="title">SmartRosary Web Installer</h1>
+	      <div class="header-controls">
+	        <button id="themeToggle" type="button" aria-pressed="false" title="Switch to light mode">Light</button>
+	        <select id="uiLangSelect" aria-label="Interface language">
+	          <option value="pl" selected>PL</option>
           <option value="en">EN</option>
           <option value="de">DE</option>
         </select>
@@ -370,13 +367,16 @@
         </div>
       </div>
 
-      <div id="log" style="display:none;"></div>
-    </div>
+	      <div id="log" style="display:none;"></div>
+	    </div>
+	    <footer class="page-footer" aria-label="Footer">
+	      <div id="deployInfo" class="deploy-info" aria-label="Last deploy"></div>
+	    </footer>
 
-    <!-- Wake lock helpers -->
-    <script src="https://lib.arvancloud.ir/nosleep/0.91.0/NoSleep.min.js"></script>
-    <script>
-      (() => {
+	    <!-- Wake lock helpers -->
+	    <script src="https://lib.arvancloud.ir/nosleep/0.91.0/NoSleep.min.js"></script>
+	    <script>
+	      (() => {
         const THEME_KEY = 'dashboard-theme';
 
         const readStoredTheme = () => {
