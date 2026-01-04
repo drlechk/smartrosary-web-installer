@@ -314,14 +314,15 @@
             <tr>
               <td><label for="intentions" id="intentionsLabel">Intentions:</label></td>
               <td>
-                <select id="intentions">
-                  <option value="none">None</option>
-                  <option value="rosary">Żywy Różaniec 2025 (PMK Düsseldorf)</option>
-                </select>
-              </td>
-            </tr>
-          </table>
-        </div>
+	                <select id="intentions">
+	                  <option value="none">None</option>
+	                  <option value="rosary">Żywy Różaniec 2025 (PMK Düsseldorf)</option>
+	                  <option value="rosary2026">Żywy Różaniec 2026 (PMK Düsseldorf)</option>
+	                </select>
+	              </td>
+	            </tr>
+	          </table>
+	        </div>
         <p align="center">
           <esp-web-install-button>
             <button slot="activate" id="usbInstallActivate" class="uploadBtn" type="button">Connect & Upload</button>
@@ -358,10 +359,11 @@
       <div class="uploadBox" id="otaIntsBox">
         <h2 id="intentsTitle">Upload intentions via Bluetooth</h2>
         <div style="text-align: center; margin-top: 1em;">
-          <select id="intentionsFileSelect">
-            <option value="intentions/nvs-intentions-pmkdus-2025.bin">Żywy Różaniec 2025 (PMK Düsseldorf)</option>
-          </select>
-        </div>
+	          <select id="intentionsFileSelect">
+	            <option value="intentions/nvs-intentions-pmkdus-2026.bin">Żywy Różaniec 2026 (PMK Düsseldorf)</option>
+	            <option value="intentions/nvs-intentions-pmkdus-2025.bin">Żywy Różaniec 2025 (PMK Düsseldorf)</option>
+	          </select>
+	        </div>
         <div style="text-align: center; margin-top: 1em;">
           <button id="uploadIntentionsBtn" class="uploadBtn">Connect & Upload</button>
         </div>
@@ -721,14 +723,19 @@
             de: { name: "Deutsch", path: "smartrosary-web-installer/lang/nvs-lang-de.bin", offset: 0x2F5000 }
           };
 
-          const intentions = {
-            none: null,
-            rosary: {
-              name: "Żywy Różaniec 2025",
-              path: "smartrosary-web-installer/intentions/nvs-intentions-pmkdus-2025.bin",
-              offset: 0x2F0000
-            }
-          };
+	          const intentions = {
+	            none: null,
+	            rosary: {
+	              name: "Żywy Różaniec 2025",
+	              path: "smartrosary-web-installer/intentions/nvs-intentions-pmkdus-2025.bin",
+	              offset: 0x2F0000
+	            },
+	            rosary2026: {
+	              name: "Żywy Różaniec 2026",
+	              path: "smartrosary-web-installer/intentions/nvs-intentions-pmkdus-2026.bin",
+	              offset: 0x2F0000
+	            }
+	          };
 
           function buildManifest() {
             if (btn._blobUrl) URL.revokeObjectURL(btn._blobUrl);
