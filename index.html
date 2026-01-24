@@ -325,7 +325,7 @@
 	        </div>
         <p align="center">
           <esp-web-install-button>
-            <button slot="activate" id="usbInstallActivate" class="uploadBtn" type="button">Connect & Upload</button>
+            <button slot="activate" id="usbInstallActivate" class="uploadBtn" type="button" disabled>Connect & Upload</button>
             <span slot="unsupported" id="ewtUnsupported">Your browser does not support installing things on ESP devices. Use Google Chrome or Microsoft Edge.</span>
           </esp-web-install-button>
         </p>
@@ -376,9 +376,35 @@
 	    </footer>
 
 	    <!-- Wake lock helpers -->
-	    <script src="https://lib.arvancloud.ir/nosleep/0.91.0/NoSleep.min.js"></script>
 	    <script>
 	      (() => {
+        const NOSLEEP_SRC = 'https://lib.arvancloud.ir/nosleep/0.91.0/NoSleep.min.js';
+        let noSleepLoadPromise = null;
+
+        function loadNoSleep() {
+          if (typeof NoSleep !== 'undefined') return Promise.resolve();
+          if (noSleepLoadPromise) return noSleepLoadPromise;
+
+          noSleepLoadPromise = new Promise((resolve, reject) => {
+            const existing = document.querySelector(`script[data-nosleep="true"]`);
+            if (existing) {
+              existing.addEventListener('load', () => resolve(), { once: true });
+              existing.addEventListener('error', () => reject(new Error('NoSleep load failed')), { once: true });
+              return;
+            }
+
+            const script = document.createElement('script');
+            script.src = NOSLEEP_SRC;
+            script.async = true;
+            script.dataset.nosleep = 'true';
+            script.addEventListener('load', () => resolve(), { once: true });
+            script.addEventListener('error', () => reject(new Error('NoSleep load failed')), { once: true });
+            document.head.appendChild(script);
+          });
+
+          return noSleepLoadPromise;
+        }
+
         const THEME_KEY = 'dashboard-theme';
 
         const readStoredTheme = () => {
@@ -410,20 +436,18 @@
           }
         };
 
-        document.addEventListener('DOMContentLoaded', () => {
-          const prefersLight = window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches;
-          let theme = readStoredTheme() ?? (prefersLight ? 'light' : 'light');
-          applyTheme(theme);
+        const prefersLight = window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches;
+        let theme = readStoredTheme() ?? (prefersLight ? 'light' : 'light');
+        applyTheme(theme);
 
-          const toggle = document.getElementById('themeToggle');
-          if (toggle) {
-            toggle.addEventListener('click', () => {
-              theme = theme === 'light' ? 'dark' : 'light';
-              applyTheme(theme);
-              writeStoredTheme(theme);
-            });
-          }
-        });
+        const toggle = document.getElementById('themeToggle');
+        if (toggle) {
+          toggle.addEventListener('click', () => {
+            theme = theme === 'light' ? 'dark' : 'light';
+            applyTheme(theme);
+            writeStoredTheme(theme);
+          });
+        }
       })();
     </script>
     <script>
@@ -648,30 +672,30 @@
         if (unsupported) unsupported.textContent = dict.unsupportedMsg || i18n.en.unsupportedMsg;
       }
 
-      document.addEventListener("DOMContentLoaded", () => {
-        const uiLangSelect = document.getElementById("uiLangSelect");
-        const initialLang = (uiLangSelect && uiLangSelect.value) ? uiLangSelect.value : currentLang;
-        setLanguage(initialLang);
+	      (() => {
+	        const uiLangSelect = document.getElementById("uiLangSelect");
+	        const initialLang = (uiLangSelect && uiLangSelect.value) ? uiLangSelect.value : currentLang;
+	        setLanguage(initialLang);
 
-        const deployInfo = document.getElementById("deployInfo");
-        if (deployInfo) {
-          const ts = new Date(document.lastModified);
-          const formatted = isNaN(ts.getTime())
-            ? ""
-            : ts.toLocaleString(undefined, {
-                year: "numeric",
-                month: "short",
-                day: "numeric",
-                hour: "2-digit",
-                minute: "2-digit"
-              });
-          deployInfo.textContent = formatted ? `Last deploy: ${formatted}` : "";
-        }
+	        const deployInfo = document.getElementById("deployInfo");
+	        if (deployInfo) {
+	          const ts = new Date(document.lastModified);
+	          const formatted = isNaN(ts.getTime())
+	            ? ""
+	            : ts.toLocaleString(undefined, {
+	                year: "numeric",
+	                month: "short",
+	                day: "numeric",
+	                hour: "2-digit",
+	                minute: "2-digit"
+	              });
+	          deployInfo.textContent = formatted ? `Last deploy: ${formatted}` : "";
+	        }
 
-        if (uiLangSelect) {
-          uiLangSelect.addEventListener("change", e => setLanguage(e.target.value));
-        }
-      });
+	        if (uiLangSelect) {
+	          uiLangSelect.addEventListener("change", e => setLanguage(e.target.value));
+	        }
+	      })();
 
       // ---------- 2) Screen wake-lock ----------
       let wakeLock = null;
@@ -688,22 +712,33 @@
       let noSleep = null;
       function preventStandby() {
         enableWakeLock();
-        try {
-          if (!noSleep && typeof NoSleep !== 'undefined') {
-            noSleep = new NoSleep();
-          }
-          if (noSleep) noSleep.enable();
-        } catch {}
+        loadNoSleep()
+          .then(() => {
+            try {
+              if (!noSleep && typeof NoSleep !== 'undefined') noSleep = new NoSleep();
+              if (noSleep) noSleep.enable();
+            } catch {}
+          })
+          .catch(() => {});
       }
       document.addEventListener('visibilitychange', () => {
         if (wakeLock !== null && document.visibilityState === 'visible') enableWakeLock();
       });
+
+      // Warm the cache without blocking interactivity.
+      if ('requestIdleCallback' in window) {
+        requestIdleCallback(() => loadNoSleep().catch(() => {}), { timeout: 2000 });
+      } else {
+        setTimeout(() => loadNoSleep().catch(() => {}), 1200);
+      }
     </script>
     <!-- USB manifest + Bluetooth logic -->
     <script>
-      document.addEventListener("DOMContentLoaded", () => {
+      (() => {
         customElements.whenDefined("esp-web-install-button").then(() => {
           const btn     = document.querySelector("esp-web-install-button");
+          const activateBtn = document.getElementById("usbInstallActivate");
+          if (activateBtn) activateBtn.disabled = false;
           const selLang = document.getElementById("language");
           const selInt  = document.getElementById("intentions");
           const origin  = window.location.origin;
@@ -774,7 +809,7 @@
           selInt .addEventListener("change", buildManifest);
           buildManifest();
         });
-      });
+      })();
     </script>
 
     <!-- Bluetooth uploader (firmware / lang / intentions) -->
