@@ -404,6 +404,8 @@
 
           return noSleepLoadPromise;
         }
+        // Expose for other scripts (Bluetooth uploader calls preventStandby()).
+        window.loadNoSleep = loadNoSleep;
 
         const THEME_KEY = 'dashboard-theme';
 
@@ -712,7 +714,7 @@
       let noSleep = null;
       function preventStandby() {
         enableWakeLock();
-        loadNoSleep()
+        (window.loadNoSleep ? window.loadNoSleep() : Promise.resolve())
           .then(() => {
             try {
               if (!noSleep && typeof NoSleep !== 'undefined') noSleep = new NoSleep();
@@ -727,9 +729,9 @@
 
       // Warm the cache without blocking interactivity.
       if ('requestIdleCallback' in window) {
-        requestIdleCallback(() => loadNoSleep().catch(() => {}), { timeout: 2000 });
+        requestIdleCallback(() => (window.loadNoSleep ? window.loadNoSleep() : Promise.resolve()).catch(() => {}), { timeout: 2000 });
       } else {
-        setTimeout(() => loadNoSleep().catch(() => {}), 1200);
+        setTimeout(() => (window.loadNoSleep ? window.loadNoSleep() : Promise.resolve()).catch(() => {}), 1200);
       }
     </script>
     <!-- USB manifest + Bluetooth logic -->
