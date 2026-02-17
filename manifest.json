@@ -1,6 +1,6 @@
 {
   "name": "SmartRosary Polski",
-  "version": "v1.17",
+  "version": "v1.18",
   "funding_url": "https://esphome.io/guides/supporters.html",
   "builds": [
     {
@@ -9,9 +9,9 @@
         { "path": "firmware/bootloader-silent.bin", "offset": 0 },
         { "path": "firmware/partitions.bin", "offset": 32768 },
         { "path": "firmware/boot_app0.bin", "offset": 57344 },
-        { "path": "firmware/app.bin", "offset": 65536 },
-        { "path": "lang/nvs-lang-pl.bin", "offset": 3096576 },
-        { "path": "spiffs/wallpaper.bin", "offset": 3284992 }
+        { "path": "firmware/firmware.bin", "offset": 65536 },
+        { "path": "lang/nvs-lang-pl.bin", "offset": 3100672 },
+        { "path": "spiffs/wallpaper.bin", "offset": 3289088 }
       ]
     }
   ]
