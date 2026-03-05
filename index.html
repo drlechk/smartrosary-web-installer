@@ -296,42 +296,6 @@
     </div>
     <div class="content">
 
-      <!-- USB -->
-      <div class="uploadBox" id="usbBox">
-	        <h2 id="usbTitle">Upload firmware v1.18 via USB</h2>
-        <div class="controls-container">
-          <table class="controls-table">
-            <tr>
-              <td><label for="language" id="fwLangLabel">Language (firmware data):</label></td>
-              <td>
-                <select id="language">
-                  <option value="pl" selected>Polski</option>
-                  <option value="en">English</option>
-                  <option value="de">Deutsch</option>
-                </select>
-              </td>
-            </tr>
-            <tr>
-              <td><label for="intentions" id="intentionsLabel">Intentions:</label></td>
-              <td>
-	                <select id="intentions">
-	                  <option value="none">None</option>
-	                  <option value="rosary">Żywy Różaniec 2025 (PMK Düsseldorf)</option>
-	                  <option value="rosary2026">Żywy Różaniec 2026 (PMK Düsseldorf)</option>
-	                </select>
-	              </td>
-	            </tr>
-	          </table>
-	        </div>
-        <p align="center">
-          <esp-web-install-button>
-            <button slot="activate" id="usbInstallActivate" class="uploadBtn" type="button" disabled>Connect & Upload</button>
-            <span slot="unsupported" id="ewtUnsupported">Your browser does not support installing things on ESP devices. Use Google Chrome or Microsoft Edge.</span>
-          </esp-web-install-button>
-        </p>
-        <div class="footer">USB Installer powered by <a href="https://esphome.github.io/esp-web-tools/">ESP Web Tools</a>.</div>
-      </div>
-
       <!-- Bluetooth: Firmware -->
       <div class="uploadBox" id="otaFwBox">
 	        <h2 id="otaTitle">Upload firmware v1.18 via Bluetooth</h2>
@@ -367,6 +331,42 @@
         <div style="text-align: center; margin-top: 1em;">
           <button id="uploadIntentionsBtn" class="uploadBtn">Connect & Upload</button>
         </div>
+      </div>
+
+      <!-- USB -->
+      <div class="uploadBox" id="usbBox">
+	        <h2 id="usbTitle">Upload firmware v1.18 via USB</h2>
+        <div class="controls-container">
+          <table class="controls-table">
+            <tr>
+              <td><label for="language" id="fwLangLabel">Language (firmware data):</label></td>
+              <td>
+                <select id="language">
+                  <option value="pl" selected>Polski</option>
+                  <option value="en">English</option>
+                  <option value="de">Deutsch</option>
+                </select>
+              </td>
+            </tr>
+            <tr>
+              <td><label for="intentions" id="intentionsLabel">Intentions:</label></td>
+              <td>
+	                <select id="intentions">
+	                  <option value="none">None</option>
+	                  <option value="rosary">Żywy Różaniec 2025 (PMK Düsseldorf)</option>
+	                  <option value="rosary2026">Żywy Różaniec 2026 (PMK Düsseldorf)</option>
+	                </select>
+	              </td>
+	            </tr>
+	          </table>
+	        </div>
+        <p align="center">
+          <esp-web-install-button>
+            <button slot="activate" id="usbInstallActivate" class="uploadBtn" type="button" disabled>Connect & Upload</button>
+            <span slot="unsupported" id="ewtUnsupported">Your browser does not support installing things on ESP devices. Use Google Chrome or Microsoft Edge.</span>
+          </esp-web-install-button>
+        </p>
+        <div class="footer">USB Installer powered by <a href="https://esphome.github.io/esp-web-tools/">ESP Web Tools</a>.</div>
       </div>
 
 	      <div id="log" style="display:none;"></div>
