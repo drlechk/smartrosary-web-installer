@@ -269,6 +269,12 @@
       window.GlobalUI = GlobalUI;
       document.addEventListener('DOMContentLoaded', () => GlobalUI.reset());
     </script>
+    <script src="i18n/pl.js"></script>
+    <script src="i18n/en.js"></script>
+    <script src="i18n/de.js"></script>
+    <script src="i18n/es.js"></script>
+    <script src="i18n/fr.js"></script>
+    <script src="i18n/pt.js"></script>
     <script type="module" src="https://unpkg.com/esp-web-tools@10.1.0/dist/web/install-button.js"></script>
   </head>
 	  <body>
@@ -281,6 +287,9 @@
 	          <option value="pl" selected>PL</option>
           <option value="en">EN</option>
           <option value="de">DE</option>
+          <option value="es">ES</option>
+          <option value="fr">FR</option>
+          <option value="pt">PT</option>
         </select>
       </div>
     </header>
@@ -312,6 +321,9 @@
             <option value="lang/nvs-lang-pl.bin" selected>Polski</option>
             <option value="lang/nvs-lang-en.bin">English</option>
             <option value="lang/nvs-lang-de.bin">Deutsch</option>
+            <option value="lang/nvs-lang-es.bin">Español</option>
+            <option value="lang/nvs-lang-fr.bin">Français</option>
+            <option value="lang/nvs-lang-pt.bin">Português</option>
           </select>
         </div>
         <div style="text-align: center; margin-top: 1em;">
@@ -345,6 +357,9 @@
                   <option value="pl" selected>Polski</option>
                   <option value="en">English</option>
                   <option value="de">Deutsch</option>
+                  <option value="es">Español</option>
+                  <option value="fr">Français</option>
+                  <option value="pt">Português</option>
                 </select>
               </td>
             </tr>
@@ -371,7 +386,7 @@
 
 	      <div id="log" style="display:none;"></div>
 	    </div>
-	    <footer class="page-footer" aria-label="Footer">
+	    <footer id="pageFooter" class="page-footer" aria-label="Footer">
 	      <div id="deployInfo" class="deploy-info" aria-label="Last deploy"></div>
 	    </footer>
 
@@ -457,151 +472,13 @@
       const FW_VERSION = "v1.22";
 
       // ---------- 1) UI i18n ----------
-      const i18n = {
-        pl: {
-          langLabel: "Język",
-          title: "SmartRosary Instalator",
-          usbTitle: `Wgraj firmware ${FW_VERSION} przez USB`,
-          otaTitle: `Wgraj firmware ${FW_VERSION} przez Bluetooth`,
-          langTitle: "Wgraj język przez Bluetooth",
-          intentsTitle: "Wgraj intencje przez Bluetooth",
-          connectUpload: "Połącz i wgraj",
-          fwLangLabel: "Język:",
-          intentionsLabel: "Intencje:",
-          noneOption: "Brak",
-          statusReady: "Gotowe.",
-          statusConnecting: "Łączenie…",
-          statusPreparing: "Połączono. Przygotowywanie transferu…",
-          errorNotRosary: "Wybrane urządzenie to nie różaniec (błąd nazwy).",
-          errorConsent: "Urządzenie odmówiło zgody lub upłynął czas. Dotknij \"Allow\" i spróbuj ponownie.",
-          errorFirmwareMissing: "Nie znaleziono paczki firmware.",
-          errorIntentionsMissing: "Nie znaleziono pliku z intencjami.",
-          errorLanguageMissing: "Nie znaleziono pliku językowego.",
-          errorFirmwareFailed: "Aktualizacja firmware nie powiodła się.",
-          errorIntentionsFailed: "Aktualizacja intencji nie powiodła się.",
-          errorLanguageFailed: "Aktualizacja języka nie powiodła się.",
-          progressFirmware: "Aktualizacja firmware",
-          progressIntentions: "Aktualizacja intencji",
-          progressLanguage: "Aktualizacja języka",
-          completeFirmware: "Aktualizacja firmware zakończona.",
-          completeIntentions: "Aktualizacja intencji zakończona.",
-          completeLanguage: "Aktualizacja języka zakończona.",
-          uiLangAria: "Język interfejsu",
-          usbFooter: "Instalator USB wspierany przez",
-          themeLightLabel: "Jasny",
-          themeDarkLabel: "Ciemny",
-          themeLightTitle: "Przełącz na jasny tryb",
-          themeDarkTitle: "Przełącz na ciemny tryb"
-        },
-        de: {
-          langLabel: "Sprache",
-          title: "SmartRosary Installer",
-          usbTitle: `Firmware ${FW_VERSION} per USB hochladen`,
-          otaTitle: `Firmware ${FW_VERSION} per Bluetooth hochladen`,
-          langTitle: "Sprache per Bluetooth hochladen",
-          intentsTitle: "Intentionen per Bluetooth hochladen",
-          connectUpload: "Verbinden & Hochladen",
-          fwLangLabel: "Sprache:",
-          intentionsLabel: "Intentionen:",
-          noneOption: "Keine",
-          statusReady: "Bereit.",
-          statusConnecting: "Verbinden…",
-          statusPreparing: "Verbunden. Übertragung wird vorbereitet…",
-          errorNotRosary: "Ausgewähltes Gerät ist kein Rosenkranz (Namensprüfung fehlgeschlagen).",
-          errorConsent: "Gerät verweigert Zustimmung oder Zeitüberschreitung. Bitte \"Allow\" am Gerät wählen und erneut versuchen.",
-          errorFirmwareMissing: "Firmware-Paket nicht gefunden.",
-          errorIntentionsMissing: "Intentionen-Datei nicht gefunden.",
-          errorLanguageMissing: "Sprachdatei nicht gefunden.",
-          errorFirmwareFailed: "Firmware-Update fehlgeschlagen.",
-          errorIntentionsFailed: "Intentionen-Update fehlgeschlagen.",
-          errorLanguageFailed: "Sprach-Update fehlgeschlagen.",
-          progressFirmware: "Firmware-Update",
-          progressIntentions: "Intentionen-Update",
-          progressLanguage: "Sprach-Update",
-          completeFirmware: "Firmware-Update abgeschlossen.",
-          completeIntentions: "Intentionen-Update abgeschlossen.",
-          completeLanguage: "Sprach-Update abgeschlossen.",
-          uiLangAria: "Interface-Sprache",
-          usbFooter: "USB-Installer bereitgestellt von",
-          themeLightLabel: "Hell",
-          themeDarkLabel: "Dunkel",
-          themeLightTitle: "Auf helles Design umschalten",
-          themeDarkTitle: "Auf dunkles Design umschalten",
-          unsupportedMsg: "Ihr Browser unterstützt die Installation auf ESP-Geräten nicht. Bitte Google Chrome oder Microsoft Edge verwenden."
-        },
-        en: {
-          langLabel: "Language",
-          title: "SmartRosary Installer",
-          usbTitle: `Upload firmware ${FW_VERSION} via USB`,
-          otaTitle: `Upload firmware ${FW_VERSION} via Bluetooth`,
-          langTitle: "Upload language via Bluetooth",
-          intentsTitle: "Upload intentions via Bluetooth",
-          connectUpload: "Connect & Upload",
-          fwLangLabel: "Language:",
-          intentionsLabel: "Intentions:",
-          noneOption: "None",
-          statusReady: "Ready.",
-          statusConnecting: "Connecting…",
-          statusPreparing: "Connected. Preparing transfer…",
-          errorNotRosary: "Picked device is not a rosary (name check failed).",
-          errorConsent: "Device denied consent or timed out. Please tap \"Allow\" on the device and try again.",
-          errorFirmwareMissing: "Firmware package not found.",
-          errorIntentionsMissing: "Intentions file not found.",
-          errorLanguageMissing: "Language file not found.",
-          errorFirmwareFailed: "Bluetooth firmware upload failed.",
-          errorIntentionsFailed: "Bluetooth intentions upload failed.",
-          errorLanguageFailed: "Bluetooth language upload failed.",
-          progressFirmware: "Bluetooth firmware upload",
-          progressIntentions: "Bluetooth intentions upload",
-          progressLanguage: "Bluetooth language upload",
-          completeFirmware: "Bluetooth firmware upload complete.",
-          completeIntentions: "Bluetooth intentions upload complete.",
-          completeLanguage: "Bluetooth language upload complete.",
-          uiLangAria: "Interface language",
-          usbFooter: "USB Installer powered by",
-          themeLightLabel: "Light",
-          themeDarkLabel: "Dark",
-          themeLightTitle: "Switch to light mode",
-          themeDarkTitle: "Switch to dark mode",
-          unsupportedMsg: "Your browser does not support installing things on ESP devices. Use Google Chrome or Microsoft Edge."
-        },
-        pl: {
-          langLabel: "Język",
-          title: "SmartRosary Instalator",
-          usbTitle: `Wgraj firmware ${FW_VERSION} przez USB`,
-          otaTitle: `Wgraj firmware ${FW_VERSION} przez Bluetooth`,
-          langTitle: "Wgraj język przez Bluetooth",
-          intentsTitle: "Wgraj intencje przez Bluetooth",
-          connectUpload: "Połącz i wgraj",
-          fwLangLabel: "Język:",
-          intentionsLabel: "Intencje:",
-          noneOption: "Brak",
-          statusReady: "Gotowe.",
-          statusConnecting: "Łączenie…",
-          statusPreparing: "Połączono. Przygotowywanie transferu…",
-          errorNotRosary: "Wybrane urządzenie to nie różaniec (błąd nazwy).",
-          errorConsent: "Urządzenie odmówiło zgody lub upłynął czas. Dotknij \"Allow\" i spróbuj ponownie.",
-          errorFirmwareMissing: "Nie znaleziono paczki firmware.",
-          errorIntentionsMissing: "Nie znaleziono pliku z intencjami.",
-          errorLanguageMissing: "Nie znaleziono pliku językowego.",
-          errorFirmwareFailed: "Aktualizacja firmware nie powiodła się.",
-          errorIntentionsFailed: "Aktualizacja intencji nie powiodła się.",
-          errorLanguageFailed: "Aktualizacja języka nie powiodła się.",
-          progressFirmware: "Aktualizacja firmware",
-          progressIntentions: "Aktualizacja intencji",
-          progressLanguage: "Aktualizacja języka",
-          completeFirmware: "Aktualizacja firmware zakończona.",
-          completeIntentions: "Aktualizacja intencji zakończona.",
-          completeLanguage: "Aktualizacja języka zakończona.",
-          uiLangAria: "Język interfejsu",
-          usbFooter: "Instalator USB wspierany przez",
-          themeLightLabel: "Jasny",
-          themeDarkLabel: "Ciemny",
-          themeLightTitle: "Przełącz na jasny tryb",
-          themeDarkTitle: "Przełącz na ciemny tryb",
-          unsupportedMsg: "Twoja przeglądarka nie obsługuje instalacji na urządzeniach ESP. Użyj Google Chrome lub Microsoft Edge."
-        }
-      };
+      const localeFactories = window.SmartRosaryLocales || {};
+      const i18n = Object.fromEntries(
+        Object.entries(localeFactories).map(([langKey, createLocale]) => [
+          langKey,
+          typeof createLocale === "function" ? createLocale(FW_VERSION) : createLocale
+        ])
+      );
 
 
       let currentLang = 'pl';
@@ -638,6 +515,22 @@
           uiLangSelect.value = currentLang;
         }
 
+        const languageFileSelect = document.getElementById("languageFileSelect");
+        if (languageFileSelect) {
+          const matchingLanguageBin = `lang/nvs-lang-${currentLang}.bin`;
+          const hasMatchingBin = Array.from(languageFileSelect.options).some(option => option.value === matchingLanguageBin);
+          if (hasMatchingBin) languageFileSelect.value = matchingLanguageBin;
+        }
+
+        const firmwareLanguageSelect = document.getElementById("language");
+        if (firmwareLanguageSelect) {
+          const hasMatchingLanguage = Array.from(firmwareLanguageSelect.options).some(option => option.value === currentLang);
+          if (hasMatchingLanguage && firmwareLanguageSelect.value !== currentLang) {
+            firmwareLanguageSelect.value = currentLang;
+            firmwareLanguageSelect.dispatchEvent(new Event("change"));
+          }
+        }
+
         const titleEl = document.getElementById("title");
         if (titleEl) titleEl.textContent = dict.title;
         const usbTitle = document.getElementById("usbTitle");
@@ -672,6 +565,12 @@
 
         const unsupported = document.getElementById("ewtUnsupported");
         if (unsupported) unsupported.textContent = dict.unsupportedMsg || i18n.en.unsupportedMsg;
+
+        const pageFooter = document.getElementById("pageFooter");
+        if (pageFooter) pageFooter.setAttribute("aria-label", dict.footerAria || i18n.en.footerAria);
+
+        const deployInfo = document.getElementById("deployInfo");
+        if (deployInfo) deployInfo.setAttribute("aria-label", dict.deployLabel || i18n.en.deployLabel);
       }
 
 	      (() => {
@@ -691,7 +590,7 @@
 	                hour: "2-digit",
 	                minute: "2-digit"
 	              });
-	          deployInfo.textContent = formatted ? `Last deploy: ${formatted}` : "";
+	          deployInfo.textContent = formatted ? `${t('deployLabel')}: ${formatted}` : "";
 	        }
 
 	        if (uiLangSelect) {
@@ -757,7 +656,10 @@
           const languages = {
             pl: { name: "Polski",  path: "smartrosary-web-installer/lang/nvs-lang-pl.bin", offset: 0x2F5000 },
             en: { name: "English", path: "smartrosary-web-installer/lang/nvs-lang-en.bin", offset: 0x2F5000 },
-            de: { name: "Deutsch", path: "smartrosary-web-installer/lang/nvs-lang-de.bin", offset: 0x2F5000 }
+            de: { name: "Deutsch", path: "smartrosary-web-installer/lang/nvs-lang-de.bin", offset: 0x2F5000 },
+            es: { name: "Español", path: "smartrosary-web-installer/lang/nvs-lang-es.bin", offset: 0x2F5000 },
+            fr: { name: "Français", path: "smartrosary-web-installer/lang/nvs-lang-fr.bin", offset: 0x2F5000 },
+            pt: { name: "Português", path: "smartrosary-web-installer/lang/nvs-lang-pt.bin", offset: 0x2F5000 }
           };
 
 	          const intentions = {
