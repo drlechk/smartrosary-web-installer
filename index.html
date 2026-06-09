@@ -189,6 +189,7 @@
         }
       })();
     </script>
+    <script src="version.js"></script>
     <script>
       const GlobalUI = (() => {
         let statusIdle = 'Ready.';
@@ -307,7 +308,7 @@
 
       <!-- Bluetooth: Firmware -->
       <div class="uploadBox" id="otaFwBox">
-	        <h2 id="otaTitle">Upload firmware v1.23 via Bluetooth</h2>
+	        <h2 id="otaTitle">Upload firmware via Bluetooth</h2>
         <div style="text-align: center; margin-top: 1em;">
           <button id="uploadFirmwareBtn" class="uploadBtn">Connect & Upload</button>
         </div>
@@ -347,7 +348,7 @@
 
       <!-- USB -->
       <div class="uploadBox" id="usbBox">
-	        <h2 id="usbTitle">Upload firmware v1.23 via USB</h2>
+	        <h2 id="usbTitle">Upload firmware via USB</h2>
         <div class="controls-container">
           <table class="controls-table">
             <tr>
@@ -469,7 +470,7 @@
     </script>
     <script>
       // ---------- 0) Firmware version ----------
-      const FW_VERSION = "v1.23";
+      const FW_VERSION = window.SMARTROSARY_VERSION;
 
       // ---------- 1) UI i18n ----------
       const localeFactories = window.SmartRosaryLocales || {};

@@ -1,0 +1,1 @@
+window.SMARTROSARY_VERSION = "v1.24";
