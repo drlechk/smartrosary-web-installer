@@ -1,6 +1,15 @@
 // Generated from /Users/lech/Projects/PlatformIO/esp32c3-rosary release commits after 622ef97.
 window.SmartRosaryChangelog = [
   {
+    version: "v1.26",
+    releaseCommit: "N/A",
+    changes: [
+      { hash: "", text: "Fixed intentions schedule wiping issue upon initial unified restore" },
+      { hash: "", text: "Resolved BLE pacing timeout during dashboard restore" },
+      { hash: "", text: "Corrected NVS binary data structure for proper intention titles on device" }
+    ]
+  },
+  {
     version: "v1.25",
     releaseCommit: "4a4209d",
     changes: [
