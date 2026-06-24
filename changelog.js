@@ -2,7 +2,7 @@
 window.SmartRosaryChangelog = [
   {
     version: "v1.26",
-    releaseCommit: "N/A",
+    releaseCommit: "f36d6ac",
     changes: [
       { hash: "", text: "Fixed intentions schedule wiping issue upon initial unified restore" },
       { hash: "", text: "Resolved BLE pacing timeout during dashboard restore" },
