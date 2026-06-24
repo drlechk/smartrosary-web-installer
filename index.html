@@ -122,6 +122,12 @@
       .controls-table td {border: none; padding: 0.3rem 0.5rem; vertical-align: middle;}
       label { display: inline-block; width: 160px; max-width: 100%; }
       .content select { padding: 8px 10px; background: var(--control-bg); color: var(--control-text); border:1px solid var(--control-border); border-radius:8px; width: 100%; max-width: 100%; }
+      .changelog-controls { display: grid; grid-template-columns: 160px minmax(0, 1fr); gap: 10px; align-items: center; margin-top: 12px; }
+      .changelog-meta { margin: 12px 0 0; color: var(--muted); font-size: 12px; text-align: center; }
+      .changelog-list { margin: 12px 0 0; padding-left: 0; list-style: none; }
+      .changelog-list li { display: grid; grid-template-columns: 68px minmax(0, 1fr); gap: 10px; padding: 8px 0; border-top: 1px solid var(--border); }
+      .commit-hash { color: var(--muted); font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace; font-size: 12px; line-height: 1.7; }
+      .change-text { min-width: 0; overflow-wrap: anywhere; }
 
       /* Mobile: stack labels and inputs to avoid overflow */
       @media (max-width: 560px) {
@@ -129,6 +135,8 @@
         .controls-table, .controls-table tr, .controls-table td { display: block; width: 100%; }
         .controls-table tr { margin-bottom: 10px; }
         label { width: 100%; margin-bottom: 6px; }
+        .changelog-controls { grid-template-columns: 1fr; gap: 6px; }
+        .changelog-list li { grid-template-columns: 1fr; gap: 2px; }
       }
 
       /* Buttons */
@@ -190,6 +198,7 @@
       })();
     </script>
     <script src="version.js"></script>
+    <script src="changelog.js"></script>
     <script>
       const GlobalUI = (() => {
         let statusIdle = 'Ready.';
@@ -385,6 +394,17 @@
         <div class="footer">USB Installer powered by <a href="https://esphome.github.io/esp-web-tools/">ESP Web Tools</a>.</div>
       </div>
 
+      <!-- Changelog -->
+      <div class="uploadBox" id="changelogBox">
+        <h2 id="changelogTitle">Firmware changelog</h2>
+        <div class="changelog-controls">
+          <label for="changelogVersion" id="changelogVersionLabel">Version:</label>
+          <select id="changelogVersion"></select>
+        </div>
+        <p class="changelog-meta" id="changelogMeta"></p>
+        <ul class="changelog-list" id="changelogList"></ul>
+      </div>
+
 	      <div id="log" style="display:none;"></div>
 	    </div>
 	    <footer id="pageFooter" class="page-footer" aria-label="Footer">
@@ -493,6 +513,57 @@
         return dict[key] || i18n.en[key] || '';
       }
 
+      const changelogEntries = Array.isArray(window.SmartRosaryChangelog) ? window.SmartRosaryChangelog : [];
+
+      function populateChangelog() {
+        const select = document.getElementById("changelogVersion");
+        if (!select || !changelogEntries.length) return;
+
+        select.innerHTML = "";
+        changelogEntries.forEach(entry => {
+          const option = document.createElement("option");
+          option.value = entry.version;
+          option.textContent = entry.version;
+          select.appendChild(option);
+        });
+
+        const preferred = changelogEntries.some(entry => entry.version === FW_VERSION)
+          ? FW_VERSION
+          : changelogEntries[0].version;
+        select.value = preferred;
+        select.addEventListener("change", renderChangelog);
+        renderChangelog();
+      }
+
+      function renderChangelog() {
+        const select = document.getElementById("changelogVersion");
+        const list = document.getElementById("changelogList");
+        const meta = document.getElementById("changelogMeta");
+        if (!select || !list || !meta) return;
+
+        const dict = getTranslation();
+        const entry = changelogEntries.find(item => item.version === select.value) || changelogEntries[0];
+        list.innerHTML = "";
+
+        if (!entry) {
+          meta.textContent = dict.changelogEmpty || i18n.en.changelogEmpty;
+          return;
+        }
+
+        meta.textContent = `${dict.changelogCommitLabel || i18n.en.changelogCommitLabel}: ${entry.releaseCommit}`;
+        entry.changes.forEach(change => {
+          const item = document.createElement("li");
+          const hash = document.createElement("span");
+          hash.className = "commit-hash";
+          hash.textContent = change.hash;
+          const text = document.createElement("span");
+          text.className = "change-text";
+          text.textContent = change.text;
+          item.append(hash, text);
+          list.appendChild(item);
+        });
+      }
+
       function updateThemeToggleText(isLight) {
         const toggle = document.getElementById('themeToggle');
         if (!toggle) return;
@@ -546,6 +617,10 @@
         if (fwLabel) fwLabel.textContent = dict.fwLangLabel;
         const intentsLabel = document.getElementById("intentionsLabel");
         if (intentsLabel) intentsLabel.textContent = dict.intentionsLabel;
+        const changelogTitle = document.getElementById("changelogTitle");
+        if (changelogTitle) changelogTitle.textContent = dict.changelogTitle || i18n.en.changelogTitle;
+        const changelogVersionLabel = document.getElementById("changelogVersionLabel");
+        if (changelogVersionLabel) changelogVersionLabel.textContent = dict.changelogVersionLabel || i18n.en.changelogVersionLabel;
 
         const noneOption = document.querySelector('#intentions option[value="none"]');
         if (noneOption) noneOption.textContent = dict.noneOption;
@@ -572,11 +647,14 @@
 
         const deployInfo = document.getElementById("deployInfo");
         if (deployInfo) deployInfo.setAttribute("aria-label", dict.deployLabel || i18n.en.deployLabel);
+
+        renderChangelog();
       }
 
 	      (() => {
 	        const uiLangSelect = document.getElementById("uiLangSelect");
 	        const initialLang = (uiLangSelect && uiLangSelect.value) ? uiLangSelect.value : currentLang;
+	        populateChangelog();
 	        setLanguage(initialLang);
 
 	        const deployInfo = document.getElementById("deployInfo");
