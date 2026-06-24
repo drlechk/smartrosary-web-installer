@@ -138,5 +138,12 @@ window.SmartRosaryChangelog = [
       { hash: "69ace11", text: "Added customizable Intention scheduling and Mystery selection over BLE" },
       { hash: "20c2e8f", text: "Added specific fixes to improve iOS Bluetooth connectivity" }
     ]
+  },
+  {
+    version: "v1.0",
+    releaseCommit: "",
+    changes: [
+      { hash: "", text: "Initial release" }
+    ]
   }
 ];
