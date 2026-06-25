@@ -1,6 +1,16 @@
 // Generated from /Users/lech/Projects/PlatformIO/esp32c3-rosary release commits after 622ef97.
 window.SmartRosaryChangelog = [
   {
+    version: "v1.27",
+    releaseCommit: "277e9a0",
+    changes: [
+      { hash: "", text: "Add fully synchronized Shutdown Timer control from dashboard" },
+      { hash: "", text: "Fix dashboard translation omissions and double commas in UI" },
+      { hash: "", text: "Add visual indicator on dashboard for outdated firmware (older than v1.25)" },
+      { hash: "", text: "Improve live synchronization when modifying settings via dashboard or device" }
+    ]
+  },
+  {
     version: "v1.26",
     releaseCommit: "f36d6ac",
     changes: [
