@@ -1,6 +1,13 @@
 // Generated from /Users/lech/Projects/PlatformIO/esp32c3-rosary release commits after 622ef97.
 window.SmartRosaryChangelog = [
   {
+    version: "v1.28",
+    releaseCommit: "a66392b",
+    changes: [
+      { hash: "a66392b", text: "Implement English NVS fallback and fix intentions backup/restore" }
+    ]
+  },
+  {
     version: "v1.27",
     releaseCommit: "277e9a0",
     changes: [
