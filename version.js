@@ -1,1 +1,1 @@
-window.SMARTROSARY_VERSION = "v1.28";
+window.SMARTROSARY_VERSION = "v1.29";

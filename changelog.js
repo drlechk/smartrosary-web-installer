@@ -1,6 +1,13 @@
 // Generated from /Users/lech/Projects/PlatformIO/esp32c3-rosary release commits after 622ef97.
 window.SmartRosaryChangelog = [
   {
+    version: "v1.29",
+    releaseCommit: "e637067",
+    changes: [
+      { hash: "8154ded", text: "Add chunked download support for BLE intention descriptions" }
+    ]
+  },
+  {
     version: "v1.28",
     releaseCommit: "a66392b",
     changes: [
