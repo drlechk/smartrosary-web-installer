@@ -1,6 +1,15 @@
 // Generated from /Users/lech/Projects/PlatformIO/esp32c3-rosary release commits after 622ef97.
 window.SmartRosaryChangelog = [
   {
+    version: "v1.30",
+    releaseCommit: "74e6c58",
+    changes: [
+      { hash: "74e6c58", text: "Add dedicated mobile-app BLE pairing with a persistent 128-bit token and one-time physical approval" },
+      { hash: "", text: "Allow trusted app reconnects without repeating the rosary permission prompt, with explicit unpair support" },
+      { hash: "", text: "Preserve the existing web dashboard consent commands, BLE characteristics, and update flows unchanged" }
+    ]
+  },
+  {
     version: "v1.29",
     releaseCommit: "e637067",
     changes: [
