@@ -1,6 +1,15 @@
 // Generated from /Users/lech/Projects/PlatformIO/esp32c3-rosary release commits after 622ef97.
 window.SmartRosaryChangelog = [
   {
+    version: "v1.31",
+    releaseCommit: "b0978e5",
+    changes: [
+      { hash: "b0978e5", text: "Expose battery percentage and current device time over BLE for the mobile status bar" },
+      { hash: "", text: "Add a dedicated device.status.get response with battery state-of-charge and RTC epoch values" },
+      { hash: "", text: "Keep battery percentage current while charging and preserve the complete legacy dashboard payload on constrained BLE connections" }
+    ]
+  },
+  {
     version: "v1.30",
     releaseCommit: "74e6c58",
     changes: [
