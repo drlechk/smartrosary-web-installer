@@ -1,6 +1,16 @@
 // Generated from /Users/lech/Projects/PlatformIO/esp32c3-rosary release commits after 622ef97.
 window.SmartRosaryChangelog = [
   {
+    version: "v1.32",
+    releaseCommit: "00f1a22",
+    changes: [
+      { hash: "00f1a22", text: "Allow up to four smartphones to remain paired with one rosary, including migration of existing single-device pairing data and selective unpairing" },
+      { hash: "", text: "Expose live charging and external-power state through device.status.get and optional statistics fields so the mobile app can show charging even at 100% battery" },
+      { hash: "", text: "Notify connected apps immediately when charging state changes while safely dispatching BLE notification work from the firmware main loop" },
+      { hash: "", text: "Keep the existing web-dashboard consent handshake and BLE protocol behavior compatible" }
+    ]
+  },
+  {
     version: "v1.31",
     releaseCommit: "b0978e5",
     changes: [
