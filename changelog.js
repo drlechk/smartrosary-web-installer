@@ -5,6 +5,7 @@ window.SmartRosaryChangelog = [
     releaseCommit: "",
     changes: [
       { hash: "", text: "Expose the installed language partition ID and version in the existing BLE settings payload" },
+      { hash: "", text: "Show firmware and language metadata below the device QR code in the format v1.33 • pl v1.0" },
       { hash: "", text: "Enable the mobile app to detect legacy unversioned language files and newer published language packages" },
       { hash: "", text: "Preserve all existing dashboard settings fields, BLE characteristics, and language installation behavior" }
     ]
