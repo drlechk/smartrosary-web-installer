@@ -1,6 +1,15 @@
 // Generated from /Users/lech/Projects/PlatformIO/esp32c3-rosary release commits after 622ef97.
 window.SmartRosaryChangelog = [
   {
+    version: "v1.33",
+    releaseCommit: "",
+    changes: [
+      { hash: "", text: "Expose the installed language partition ID and version in the existing BLE settings payload" },
+      { hash: "", text: "Enable the mobile app to detect legacy unversioned language files and newer published language packages" },
+      { hash: "", text: "Preserve all existing dashboard settings fields, BLE characteristics, and language installation behavior" }
+    ]
+  },
+  {
     version: "v1.32",
     releaseCommit: "00f1a22",
     changes: [
