@@ -1,6 +1,16 @@
 // Generated from /Users/lech/Projects/PlatformIO/esp32c3-rosary release commits after 622ef97.
 window.SmartRosaryChangelog = [
   {
+    version: "v1.34",
+    releaseCommit: "ce33da2",
+    changes: [
+      { hash: "ce33da2", text: "Add paired-app slot management so one connected app can list and remove other paired app devices without removing itself" },
+      { hash: "ce33da2", text: "Add a silent app-pairing check for automatic reconnects so a deleted app token no longer opens the on-device permission prompt" },
+      { hash: "ce33da2", text: "Expose hardware ID and compact paired-app metadata in the existing BLE settings payload while keeping dashboard compatibility" },
+      { hash: "ce33da2", text: "Hide only the long intention description during tile swipes so intention titles remain visible and transitions stay smooth" }
+    ]
+  },
+  {
     version: "v1.33",
     releaseCommit: "",
     changes: [
