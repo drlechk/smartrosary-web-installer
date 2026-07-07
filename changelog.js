@@ -1,6 +1,16 @@
 // Generated from /Users/lech/Projects/PlatformIO/esp32c3-rosary release commits after 622ef97.
 window.SmartRosaryChangelog = [
   {
+    version: "v1.35",
+    releaseCommit: "fb67442",
+    changes: [
+      { hash: "fb67442", text: "Expose BLE connection RSSI through device.status.get so dashboards and companion apps can show signal strength reliably while connected" },
+      { hash: "fb67442", text: "Allow the web dashboard to list paired app IDs and remove pairing slots through the existing app-pairing characteristic without adding new BLE services" },
+      { hash: "fb67442", text: "Keep existing mobile app token-based pairing operations compatible while adding dashboard-friendly list/delete commands" },
+      { hash: "fb67442", text: "Release firmware v1.35 with the updated dashboard pairing and status telemetry support" }
+    ]
+  },
+  {
     version: "v1.34",
     releaseCommit: "ce33da2",
     changes: [
