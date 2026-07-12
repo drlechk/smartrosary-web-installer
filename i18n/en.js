@@ -1,11 +1,11 @@
 window.SmartRosaryLocales = window.SmartRosaryLocales || {};
 
-window.SmartRosaryLocales.en = (FW_VERSION) => ({
+window.SmartRosaryLocales.en = (FW_VERSION, LANG_VERSION) => ({
   langLabel: "Language",
   title: "SmartRosary Installer",
   usbTitle: `Upload firmware ${FW_VERSION} via USB`,
   otaTitle: `Upload firmware ${FW_VERSION} via Bluetooth`,
-  langTitle: "Upload language via Bluetooth",
+  langTitle: `Upload language${LANG_VERSION} via Bluetooth`,
   intentsTitle: "Upload intentions via Bluetooth",
   connectUpload: "Connect & Upload",
   fwLangLabel: "Language:",

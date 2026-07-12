@@ -491,13 +491,14 @@
     <script>
       // ---------- 0) Firmware version ----------
       const FW_VERSION = window.SMARTROSARY_VERSION;
+      const LANG_VERSION = window.SMARTROSARY_LANG_VERSION ? " " + window.SMARTROSARY_LANG_VERSION : "";
 
       // ---------- 1) UI i18n ----------
       const localeFactories = window.SmartRosaryLocales || {};
       const i18n = Object.fromEntries(
         Object.entries(localeFactories).map(([langKey, createLocale]) => [
           langKey,
-          typeof createLocale === "function" ? createLocale(FW_VERSION) : createLocale
+          typeof createLocale === "function" ? createLocale(FW_VERSION, LANG_VERSION) : createLocale
         ])
       );
 
