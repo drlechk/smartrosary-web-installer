@@ -2,25 +2,26 @@
 window.SmartRosaryChangelog = [
   {
     version: "v1.37",
-    releaseCommit: "",
+    releaseCommit: "ee2b8a3",
     changes: [
-      { hash: "", text: "Fix device statistics charts to align perfectly with the dashboard and smartphone app reference" },
-      { hash: "", text: "Update device pie chart and bar chart text labels to correctly display weighted full rosary counts" },
-      { hash: "", text: "Keep visual proportions accurate on device bar chart by rendering with raw mystery part counts" }
+      { hash: "fe99850", text: "Fix device statistics charts to align perfectly with the dashboard and smartphone app reference" },
+      { hash: "fe99850", text: "Update device pie chart and bar chart text labels to correctly display weighted full rosary counts" },
+      { hash: "fe99850", text: "Keep visual proportions accurate on device bar chart by rendering with raw mystery part counts" }
     ]
   },
   {
     version: "v1.36",
-    releaseCommit: "",
+    releaseCommit: "36c9776",
     changes: [
-      { hash: "", text: "Add support for v1.1 language partitions and report installed language versions to clients" },
-      { hash: "", text: "Release firmware v1.36 alongside updated language editor and translated assets" }
+      { hash: "36c9776", text: "Add support for v1.1 language partitions and report installed language versions to clients" },
+      { hash: "36c9776", text: "Release firmware v1.36 alongside updated language editor and translated assets" }
     ]
   },
   {
     version: "v1.35",
     releaseCommit: "fb67442",
     changes: [
+      { hash: "fb67442", text: "Added completely new visual statistic tiles to the device interface" },
       { hash: "fb67442", text: "Expose BLE connection RSSI through device.status.get so dashboards and companion apps can show signal strength reliably while connected" },
       { hash: "fb67442", text: "Allow the web dashboard to list paired app IDs and remove pairing slots through the existing app-pairing characteristic without adding new BLE services" },
       { hash: "fb67442", text: "Keep existing mobile app token-based pairing operations compatible while adding dashboard-friendly list/delete commands" },
