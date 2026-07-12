@@ -40,12 +40,12 @@ window.SmartRosaryChangelog = [
   },
   {
     version: "v1.33",
-    releaseCommit: "",
+    releaseCommit: "3d950a9",
     changes: [
-      { hash: "", text: "Expose the installed language partition ID and version in the existing BLE settings payload" },
-      { hash: "", text: "Show firmware and language metadata below the device QR code in the format v1.33 • pl v1.0" },
-      { hash: "", text: "Enable the mobile app to detect legacy unversioned language files and newer published language packages" },
-      { hash: "", text: "Preserve all existing dashboard settings fields, BLE characteristics, and language installation behavior" }
+      { hash: "3d950a9", text: "Expose the installed language partition ID and version in the existing BLE settings payload" },
+      { hash: "3d950a9", text: "Show firmware and language metadata below the device QR code in the format v1.33 • pl v1.0" },
+      { hash: "3d950a9", text: "Enable the mobile app to detect legacy unversioned language files and newer published language packages" },
+      { hash: "3d950a9", text: "Preserve all existing dashboard settings fields, BLE characteristics, and language installation behavior" }
     ]
   },
   {
@@ -53,9 +53,9 @@ window.SmartRosaryChangelog = [
     releaseCommit: "00f1a22",
     changes: [
       { hash: "00f1a22", text: "Allow up to four smartphones to remain paired with one rosary, including migration of existing single-device pairing data and selective unpairing" },
-      { hash: "", text: "Expose live charging and external-power state through device.status.get and optional statistics fields so the mobile app can show charging even at 100% battery" },
-      { hash: "", text: "Notify connected apps immediately when charging state changes while safely dispatching BLE notification work from the firmware main loop" },
-      { hash: "", text: "Keep the existing web-dashboard consent handshake and BLE protocol behavior compatible" }
+      { hash: "00f1a22", text: "Expose live charging and external-power state through device.status.get and optional statistics fields so the mobile app can show charging even at 100% battery" },
+      { hash: "00f1a22", text: "Notify connected apps immediately when charging state changes while safely dispatching BLE notification work from the firmware main loop" },
+      { hash: "00f1a22", text: "Keep the existing web-dashboard consent handshake and BLE protocol behavior compatible" }
     ]
   },
   {
@@ -63,8 +63,8 @@ window.SmartRosaryChangelog = [
     releaseCommit: "b0978e5",
     changes: [
       { hash: "b0978e5", text: "Expose battery percentage and current device time over BLE for the mobile status bar" },
-      { hash: "", text: "Add a dedicated device.status.get response with battery state-of-charge and RTC epoch values" },
-      { hash: "", text: "Keep battery percentage current while charging and preserve the complete legacy dashboard payload on constrained BLE connections" }
+      { hash: "b0978e5", text: "Add a dedicated device.status.get response with battery state-of-charge and RTC epoch values" },
+      { hash: "b0978e5", text: "Keep battery percentage current while charging and preserve the complete legacy dashboard payload on constrained BLE connections" }
     ]
   },
   {
@@ -72,8 +72,8 @@ window.SmartRosaryChangelog = [
     releaseCommit: "74e6c58",
     changes: [
       { hash: "74e6c58", text: "Add dedicated mobile-app BLE pairing with a persistent 128-bit token and one-time physical approval" },
-      { hash: "", text: "Allow trusted app reconnects without repeating the rosary permission prompt, with explicit unpair support" },
-      { hash: "", text: "Preserve the existing web dashboard consent commands, BLE characteristics, and update flows unchanged" }
+      { hash: "74e6c58", text: "Allow trusted app reconnects without repeating the rosary permission prompt, with explicit unpair support" },
+      { hash: "74e6c58", text: "Preserve the existing web dashboard consent commands, BLE characteristics, and update flows unchanged" }
     ]
   },
   {
@@ -94,19 +94,19 @@ window.SmartRosaryChangelog = [
     version: "v1.27",
     releaseCommit: "277e9a0",
     changes: [
-      { hash: "", text: "Add fully synchronized Shutdown Timer control from dashboard" },
-      { hash: "", text: "Fix dashboard translation omissions and double commas in UI" },
-      { hash: "", text: "Add visual indicator on dashboard for outdated firmware (older than v1.25)" },
-      { hash: "", text: "Improve live synchronization when modifying settings via dashboard or device" }
+      { hash: "277e9a0", text: "Add fully synchronized Shutdown Timer control from dashboard" },
+      { hash: "277e9a0", text: "Fix dashboard translation omissions and double commas in UI" },
+      { hash: "277e9a0", text: "Add visual indicator on dashboard for outdated firmware (older than v1.25)" },
+      { hash: "277e9a0", text: "Improve live synchronization when modifying settings via dashboard or device" }
     ]
   },
   {
     version: "v1.26",
     releaseCommit: "f36d6ac",
     changes: [
-      { hash: "", text: "Fixed intentions schedule wiping issue upon initial unified restore" },
-      { hash: "", text: "Resolved BLE pacing timeout during dashboard restore" },
-      { hash: "", text: "Corrected NVS binary data structure for proper intention titles on device" }
+      { hash: "f36d6ac", text: "Fixed intentions schedule wiping issue upon initial unified restore" },
+      { hash: "f36d6ac", text: "Resolved BLE pacing timeout during dashboard restore" },
+      { hash: "f36d6ac", text: "Corrected NVS binary data structure for proper intention titles on device" }
     ]
   },
   {
@@ -241,9 +241,9 @@ window.SmartRosaryChangelog = [
   },
   {
     version: "v1.0",
-    releaseCommit: "",
+    releaseCommit: "92e5896",
     changes: [
-      { hash: "", text: "Initial release" }
+      { hash: "92e5896", text: "Initial release" }
     ]
   }
 ];
