@@ -13,6 +13,7 @@ window.SmartRosaryChangelog = [
     version: "v1.36",
     releaseCommit: "36c9776",
     changes: [
+      { hash: "36c9776", text: "Added completely new visual statistic tiles to the device interface" },
       { hash: "36c9776", text: "Add support for v1.1 language partitions and report installed language versions to clients" },
       { hash: "36c9776", text: "Release firmware v1.36 alongside updated language editor and translated assets" }
     ]
@@ -21,7 +22,6 @@ window.SmartRosaryChangelog = [
     version: "v1.35",
     releaseCommit: "fb67442",
     changes: [
-      { hash: "fb67442", text: "Added completely new visual statistic tiles to the device interface" },
       { hash: "fb67442", text: "Expose BLE connection RSSI through device.status.get so dashboards and companion apps can show signal strength reliably while connected" },
       { hash: "fb67442", text: "Allow the web dashboard to list paired app IDs and remove pairing slots through the existing app-pairing characteristic without adding new BLE services" },
       { hash: "fb67442", text: "Keep existing mobile app token-based pairing operations compatible while adding dashboard-friendly list/delete commands" },
