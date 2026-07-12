@@ -1,6 +1,23 @@
 // Generated from /Users/lech/Projects/PlatformIO/esp32c3-rosary release commits after 622ef97.
 window.SmartRosaryChangelog = [
   {
+    version: "v1.37",
+    releaseCommit: "",
+    changes: [
+      { hash: "", text: "Fix device statistics charts to align perfectly with the dashboard and smartphone app reference" },
+      { hash: "", text: "Update device pie chart and bar chart text labels to correctly display weighted full rosary counts" },
+      { hash: "", text: "Keep visual proportions accurate on device bar chart by rendering with raw mystery part counts" }
+    ]
+  },
+  {
+    version: "v1.36",
+    releaseCommit: "",
+    changes: [
+      { hash: "", text: "Add support for v1.1 language partitions and report installed language versions to clients" },
+      { hash: "", text: "Release firmware v1.36 alongside updated language editor and translated assets" }
+    ]
+  },
+  {
     version: "v1.35",
     releaseCommit: "fb67442",
     changes: [
