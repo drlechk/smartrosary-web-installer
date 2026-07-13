@@ -1,6 +1,16 @@
 // Generated from /Users/lech/Projects/PlatformIO/esp32c3-rosary release commits after 622ef97.
 window.SmartRosaryChangelog = [
   {
+    version: "v1.38",
+    releaseCommit: "096239c",
+    changes: [
+      { hash: "2ed518e", text: "Clear manually selected intention history marking when the user changes the mystery or part roller before continuing prayer" },
+      { hash: "096239c", text: "Add the History tile as the first Mysteries subpage with day, week, month, and year buckets plus swipe navigation" },
+      { hash: "096239c", text: "Render history as stacked mystery-colored bars with intention-prayed entries shown by diagonal hatching" },
+      { hash: "096239c", text: "Release firmware v1.38 and language binaries v1.2 for the installer" }
+    ]
+  },
+  {
     version: "v1.37",
     releaseCommit: "ee2b8a3",
     changes: [
