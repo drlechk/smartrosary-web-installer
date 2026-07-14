@@ -1,6 +1,20 @@
 // Generated from /Users/lech/Projects/PlatformIO/esp32c3-rosary release commits after 622ef97.
 window.SmartRosaryChangelog = [
   {
+    version: "v1.39",
+    releaseCommit: "e0221a8",
+    changes: [
+      { hash: "8f585fa", text: "Fix compilation error: forward declare update_history_bucket_label" },
+      { hash: "7a29732", text: "Fix history date label update on boot, change hatch to black, remove rounded corners" },
+      { hash: "472483a", text: "Group all intention segments at the very top of history columns" },
+      { hash: "774c3c1", text: "Improve visibility of intention hatch for small heights in Year view" },
+      { hash: "e672278", text: "Fix diagonal hatch rendering for 1px height segments" },
+      { hash: "98d17b8", text: "Update day view bucket size to 2h (12 columns)" },
+      { hash: "f56ee74", text: "Move diagonally hatched intention bars to the top of the segment block" },
+      { hash: "7bcbba2", text: "Update chart legends to use vertical dots and adjust chaplet bar order" }
+    ]
+  },
+  {
     version: "v1.38",
     releaseCommit: "096239c",
     changes: [
