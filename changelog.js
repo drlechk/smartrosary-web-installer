@@ -1,6 +1,15 @@
 // Generated from /Users/lech/Projects/PlatformIO/esp32c3-rosary release commits after 622ef97.
 window.SmartRosaryChangelog = [
   {
+    version: "v1.40",
+    releaseCommit: "e35e24b",
+    changes: [
+      { hash: "ecccc07", text: "Week history buckets now start on Sunday to match the rosary history tile and mobile app." },
+      { hash: "ecccc07", text: "Week history date ranges now show the inclusive last day instead of the next bucket boundary." },
+      { hash: "ecccc07", text: "The active rosary bead now has the white ring marker used in the mockups and how-to screens." }
+    ]
+  },
+  {
     version: "v1.39",
     releaseCommit: "e0221a8",
     changes: [
