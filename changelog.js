@@ -1,10 +1,17 @@
 // Generated from /Users/lech/Projects/PlatformIO/esp32c3-rosary release commits after 622ef97.
 window.SmartRosaryChangelog = [
   {
-    version: "v1.40",
-    releaseCommit: "aff3012",
+    version: "v1.41",
+    releaseCommit: "f328459",
     changes: [
       { hash: "aff3012", text: "Enable write-without-response support on firmware, language, intentions, wallpaper, history, and control BLE characteristics for faster companion app transfers while preserving legacy writes." },
+      { hash: "f328459", text: "Release firmware v1.41 for the fast BLE transfer firmware build." }
+    ]
+  },
+  {
+    version: "v1.40",
+    releaseCommit: "e35e24b",
+    changes: [
       { hash: "ecccc07", text: "Week history buckets now start on Sunday to match the rosary history tile and mobile app." },
       { hash: "ecccc07", text: "Week history date ranges now show the inclusive last day instead of the next bucket boundary." },
       { hash: "ecccc07", text: "The active rosary bead now has the white ring marker used in the mockups and how-to screens." }
