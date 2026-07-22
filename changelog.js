@@ -1,6 +1,19 @@
 // Generated from /Users/lech/Projects/PlatformIO/esp32c3-rosary release commits after 622ef97.
 window.SmartRosaryChangelog = [
   {
+    version: "v1.42",
+    releaseCommit: "cafe0a9",
+    changes: [
+      { hash: "81c4688", text: "Improves ESP32-C3 BLE transfer stability by reducing NimBLE scope, using the preferred 247-byte MTU, and giving wallpaper transfers a larger worker stack." },
+      { hash: "81c4688", text: "Refreshes and sanitizes the SPIFFS wallpaper catalog after uploads, deletes, renames, and boot so deleted or duplicate wallpapers no longer remain in the cycle." },
+      { hash: "81c4688", text: "Switches away from a wallpaper before deleting it and refreshes the active image index to avoid stale image buffers on the rosary." },
+      { hash: "81c4688", text: "Makes the ESP32-C3 LVGL draw buffer allocation more robust by falling back to fewer rows when memory is tight." },
+      { hash: "7726980", text: "Moves display layout to shared display metrics so 240x240 UI placement remains consistent while newer board targets can scale cleanly." },
+      { hash: "92b4876", text: "Hides intention tiles when no custom intentions are installed, keeping the on-device menus cleaner." },
+      { hash: "cafe0a9", text: "Release firmware v1.42 for ESP32-C3 with BLE, wallpaper, and display robustness improvements." }
+    ]
+  },
+  {
     version: "v1.41",
     releaseCommit: "f328459",
     changes: [
