@@ -805,6 +805,9 @@
       const LANG_CHAR_UUID     = '12345678-1234-5678-1234-56789abcde20';
       const STATUS_CHAR_UUID   = '12345678-1234-5678-1234-56789abcdef2';
       const INFO_CTRL_UUID     = 'b8a7a0e2-1a5d-4c1e-9d93-2c9e2b9e10ff';  // <— ADD THIS
+      const FIRMWARE_CHUNK_SIZE = 128;
+      const FIRMWARE_CHUNK_DELAY_MS = 25;
+      const BLE_READY_TIMEOUT_MS = 20000;
       
 
       let device, writeChar, statusChar;
@@ -858,7 +861,7 @@
           statChar.addEventListener('characteristicvaluechanged', onStatus);
 
           // Send HELLO_WEB (0x41) to pop consent on the device
-          await ctrlChar.writeValue(Uint8Array.of(0x41));
+          await writeGattWithResponse(ctrlChar, Uint8Array.of(0x41));
 
           // Hard timeout to avoid hanging forever
           setTimeout(() => {
@@ -870,7 +873,35 @@
         return allowed;
       }
 
-      async function waitReady(){ while(!ready) await new Promise(r=>setTimeout(r,50)); ready=false; }
+      function sleep(ms) {
+        return new Promise(resolve => setTimeout(resolve, ms));
+      }
+
+      async function writeGattWithResponse(ch, payload) {
+        if (typeof ch.writeValueWithResponse === 'function') {
+          await ch.writeValueWithResponse(payload);
+          return;
+        }
+        await ch.writeValue(payload);
+      }
+
+      async function waitReady(timeoutMs = BLE_READY_TIMEOUT_MS) {
+        const started = Date.now();
+        while (!ready) {
+          if (Date.now() - started > timeoutMs) {
+            throw new Error(t('errorFirmwareFailed'));
+          }
+          await sleep(30);
+        }
+        ready = false;
+      }
+
+      async function writePaced(payload, { delayMs = 0 } = {}) {
+        ready = false;
+        await writeGattWithResponse(writeChar, payload);
+        await waitReady();
+        if (delayMs > 0) await sleep(delayMs);
+      }
 
       // More robust BLE discovery: prefer service filter, fallback to acceptAllDevices
       async function connectBLE(svcUuid, charUuid){
@@ -903,7 +934,7 @@
           try {
             // optional: tell device we’re backing out
             const ctrl = await svc.getCharacteristic(INFO_CTRL_UUID);
-            await ctrl.writeValue(Uint8Array.of(0x42)); // CANCEL_WEB
+            await writeGattWithResponse(ctrl, Uint8Array.of(0x42)); // CANCEL_WEB
           } catch {}
           throw new Error(t('errorConsent'));
         }
@@ -915,6 +946,7 @@
         // 6) Keep a global statusChar for “ready/ACK” pacing (also used above in consent)
         try {
           statusChar = await svc.getCharacteristic(STATUS_CHAR_UUID);
+          ready = false;
           statusChar.addEventListener('characteristicvaluechanged', () => { ready = true; });
           // It’s already started in helloAndAwaitConsent, but starting again is harmless
           await statusChar.startNotifications();
@@ -945,11 +977,10 @@
         // 4-byte size header (little-endian)
         const sizeBuf = new ArrayBuffer(4);
         new DataView(sizeBuf).setUint32(0,data.length,true);
-        await writeChar.writeValue(sizeBuf);
-        await waitReady();
+        await writePaced(new Uint8Array(sizeBuf), { delayMs: FIRMWARE_CHUNK_DELAY_MS });
 
-        // chunks (MTU 517 -> safe payload 512; minus 4 for CRC)
-        let offset=0, chunkSize=512-4;
+        // Conservative acknowledged chunks keep older ESP32-C3 firmware stable during OTA.
+        let offset=0, chunkSize=FIRMWARE_CHUNK_SIZE;
         while(offset<data.length){
           const len=Math.min(chunkSize,data.length-offset);
           const chunk=data.slice(offset,offset+len);
@@ -957,8 +988,7 @@
           const packet=new Uint8Array(len+4);
           packet.set(chunk);
           new DataView(packet.buffer).setUint32(len,crc,true);
-          await writeChar.writeValue(packet);
-          await waitReady();
+          await writePaced(packet, { delayMs: FIRMWARE_CHUNK_DELAY_MS });
           offset+=len; setProgress(offset,data.length);
         }
         if (window.GlobalUI) GlobalUI.announce(t('completeFirmware'));
@@ -1009,8 +1039,7 @@
       async function sendNVS(data,filename){
         // filename header
         const name=new TextEncoder().encode(filename);
-        await writeChar.writeValue(name);
-        await waitReady();
+        await writePaced(name);
 
         let offset=0, chunkSize=320; // a bit smaller than firmware chunks
         while(offset<data.length){
@@ -1020,8 +1049,7 @@
           const packet=new Uint8Array(len+4);
           packet.set(chunk);
           new DataView(packet.buffer).setUint32(len,crc,true);
-          await writeChar.writeValue(packet);
-          await waitReady();
+          await writePaced(packet);
           offset+=len; setProgress(offset,data.length);
         }
       }
