@@ -1,6 +1,15 @@
 // Generated from /Users/lech/Projects/PlatformIO/esp32c3-rosary release commits after 622ef97.
 window.SmartRosaryChangelog = [
   {
+    version: "v1.43",
+    releaseCommit: "abfd15a",
+    changes: [
+      { hash: "abfd15a", text: "Makes ESP32-C3 firmware OTA over BLE more robust by validating the announced image size, aborting failed writes cleanly, and avoiding immediate reboot on transfer errors." },
+      { hash: "abfd15a", text: "Increases the ESP32-C3 NimBLE host task stack to give BLE callbacks more headroom during flash writes." },
+      { hash: "abfd15a", text: "Release firmware v1.43 for ESP32-C3 with safer BLE firmware update handling." }
+    ]
+  },
+  {
     version: "v1.42",
     releaseCommit: "cafe0a9",
     changes: [
