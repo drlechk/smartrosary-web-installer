@@ -1,6 +1,14 @@
 // Generated from /Users/lech/Projects/PlatformIO/esp32c3-rosary release commits after 622ef97.
 window.SmartRosaryChangelog = [
   {
+    version: "v1.45",
+    releaseCommit: "7a44404",
+    changes: [
+      { hash: "5bd7a16", text: "Reorganize firmware assets and harden BLE JSON" },
+      { hash: "41fb04d", text: "Repo cleanup" }
+    ]
+  },
+  {
     version: "v1.44",
     releaseCommit: "308d4bb",
     changes: [
