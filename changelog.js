@@ -1,6 +1,16 @@
 // Generated from /Users/lech/Projects/PlatformIO/esp32c3-rosary release commits after 622ef97.
 window.SmartRosaryChangelog = [
   {
+    version: "v1.44",
+    releaseCommit: "308d4bb",
+    changes: [
+      { hash: "308d4bb", text: "Moves firmware OTA flash writes out of the BLE callback into a dedicated worker task so READY is sent only after each queued flash write completes." },
+      { hash: "308d4bb", text: "Keeps ESP32-C3 OTA erase behavior aligned with v1.41 by using progressive OTA erasing while still validating the announced image size against the OTA partition." },
+      { hash: "308d4bb", text: "Aborts interrupted firmware transfers without rebooting and restarts advertising correctly after BLE disconnects." },
+      { hash: "308d4bb", text: "Reduces the ESP32-C3 LVGL DMA draw buffer to leave more runtime heap available during BLE firmware updates." }
+    ]
+  },
+  {
     version: "v1.43",
     releaseCommit: "abfd15a",
     changes: [
