@@ -805,13 +805,18 @@
       const LANG_CHAR_UUID     = '12345678-1234-5678-1234-56789abcde20';
       const STATUS_CHAR_UUID   = '12345678-1234-5678-1234-56789abcdef2';
       const INFO_CTRL_UUID     = 'b8a7a0e2-1a5d-4c1e-9d93-2c9e2b9e10ff';  // <— ADD THIS
-      const FIRMWARE_CHUNK_SIZE = 128;
-      const FIRMWARE_CHUNK_DELAY_MS = 25;
+      const INFO_SETTINGS_UUID = 'b8a7a0e1-1a5d-4c1e-9d93-2c9e2b9e10ff';
+      const FIRMWARE_STABLE_OTA_WORKER_VERSION = '1.44';
+      const FIRMWARE_LEGACY_CHUNK_SIZE = 192;
+      const FIRMWARE_LEGACY_CHUNK_DELAY_MS = 10;
+      const FIRMWARE_STABLE_CHUNK_SIZE = 240;
+      const FIRMWARE_STABLE_CHUNK_DELAY_MS = 0;
       const BLE_READY_TIMEOUT_MS = 20000;
       
 
       let device, writeChar, statusChar;
       let ready = true;
+      let connectedFirmwareVersion = '';
 
       document.getElementById('uploadFirmwareBtn').addEventListener('click', async (ev) => {
         preventStandby();
@@ -903,6 +908,51 @@
         if (delayMs > 0) await sleep(delayMs);
       }
 
+      function normalizeFirmwareVersion(value) {
+        const text = String(value || '').trim();
+        const match = text.match(/(\d+(?:\.\d+)+)/);
+        return match ? match[1] : text.replace(/^[vV]/, '');
+      }
+
+      function compareFirmwareVersions(left, right) {
+        const a = normalizeFirmwareVersion(left).split('.').map(part => parseInt(part, 10) || 0);
+        const b = normalizeFirmwareVersion(right).split('.').map(part => parseInt(part, 10) || 0);
+        const length = Math.max(a.length, b.length);
+        for (let i = 0; i < length; i++) {
+          const av = i < a.length ? a[i] : 0;
+          const bv = i < b.length ? b[i] : 0;
+          if (av !== bv) return av - bv;
+        }
+        return 0;
+      }
+
+      function firmwareTransferProfile(version) {
+        if (version && compareFirmwareVersions(version, FIRMWARE_STABLE_OTA_WORKER_VERSION) >= 0) {
+          return {
+            chunkSize: FIRMWARE_STABLE_CHUNK_SIZE,
+            delayMs: FIRMWARE_STABLE_CHUNK_DELAY_MS,
+          };
+        }
+        return {
+          chunkSize: FIRMWARE_LEGACY_CHUNK_SIZE,
+          delayMs: FIRMWARE_LEGACY_CHUNK_DELAY_MS,
+        };
+      }
+
+      async function readFirmwareVersion(svc) {
+        try {
+          const settingsChar = await svc.getCharacteristic(INFO_SETTINGS_UUID);
+          const value = await settingsChar.readValue();
+          const bytes = new Uint8Array(value.buffer);
+          const text = new TextDecoder().decode(bytes).split('\0')[0].trim();
+          if (!text || text === '{}') return '';
+          const json = JSON.parse(text);
+          return json && json.fwVersion ? String(json.fwVersion) : '';
+        } catch {
+          return '';
+        }
+      }
+
       // More robust BLE discovery: prefer service filter, fallback to acceptAllDevices
       async function connectBLE(svcUuid, charUuid){
         if (window.GlobalUI) GlobalUI.setStatus(t('statusConnecting'));
@@ -942,6 +992,7 @@
         // 5) Now it’s safe to use your target write characteristic
         //    (firmware / language / intentions are separate chars under the same service)
         writeChar  = await svc.getCharacteristic(charUuid);
+        connectedFirmwareVersion = await readFirmwareVersion(svc);
 
         // 6) Keep a global statusChar for “ready/ACK” pacing (also used above in consent)
         try {
@@ -977,10 +1028,11 @@
         // 4-byte size header (little-endian)
         const sizeBuf = new ArrayBuffer(4);
         new DataView(sizeBuf).setUint32(0,data.length,true);
-        await writePaced(new Uint8Array(sizeBuf), { delayMs: FIRMWARE_CHUNK_DELAY_MS });
+        await writePaced(new Uint8Array(sizeBuf));
 
-        // Conservative acknowledged chunks keep older ESP32-C3 firmware stable during OTA.
-        let offset=0, chunkSize=FIRMWARE_CHUNK_SIZE;
+        // Acknowledged chunks stay cautious for old receivers and speed up on v1.44+.
+        const profile = firmwareTransferProfile(connectedFirmwareVersion);
+        let offset=0, chunkSize=profile.chunkSize;
         while(offset<data.length){
           const len=Math.min(chunkSize,data.length-offset);
           const chunk=data.slice(offset,offset+len);
@@ -988,7 +1040,7 @@
           const packet=new Uint8Array(len+4);
           packet.set(chunk);
           new DataView(packet.buffer).setUint32(len,crc,true);
-          await writePaced(packet, { delayMs: FIRMWARE_CHUNK_DELAY_MS });
+          await writePaced(packet, { delayMs: profile.delayMs });
           offset+=len; setProgress(offset,data.length);
         }
         if (window.GlobalUI) GlobalUI.announce(t('completeFirmware'));
