@@ -1,6 +1,13 @@
 // Generated from /Users/lech/Projects/PlatformIO/esp32c3-rosary release commits after 622ef97.
 window.SmartRosaryChangelog = [
   {
+    version: "v1.46",
+    releaseCommit: "c037fe7",
+    changes: [
+      { hash: "c037fe7", text: "Fix BLE JSON stats truncation on small MTU" }
+    ]
+  },
+  {
     version: "v1.45",
     releaseCommit: "7a44404",
     changes: [
