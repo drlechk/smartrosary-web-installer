@@ -1,6 +1,15 @@
 // Generated from /Users/lech/Projects/PlatformIO/esp32c3-rosary release commits after 622ef97.
 window.SmartRosaryChangelog = [
   {
+    version: "v1.48",
+    releaseCommit: "6d75044",
+    changes: [
+      { hash: "6d75044", text: "Throttles wallpaper transfer progress updates so LVGL does less work while SPIFFS writes are active." },
+      { hash: "6d75044", text: "Keeps the transfer status screen stable by switching once per transfer and disabling progress-bar animations." },
+      { hash: "6d75044", text: "Adds safer BLE transfer UI handling for firmware, language, intentions, and wallpaper uploads while preserving existing app and dashboard compatibility." }
+    ]
+  },
+  {
     version: "v1.47",
     releaseCommit: "a0451c2",
     changes: [
