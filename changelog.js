@@ -1,6 +1,17 @@
 // Generated from /Users/lech/Projects/PlatformIO/esp32c3-rosary release commits after 622ef97.
 window.SmartRosaryChangelog = [
   {
+    version: "v1.47",
+    releaseCommit: "a0451c2",
+    changes: [
+      { hash: "a0451c2", text: "Adds the wallpaper upload progress/restart screen with localized success and retry messages." },
+      { hash: "a0451c2", text: "Improves wallpaper BLE compatibility and robustness for legacy app/dashboard LIST, SHOW, DELETE, and upload flows." },
+      { hash: "a0451c2", text: "Speeds up compatible wallpaper uploads with larger MTU/credit handling while preserving legacy transfer behavior." },
+      { hash: "a0451c2", text: "Guards BLE connect input so stale C3 button or remote-touch state cannot advance the rosary during app sync." },
+      { hash: "a0451c2", text: "Refreshes the wallpaper catalog sanity checks, duplicate filtering, and small wallpaper-cycle gesture threshold." }
+    ]
+  },
+  {
     version: "v1.46",
     releaseCommit: "c037fe7",
     changes: [
