@@ -27,7 +27,7 @@
           "offset": 3100672
         },
         {
-          "path": "wallpaper/spiffs.bin",
+          "path": "wallpaper/littlefs.bin",
           "offset": 3289088
         }
       ]

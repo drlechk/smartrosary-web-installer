@@ -1,6 +1,15 @@
 // Generated from /Users/lech/Projects/PlatformIO/esp32c3-rosary release commits after 622ef97.
 window.SmartRosaryChangelog = [
   {
+    version: "v1.49",
+    releaseCommit: "0e86220",
+    changes: [
+      { hash: "0e86220", text: "Migrates the wallpaper and history filesystems to LittleFS for improved reliability." },
+      { hash: "0e86220", text: "Adds automatic on-the-fly migration for existing history entries during boot." },
+      { hash: "0e86220", text: "Significantly improves the wallpaper upload procedure for the companion app and dashboard." }
+    ]
+  },
+  {
     version: "v1.48",
     releaseCommit: "6d75044",
     changes: [
