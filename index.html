@@ -811,6 +811,8 @@
       const FIRMWARE_LEGACY_CHUNK_DELAY_MS = 10;
       const FIRMWARE_STABLE_CHUNK_SIZE = 240;
       const FIRMWARE_STABLE_CHUNK_DELAY_MS = 0;
+      const FIRMWARE_OLD_LEGACY_CHUNK_SIZE = 128;
+      const FIRMWARE_OLD_LEGACY_CHUNK_DELAY_MS = 25;
       const BLE_READY_TIMEOUT_MS = 20000;
       
 
@@ -931,6 +933,12 @@
           return {
             chunkSize: FIRMWARE_STABLE_CHUNK_SIZE,
             delayMs: FIRMWARE_STABLE_CHUNK_DELAY_MS,
+          };
+        }
+        if (version && compareFirmwareVersions(version, '1.25') < 0) {
+          return {
+            chunkSize: FIRMWARE_OLD_LEGACY_CHUNK_SIZE,
+            delayMs: FIRMWARE_OLD_LEGACY_CHUNK_DELAY_MS,
           };
         }
         return {
