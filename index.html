@@ -892,6 +892,14 @@
         await ch.writeValue(payload);
       }
 
+      async function writeGattWithoutResponse(ch, payload) {
+        if (typeof ch.writeValueWithoutResponse === 'function') {
+          await ch.writeValueWithoutResponse(payload);
+          return;
+        }
+        await ch.writeValue(payload);
+      }
+
       async function waitReady(timeoutMs = BLE_READY_TIMEOUT_MS) {
         const started = Date.now();
         while (!ready) {
@@ -903,9 +911,13 @@
         ready = false;
       }
 
-      async function writePaced(payload, { delayMs = 0 } = {}) {
+      async function writePaced(payload, { delayMs = 0, withoutResponse = false } = {}) {
         ready = false;
-        await writeGattWithResponse(writeChar, payload);
+        if (withoutResponse) {
+          await writeGattWithoutResponse(writeChar, payload);
+        } else {
+          await writeGattWithResponse(writeChar, payload);
+        }
         await waitReady();
         if (delayMs > 0) await sleep(delayMs);
       }
@@ -933,17 +945,20 @@
           return {
             chunkSize: FIRMWARE_STABLE_CHUNK_SIZE,
             delayMs: FIRMWARE_STABLE_CHUNK_DELAY_MS,
+            withoutResponse: false,
           };
         }
         if (version && compareFirmwareVersions(version, '1.41') < 0) {
           return {
             chunkSize: FIRMWARE_OLD_LEGACY_CHUNK_SIZE,
             delayMs: FIRMWARE_OLD_LEGACY_CHUNK_DELAY_MS,
+            withoutResponse: true,
           };
         }
         return {
           chunkSize: FIRMWARE_LEGACY_CHUNK_SIZE,
           delayMs: FIRMWARE_LEGACY_CHUNK_DELAY_MS,
+          withoutResponse: false,
         };
       }
 
@@ -1048,7 +1063,7 @@
           const packet=new Uint8Array(len+4);
           packet.set(chunk);
           new DataView(packet.buffer).setUint32(len,crc,true);
-          await writePaced(packet, { delayMs: profile.delayMs });
+          await writePaced(packet, { delayMs: profile.delayMs, withoutResponse: profile.withoutResponse });
           offset+=len; setProgress(offset,data.length);
         }
         if (window.GlobalUI) GlobalUI.announce(t('completeFirmware'));
