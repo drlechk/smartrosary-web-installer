@@ -811,8 +811,8 @@
       const FIRMWARE_LEGACY_CHUNK_DELAY_MS = 10;
       const FIRMWARE_STABLE_CHUNK_SIZE = 240;
       const FIRMWARE_STABLE_CHUNK_DELAY_MS = 0;
-      const FIRMWARE_OLD_LEGACY_CHUNK_SIZE = 128;
-      const FIRMWARE_OLD_LEGACY_CHUNK_DELAY_MS = 25;
+      const FIRMWARE_SAFE_RESCUE_CHUNK_SIZE = 508;
+      const FIRMWARE_SAFE_RESCUE_CHUNK_DELAY_MS = 0;
       const BLE_READY_TIMEOUT_MS = 20000;
       
 
@@ -904,6 +904,7 @@
         const started = Date.now();
         while (!ready) {
           if (Date.now() - started > timeoutMs) {
+            console.error(`[BLE OTA] Timeout waiting for device ready after ${timeoutMs}ms!`);
             throw new Error(t('errorFirmwareFailed'));
           }
           await sleep(30);
@@ -913,10 +914,15 @@
 
       async function writePaced(payload, { delayMs = 0, withoutResponse = false } = {}) {
         ready = false;
-        if (withoutResponse) {
-          await writeGattWithoutResponse(writeChar, payload);
-        } else {
-          await writeGattWithResponse(writeChar, payload);
+        try {
+          if (withoutResponse) {
+            await writeGattWithoutResponse(writeChar, payload);
+          } else {
+            await writeGattWithResponse(writeChar, payload);
+          }
+        } catch (err) {
+          console.error(`[BLE OTA] GATT Write failed:`, err);
+          throw err;
         }
         await waitReady();
         if (delayMs > 0) await sleep(delayMs);
@@ -941,25 +947,28 @@
       }
 
       function firmwareTransferProfile(version) {
+        let profile;
         if (version && compareFirmwareVersions(version, FIRMWARE_STABLE_OTA_WORKER_VERSION) >= 0) {
-          return {
+          profile = {
             chunkSize: FIRMWARE_STABLE_CHUNK_SIZE,
             delayMs: FIRMWARE_STABLE_CHUNK_DELAY_MS,
             withoutResponse: false,
           };
-        }
-        if (version && compareFirmwareVersions(version, '1.41') < 0) {
-          return {
-            chunkSize: FIRMWARE_OLD_LEGACY_CHUNK_SIZE,
-            delayMs: FIRMWARE_OLD_LEGACY_CHUNK_DELAY_MS,
-            withoutResponse: true,
+        } else if (!version || compareFirmwareVersions(version, '1.41') < 0) {
+          profile = {
+            chunkSize: FIRMWARE_SAFE_RESCUE_CHUNK_SIZE,
+            delayMs: FIRMWARE_SAFE_RESCUE_CHUNK_DELAY_MS,
+            withoutResponse: false,
+          };
+        } else {
+          profile = {
+            chunkSize: FIRMWARE_LEGACY_CHUNK_SIZE,
+            delayMs: FIRMWARE_LEGACY_CHUNK_DELAY_MS,
+            withoutResponse: false,
           };
         }
-        return {
-          chunkSize: FIRMWARE_LEGACY_CHUNK_SIZE,
-          delayMs: FIRMWARE_LEGACY_CHUNK_DELAY_MS,
-          withoutResponse: false,
-        };
+        console.log(`[BLE OTA] Profile for v${version || 'unknown'}:`, profile);
+        return profile;
       }
 
       async function readFirmwareVersion(svc) {
@@ -1016,6 +1025,7 @@
         //    (firmware / language / intentions are separate chars under the same service)
         writeChar  = await svc.getCharacteristic(charUuid);
         connectedFirmwareVersion = await readFirmwareVersion(svc);
+        console.log(`[BLE OTA] Connected device version:`, connectedFirmwareVersion);
 
         // 6) Keep a global statusChar for “ready/ACK” pacing (also used above in consent)
         try {
@@ -1056,6 +1066,8 @@
         // Acknowledged chunks stay cautious for old receivers and speed up on v1.44+.
         const profile = firmwareTransferProfile(connectedFirmwareVersion);
         let offset=0, chunkSize=profile.chunkSize;
+        console.log(`[BLE OTA] Starting upload loop: totalSize=${data.length} bytes`);
+        
         while(offset<data.length){
           const len=Math.min(chunkSize,data.length-offset);
           const chunk=data.slice(offset,offset+len);
@@ -1063,9 +1075,15 @@
           const packet=new Uint8Array(len+4);
           packet.set(chunk);
           new DataView(packet.buffer).setUint32(len,crc,true);
+          
+          if (offset % (chunkSize * 10) === 0) {
+             console.log(`[BLE OTA] Upload progress: ${offset}/${data.length} (${Math.round((offset/data.length)*100)}%)`);
+          }
+          
           await writePaced(packet, { delayMs: profile.delayMs, withoutResponse: profile.withoutResponse });
           offset+=len; setProgress(offset,data.length);
         }
+        console.log(`[BLE OTA] Upload complete!`);
         if (window.GlobalUI) GlobalUI.announce(t('completeFirmware'));
       }
 
