@@ -1,6 +1,15 @@
 // Generated from /Users/lech/Projects/PlatformIO/esp32c3-rosary release commits after 622ef97.
 window.SmartRosaryChangelog = [
   {
+    version: "v1.50",
+    releaseCommit: "68bc5ae",
+    changes: [
+      { hash: "68bc5ae", text: "Limits wallpaper visibility to the rosary tile and wallpaper settings tile so it does not bleed through unrelated screens." },
+      { hash: "68bc5ae", text: "Keeps the wallpaper background enabled when navigating back to the rosary tile after splash or BLE-driven navigation." },
+      { hash: "68bc5ae", text: "Adds the Medjugorje preset wallpaper binary for 466x466 rosaries." }
+    ]
+  },
+  {
     version: "v1.49",
     releaseCommit: "0e86220",
     changes: [
