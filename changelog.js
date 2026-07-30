@@ -1,6 +1,14 @@
 // Generated from /Users/lech/Projects/PlatformIO/esp32c3-rosary release commits after 622ef97.
 window.SmartRosaryChangelog = [
   {
+    version: "v1.52",
+    releaseCommit: "972aec4",
+    changes: [
+      { hash: "ab6bf72", text: "Adds datetime roller settings to firmware and scales arrow font for 466 display." },
+      { hash: "972aec4", text: "Release firmware v1.52." }
+    ]
+  },
+  {
     version: "v1.51",
     releaseCommit: "e8a1235",
     changes: [
