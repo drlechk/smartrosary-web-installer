@@ -1,6 +1,17 @@
 // Generated from /Users/lech/Projects/PlatformIO/esp32c3-rosary release commits after 622ef97.
 window.SmartRosaryChangelog = [
   {
+    version: "v1.51",
+    releaseCommit: "e8a1235",
+    changes: [
+      { hash: "cbfbbc6", text: "Preserves a plausible external RTC time on C3 after OTA or USB reflashing instead of overwriting it on first boot." },
+      { hash: "b3d4cb6", text: "Uses black backing behind wallpaper tiles so their background matches the rest of the UI." },
+      { hash: "6ac3550", text: "Stores the last successful datetime sync marker and warns when boot RTC time is stale, missing, or not advancing." },
+      { hash: "128ecbe", text: "Localizes the full-screen datetime warning and verifies RTC write/readback before accepting app sync." },
+      { hash: "e8a1235", text: "Release firmware v1.51." }
+    ]
+  },
+  {
     version: "v1.50",
     releaseCommit: "68bc5ae",
     changes: [
