@@ -819,6 +819,7 @@
       let device, writeChar, statusChar;
       let ready = true;
       let connectedFirmwareVersion = '';
+      let connectedHardwareId = 'esp32-c3-01';
 
       document.getElementById('uploadFirmwareBtn').addEventListener('click', async (ev) => {
         preventStandby();
@@ -979,6 +980,9 @@
           const text = new TextDecoder().decode(bytes).split('\0')[0].trim();
           if (!text || text === '{}') return '';
           const json = JSON.parse(text);
+          if (json && json.hardwareId) {
+            connectedHardwareId = String(json.hardwareId);
+          }
           return json && json.fwVersion ? String(json.fwVersion) : '';
         } catch {
           return '';
@@ -1045,17 +1049,24 @@
       }
 
       async function startFirmwareBluetooth(btn){
-        const resp = await fetch('firmware/firmware.bin');
+        // Connect first, to read the hardware ID
+        await connectBLE(SERVICE_UUID,FIRMWARE_CHAR_UUID);
+        
+        let fwPath = 'firmware/firmware.bin';
+        if (connectedHardwareId === 'esp32-s3-touch-amoled-1-75') {
+          fwPath = 'firmware/s3/firmware.bin';
+        }
+
+        const resp = await fetch(fwPath);
         if(!resp.ok){
           const msg = t('errorFirmwareMissing');
           if (window.GlobalUI) GlobalUI.error(msg);
           alert(msg);
+          if (device && device.gatt.connected) device.gatt.disconnect();
           return;
         }
         const data = new Uint8Array(await resp.arrayBuffer());
 
-        // Connect first, then show progress
-        await connectBLE(SERVICE_UUID,FIRMWARE_CHAR_UUID);
         if (window.GlobalUI) GlobalUI.showProgress(t('progressFirmware'));
 
         // 4-byte size header (little-endian)

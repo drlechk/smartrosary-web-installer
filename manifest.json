@@ -31,6 +31,35 @@
           "offset": 3289088
         }
       ]
+    },
+    {
+      "chipFamily": "ESP32-S3",
+      "parts": [
+        {
+          "path": "firmware/s3/bootloader.bin",
+          "offset": 0
+        },
+        {
+          "path": "firmware/s3/partitions.bin",
+          "offset": 32768
+        },
+        {
+          "path": "firmware/s3/boot_app0.bin",
+          "offset": 57344
+        },
+        {
+          "path": "firmware/s3/firmware.bin",
+          "offset": 65536
+        },
+        {
+          "path": "lang/nvs-lang-pl.bin",
+          "offset": 8343552
+        },
+        {
+          "path": "wallpaper/s3/littlefs.bin",
+          "offset": 8646656
+        }
+      ]
     }
   ]
 }
