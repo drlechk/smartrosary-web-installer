@@ -1,6 +1,13 @@
 // Generated from /Users/lech/Projects/PlatformIO/esp32c3-rosary release commits after 622ef97.
 window.SmartRosaryChangelog = [
   {
+    version: "v1.53",
+    releaseCommit: "0bd2e74",
+    changes: [
+      { hash: "0bd2e74", text: "Adds translation for 'Adjust time/date' subtitle." }
+    ]
+  },
+  {
     version: "v1.52",
     releaseCommit: "972aec4",
     changes: [
