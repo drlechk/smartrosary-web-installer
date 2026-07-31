@@ -978,8 +978,11 @@
           const value = await settingsChar.readValue();
           const bytes = new Uint8Array(value.buffer);
           const text = new TextDecoder().decode(bytes).split('\0')[0].trim();
+          console.log(`[BLE OTA] INFO_SETTINGS_UUID payload:`, text);
+          
           if (!text || text === '{}') {
              connectedHardwareId = 'esp32-c3-01';
+             console.log(`[BLE OTA] Empty payload. Defaulting hardwareId to:`, connectedHardwareId);
              return '';
           }
           const json = JSON.parse(text);
@@ -988,8 +991,10 @@
           } else {
             connectedHardwareId = 'esp32-c3-01';
           }
+          console.log(`[BLE OTA] Parsed hardwareId:`, connectedHardwareId);
           return json && json.fwVersion ? String(json.fwVersion) : '';
-        } catch {
+        } catch (e) {
+          console.error("[BLE OTA] Failed to read or parse firmware version:", e);
           connectedHardwareId = 'esp32-c3-01';
           return '';
         }
