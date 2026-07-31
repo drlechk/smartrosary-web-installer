@@ -998,23 +998,39 @@
              if (window.GlobalUI) GlobalUI.setDevice(connectedHardwareId);
              return '';
           }
-          const json = JSON.parse(text);
-          if (json && json.hardwareId) {
-            connectedHardwareId = String(json.hardwareId);
-          } else {
-            connectedHardwareId = window.confirm("Detected older firmware without hardware ID.\nDoes this rosary have a SCREEN (ESP32-S3)?\n\nClick OK for S3 with screen.\nClick Cancel for C3 (mechanical only).")
-              ? 'esp32-s3-touch-amoled-1-75'
-              : 'esp32-c3-01';
+          let connectedHardwareId = null;
+          let fwVersion = '';
+
+          try {
+            const json = JSON.parse(text);
+            if (json && json.hardwareId) {
+              connectedHardwareId = String(json.hardwareId);
+            } else {
+              connectedHardwareId = window.confirm("Detected older firmware without hardware ID.\nDoes this rosary have a SCREEN (ESP32-S3)?\n\nClick OK for S3 with screen.\nClick Cancel for C3 (mechanical only).")
+                ? 'esp32-s3-touch-amoled-1-75'
+                : 'esp32-c3-01';
+            }
+            if (json && json.fwVersion) fwVersion = String(json.fwVersion);
+          } catch (e) {
+            console.warn("[BLE OTA] JSON parse failed, likely due to MTU truncation. Attempting regex extraction...");
+            const hwMatch = text.match(/"hardwareId"\s*:\s*"([^"]+)"/);
+            if (hwMatch) {
+              connectedHardwareId = hwMatch[1];
+            } else {
+              connectedHardwareId = window.confirm("Failed to fully read firmware data (might be a legacy version).\nDoes this rosary have a SCREEN (ESP32-S3)?\n\nClick OK for S3 with screen.\nClick Cancel for C3 (mechanical only).")
+                ? 'esp32-s3-touch-amoled-1-75'
+                : 'esp32-c3-01';
+            }
+            const fwMatch = text.match(/"fwVersion"\s*:\s*"([^"]+)"/);
+            if (fwMatch) fwVersion = fwMatch[1];
           }
+
           console.log(`[BLE OTA] Parsed hardwareId:`, connectedHardwareId);
           if (window.GlobalUI) GlobalUI.setDevice(connectedHardwareId);
-          return json && json.fwVersion ? String(json.fwVersion) : '';
-        } catch (e) {
-          console.error("[BLE OTA] Failed to read or parse firmware version:", e);
-          connectedHardwareId = window.confirm("Failed to read firmware data (might be a legacy version).\nDoes this rosary have a SCREEN (ESP32-S3)?\n\nClick OK for S3 with screen.\nClick Cancel for C3 (mechanical only).")
-            ? 'esp32-s3-touch-amoled-1-75'
-            : 'esp32-c3-01';
-          if (window.GlobalUI) GlobalUI.setDevice(connectedHardwareId);
+          
+          return fwVersion;
+        } catch (err) {
+          console.error("[BLE OTA] Failed to read firmware version:", err);
           return '';
         }
       }
