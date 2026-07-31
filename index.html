@@ -978,13 +978,19 @@
           const value = await settingsChar.readValue();
           const bytes = new Uint8Array(value.buffer);
           const text = new TextDecoder().decode(bytes).split('\0')[0].trim();
-          if (!text || text === '{}') return '';
+          if (!text || text === '{}') {
+             connectedHardwareId = 'esp32-c3-01';
+             return '';
+          }
           const json = JSON.parse(text);
           if (json && json.hardwareId) {
             connectedHardwareId = String(json.hardwareId);
+          } else {
+            connectedHardwareId = 'esp32-c3-01';
           }
           return json && json.fwVersion ? String(json.fwVersion) : '';
         } catch {
+          connectedHardwareId = 'esp32-c3-01';
           return '';
         }
       }
