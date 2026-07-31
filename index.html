@@ -991,10 +991,8 @@
           console.log(`[BLE OTA] INFO_SETTINGS_UUID payload:`, text);
           
           if (!text || text === '{}') {
-             connectedHardwareId = window.confirm("Empty firmware data payload.\nDoes this rosary have a SCREEN (ESP32-S3)?\n\nClick OK for S3 with screen.\nClick Cancel for C3 (mechanical only).")
-               ? 'esp32-s3-touch-amoled-1-75'
-               : 'esp32-c3-01';
-             console.log(`[BLE OTA] Empty payload. User selected hardwareId:`, connectedHardwareId);
+             connectedHardwareId = 'esp32-c3-01';
+             console.log(`[BLE OTA] Empty payload. Defaulting to legacy hardwareId:`, connectedHardwareId);
              if (window.GlobalUI) GlobalUI.setDevice(connectedHardwareId);
              return '';
           }
@@ -1005,9 +1003,7 @@
             if (json && json.hardwareId) {
               connectedHardwareId = String(json.hardwareId);
             } else {
-              connectedHardwareId = window.confirm("Detected older firmware without hardware ID.\nDoes this rosary have a SCREEN (ESP32-S3)?\n\nClick OK for S3 with screen.\nClick Cancel for C3 (mechanical only).")
-                ? 'esp32-s3-touch-amoled-1-75'
-                : 'esp32-c3-01';
+              connectedHardwareId = 'esp32-c3-01';
             }
             if (json && json.fwVersion) fwVersion = String(json.fwVersion);
           } catch (e) {
@@ -1016,9 +1012,7 @@
             if (hwMatch) {
               connectedHardwareId = hwMatch[1];
             } else {
-              connectedHardwareId = window.confirm("Failed to fully read firmware data (might be a legacy version).\nDoes this rosary have a SCREEN (ESP32-S3)?\n\nClick OK for S3 with screen.\nClick Cancel for C3 (mechanical only).")
-                ? 'esp32-s3-touch-amoled-1-75'
-                : 'esp32-c3-01';
+              connectedHardwareId = 'esp32-c3-01';
             }
             const fwMatch = text.match(/"fwVersion"\s*:\s*"([^"]+)"/);
             if (fwMatch) fwVersion = fwMatch[1];
