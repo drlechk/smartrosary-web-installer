@@ -13,9 +13,9 @@ window.SMARTROSARY_BREAKING_CHANGES = {
 };
 window.SMARTROSARY_RELEASE_MESSAGE = {
   "en": "Firmware v1.54 brings OTA upgrade status screens on the device itself and improves RTC synchronization reliability.",
-  "de": "Firmware v1.54 bringt OTA-Upgrade-Statusbildschirme auf dem Gerät selbst und verbessert die Zuverlässigkeit der RTC-Synchronisation.",
-  "pl": "Firmware v1.54 wprowadza ekrany statusu aktualizacji OTA na samym urządzeniu i poprawia niezawodność synchronizacji RTC.",
-  "fr": "Le firmware v1.54 apporte des écrans d'état de mise à niveau OTA sur l'appareil lui-même et améliore la fiabilité de synchronisation RTC.",
-  "es": "El firmware v1.54 trae pantallas de estado de actualización OTA en el propio dispositivo y mejora la fiabilidad de sincronización RTC.",
-  "pt": "O firmware v1.54 traz telas de status de atualização OTA no próprio dispositivo e melhora a confiabilidade da sincronização RTC."
+  "de": "Firmware v1.54 bringt OTA-Upgrade-Statusbildschirme auf dem Ger\u00e4t selbst und verbessert die Zuverl\u00e4ssigkeit der RTC-Synchronisation.",
+  "pl": "Firmware v1.54 wprowadza ekrany statusu aktualizacji OTA na samym urz\u0105dzeniu i poprawia niezawodno\u015b\u0107 synchronizacji RTC.",
+  "fr": "Le firmware v1.54 apporte des \u00e9crans d'\u00e9tat de mise \u00e0 niveau OTA sur l'appareil lui-m\u00eame et am\u00e9liore la fiabilit\u00e9 de synchronisation RTC.",
+  "es": "El firmware v1.54 trae pantallas de estado de actualizaci\u00f3n OTA en el propio dispositivo y mejora la fiabilidad de sincronizaci\u00f3n RTC.",
+  "pt": "O firmware v1.54 traz telas de status de atualiza\u00e7\u00e3o OTA no pr\u00f3prio dispositivo e melhora a confiabilidade da sincroniza\u00e7\u00e3o RTC."
 };
