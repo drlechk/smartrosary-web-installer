@@ -1,5 +1,5 @@
-window.SMARTROSARY_VERSION = "v1.51";
-window.SMARTROSARY_LANG_VERSION = "v1.32";
+window.SMARTROSARY_VERSION = "v1.53";
+window.SMARTROSARY_LANG_VERSION = "v1.34";
 window.SMARTROSARY_BREAKING_CHANGES = {
   "versions": { "before": "v1.49" },
   "messages": {
@@ -12,10 +12,10 @@ window.SMARTROSARY_BREAKING_CHANGES = {
   }
 };
 window.SMARTROSARY_RELEASE_MESSAGE = {
-  "en": "Firmware v1.51 adds a fullscreen date/time warning when the rosary detects a missing, stale, or non-advancing RTC value on boot. The warning is translated in the language package v1.32, and app time sync now verifies the RTC write before accepting it.",
-  "de": "Firmware v1.51 zeigt beim Start eine vollbildige Datums-/Uhrzeitwarnung, wenn der Rosenkranz einen fehlenden, veralteten oder nicht weiterlaufenden RTC-Wert erkennt. Die Warnung ist im Sprachpaket v1.32 \u00fcbersetzt, und die Zeitsynchronisierung der App pr\u00fcft nun den RTC-Schreibvorgang, bevor er akzeptiert wird.",
-  "pl": "Firmware v1.51 dodaje pe\u0142noekranowe ostrze\u017cenie daty i godziny, gdy r\u00f3\u017caniec podczas startu wykryje brakuj\u0105c\u0105, nieaktualn\u0105 albo niepost\u0119puj\u0105c\u0105 warto\u015b\u0107 RTC. Ostrze\u017cenie jest przet\u0142umaczone w pakiecie j\u0119zykowym v1.32, a synchronizacja czasu z aplikacji sprawdza teraz zapis RTC przed jego zaakceptowaniem.",
-  "fr": "Le firmware v1.51 ajoute un avertissement date/heure en plein \u00e9cran lorsque le Rosaire d\u00e9tecte au d\u00e9marrage une valeur RTC absente, obsol\u00e8te ou qui n'avance pas. L'avertissement est traduit dans le paquet de langue v1.32, et la synchronisation de l'heure par l'application v\u00e9rifie d\u00e9sormais l'\u00e9criture RTC avant de l'accepter.",
-  "es": "El firmware v1.51 a\u00f1ade una advertencia de fecha y hora a pantalla completa cuando el Rosario detecta al arrancar un valor RTC ausente, obsoleto o que no avanza. La advertencia est\u00e1 traducida en el paquete de idioma v1.32, y la sincronizaci\u00f3n de hora desde la app ahora verifica la escritura del RTC antes de aceptarla.",
-  "pt": "O firmware v1.51 adiciona um aviso de data/hora em tela cheia quando o Ros\u00e1rio detecta na inicializa\u00e7\u00e3o um valor RTC ausente, antigo ou que n\u00e3o avan\u00e7a. O aviso est\u00e1 traduzido no pacote de idioma v1.32, e a sincroniza\u00e7\u00e3o de hora pelo aplicativo agora verifica a escrita do RTC antes de aceit\u00e1-la."
+  "en": "Firmware v1.53 adds native support for the new ESP32-S3 AMOLED hardware variant to the Web Installer and mobile app. Additionally, this release translates the 'Adjust time/date' setting screen subtitle across all languages in language package v1.34.",
+  "de": "Firmware v1.53 f\u00fcgt dem Web-Installer und der mobilen App native Unterst\u00fctzung f\u00fcr die neue Hardwarevariante ESP32-S3 AMOLED hinzu. Dar\u00fcber hinaus \u00fcbersetzt dieses Release den Untertitel der Einstellung 'Datum/Uhrzeit anpassen' in allen Sprachen (Sprachpaket v1.34).",
+  "pl": "Firmware v1.53 dodaje natywn\u0105 obs\u0142ug\u0119 nowej wersji sprz\u0119towej ESP32-S3 AMOLED w Web Installerze i aplikacji mobilnej. Ponadto ta wersja t\u0142umaczy podtytu\u0142 ustawie\u0144 'Dostosuj dat\u0119/czas' we wszystkich j\u0119zykach w pakiecie j\u0119zykowym v1.34.",
+  "fr": "Le firmware v1.53 ajoute une prise en charge native de la nouvelle variante mat\u00e9rielle ESP32-S3 AMOLED \u00e0 l'installateur Web et \u00e0 l'application mobile. De plus, cette version traduit le sous-titre de l'\u00e9cran de r\u00e9glage 'Ajuster date/heure' dans toutes les langues du paquet de langue v1.34.",
+  "es": "El firmware v1.53 a\u00f1ade soporte nativo para la nueva variante de hardware ESP32-S3 AMOLED al instalador web y la app m\u00f3vil. Adem\u00e1s, esta versi\u00f3n traduce el subt\u00edtulo de configuraci\u00f3n de 'Ajustar fecha/hora' en todos los idiomas del paquete de idioma v1.34.",
+  "pt": "O firmware v1.53 adiciona suporte nativo para a nova variante de hardware ESP32-S3 AMOLED no instalador web e aplicativo m\u00f3vel. Al\u00e9m disso, esta vers\u00e3o traduz o subt\u00edtulo de configura\u00e7\u00e3o 'Ajustar data/hora' em todos os idiomas no pacote de idioma v1.34."
 };
