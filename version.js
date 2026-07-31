@@ -1,5 +1,5 @@
-window.SMARTROSARY_VERSION = "v1.53";
-window.SMARTROSARY_LANG_VERSION = "v1.34";
+window.SMARTROSARY_VERSION = "v1.54";
+window.SMARTROSARY_LANG_VERSION = "v1.35";
 window.SMARTROSARY_BREAKING_CHANGES = {
   "versions": { "before": "v1.49" },
   "messages": {
@@ -12,10 +12,10 @@ window.SMARTROSARY_BREAKING_CHANGES = {
   }
 };
 window.SMARTROSARY_RELEASE_MESSAGE = {
-  "en": "Firmware v1.53 adds native support for the new ESP32-S3 AMOLED hardware variant to the Web Installer and mobile app. Additionally, this release translates the 'Adjust time/date' setting screen subtitle across all languages in language package v1.34.",
-  "de": "Firmware v1.53 f\u00fcgt dem Web-Installer und der mobilen App native Unterst\u00fctzung f\u00fcr die neue Hardwarevariante ESP32-S3 AMOLED hinzu. Dar\u00fcber hinaus \u00fcbersetzt dieses Release den Untertitel der Einstellung 'Datum/Uhrzeit anpassen' in allen Sprachen (Sprachpaket v1.34).",
-  "pl": "Firmware v1.53 dodaje natywn\u0105 obs\u0142ug\u0119 nowej wersji sprz\u0119towej ESP32-S3 AMOLED w Web Installerze i aplikacji mobilnej. Ponadto ta wersja t\u0142umaczy podtytu\u0142 ustawie\u0144 'Dostosuj dat\u0119/czas' we wszystkich j\u0119zykach w pakiecie j\u0119zykowym v1.34.",
-  "fr": "Le firmware v1.53 ajoute une prise en charge native de la nouvelle variante mat\u00e9rielle ESP32-S3 AMOLED \u00e0 l'installateur Web et \u00e0 l'application mobile. De plus, cette version traduit le sous-titre de l'\u00e9cran de r\u00e9glage 'Ajuster date/heure' dans toutes les langues du paquet de langue v1.34.",
-  "es": "El firmware v1.53 a\u00f1ade soporte nativo para la nueva variante de hardware ESP32-S3 AMOLED al instalador web y la app m\u00f3vil. Adem\u00e1s, esta versi\u00f3n traduce el subt\u00edtulo de configuraci\u00f3n de 'Ajustar fecha/hora' en todos los idiomas del paquete de idioma v1.34.",
-  "pt": "O firmware v1.53 adiciona suporte nativo para a nova variante de hardware ESP32-S3 AMOLED no instalador web e aplicativo m\u00f3vel. Al\u00e9m disso, esta vers\u00e3o traduz o subt\u00edtulo de configura\u00e7\u00e3o 'Ajustar data/hora' em todos os idiomas no pacote de idioma v1.34."
+  "en": "Firmware v1.54 brings OTA upgrade status screens on the device itself and improves RTC synchronization reliability.",
+  "de": "Firmware v1.54 bringt OTA-Upgrade-Statusbildschirme auf dem Gerät selbst und verbessert die Zuverlässigkeit der RTC-Synchronisation.",
+  "pl": "Firmware v1.54 wprowadza ekrany statusu aktualizacji OTA na samym urządzeniu i poprawia niezawodność synchronizacji RTC.",
+  "fr": "Le firmware v1.54 apporte des écrans d'état de mise à niveau OTA sur l'appareil lui-même et améliore la fiabilité de synchronisation RTC.",
+  "es": "El firmware v1.54 trae pantallas de estado de actualización OTA en el propio dispositivo y mejora la fiabilidad de sincronización RTC.",
+  "pt": "O firmware v1.54 traz telas de status de atualização OTA no próprio dispositivo e melhora a confiabilidade da sincronização RTC."
 };

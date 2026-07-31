@@ -1,6 +1,16 @@
 // Generated from /Users/lech/Projects/PlatformIO/esp32c3-rosary release commits after 622ef97.
 window.SmartRosaryChangelog = [
   {
+    version: "v1.54",
+    releaseCommit: "9ce44bc",
+    changes: [
+      { hash: "73cf115", text: "Adds OTA upgrade status screen with multi-language support and UI tweaks." },
+      { hash: "7d9b411", text: "Recovers PCF8563 from UART interference and fixes short-circuit time sync bug." },
+      { hash: "8f64aec", text: "Makes OTA result screen fullscreen with better spacing." },
+      { hash: "9ce44bc", text: "Release firmware v1.54." }
+    ]
+  },
+  {
     version: "v1.53",
     releaseCommit: "0bd2e74",
     changes: [
