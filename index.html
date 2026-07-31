@@ -92,6 +92,7 @@
       .toolbar-wrap { padding: 8px 12px 14px; }
       .toolbar { max-width: 720px; margin: 0 auto; display:flex; flex-direction:column; align-items:center; gap:6px; }
       .toolbar-status { font-size: 12px; color: var(--muted); text-align:center; letter-spacing: .02em; }
+      .toolbar-device { font-size: 11px; color: var(--accent); text-align:center; font-weight: 500; min-height: 14px; }
       .toolbar-progress {
         position: absolute;
         left: 0;
@@ -203,6 +204,7 @@
       const GlobalUI = (() => {
         let statusIdle = 'Ready.';
         let statusEl = null;
+        let deviceEl = null;
         let progressWrap = null;
         let progressBar = null;
         let currentTitle = null;
@@ -210,6 +212,7 @@
 
         const refs = () => {
           if (!statusEl) statusEl = document.getElementById('globalStatus');
+          if (!deviceEl) deviceEl = document.getElementById('globalDevice');
           if (!progressWrap) progressWrap = document.getElementById('globalProg');
           if (!progressBar && progressWrap) progressBar = progressWrap.querySelector('.bar');
         };
@@ -248,6 +251,7 @@
         const reset = () => {
           hideProgress();
           setStatus();
+          setDevice('');
           clearTimeout(resetTimer);
           resetTimer = null;
         };
@@ -274,7 +278,12 @@
           setStatus();
         };
 
-        return { setStatus, showProgress, updateProgress, hideProgress, reset, announce, error, setIdleText };
+        const setDevice = (idText) => {
+          refs();
+          if (deviceEl) deviceEl.textContent = idText ? `Device: ${idText}` : '';
+        };
+
+        return { setStatus, showProgress, updateProgress, hideProgress, reset, announce, error, setIdleText, setDevice };
       })();
       window.GlobalUI = GlobalUI;
       document.addEventListener('DOMContentLoaded', () => GlobalUI.reset());
@@ -307,6 +316,7 @@
       <div class="toolbar-wrap">
         <div class="toolbar">
           <div class="toolbar-status" id="globalStatus">Ready.</div>
+          <div class="toolbar-device" id="globalDevice"></div>
         </div>
       </div>
       <div id="globalProg" class="toolbar-progress">
@@ -992,10 +1002,12 @@
             connectedHardwareId = 'esp32-c3-01';
           }
           console.log(`[BLE OTA] Parsed hardwareId:`, connectedHardwareId);
+          if (window.GlobalUI) GlobalUI.setDevice(connectedHardwareId);
           return json && json.fwVersion ? String(json.fwVersion) : '';
         } catch (e) {
           console.error("[BLE OTA] Failed to read or parse firmware version:", e);
           connectedHardwareId = 'esp32-c3-01';
+          if (window.GlobalUI) GlobalUI.setDevice(connectedHardwareId);
           return '';
         }
       }
