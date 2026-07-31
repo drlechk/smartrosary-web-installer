@@ -1,6 +1,13 @@
 // Generated from /Users/lech/Projects/PlatformIO/esp32c3-rosary release commits after 622ef97.
 window.SmartRosaryChangelog = [
   {
+    version: "v1.56",
+    releaseCommit: "0526ff9",
+    changes: [
+      { hash: "0526ff9", text: "Release firmware v1.56 (UI icon and datetime setting fixes)." }
+    ]
+  },
+  {
     version: "v1.55",
     releaseCommit: "41a5f6b",
     changes: [

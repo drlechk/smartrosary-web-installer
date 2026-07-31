@@ -1,4 +1,4 @@
-window.SMARTROSARY_VERSION = "v1.55";
+window.SMARTROSARY_VERSION = "v1.56";
 window.SMARTROSARY_LANG_VERSION = "v1.37";
 window.SMARTROSARY_BREAKING_CHANGES = {
   "versions": { "before": "v1.49" },
@@ -12,10 +12,10 @@ window.SMARTROSARY_BREAKING_CHANGES = {
   }
 };
 window.SMARTROSARY_RELEASE_MESSAGE = {
-  "en": "Firmware v1.55 refines the date settings layout by changing the date selector order to DD.MM.YYYY, providing a more intuitive user experience.",
-  "de": "Firmware v1.55 verfeinert das Layout der Datumseinstellungen, indem die Reihenfolge der Datumsauswahl auf TT.MM.JJJJ ge\u00e4ndert wird, um eine intuitivere Benutzererfahrung zu bieten.",
-  "pl": "Firmware v1.55 udoskonala uk\u0142ad ustawie\u0144 daty, zmieniaj\u0105c kolejno\u015b\u0107 wyboru daty na DD.MM.RRRR, zapewniaj\u0105c bardziej intuicyjne wra\u017cenia u\u017cytkownika.",
-  "fr": "Le firmware v1.55 affine la disposition des param\u00e8tres de date en modifiant l'ordre du s\u00e9lecteur de date en JJ.MM.AAAA, offrant une exp\u00e9rience utilisateur plus intuitive.",
-  "es": "El firmware v1.55 refina el dise\u00f1o de los ajustes de fecha cambiando el orden del selector de fecha a DD.MM.AAAA, proporcionando una experiencia de usuario m\u00e1s intuitiva.",
-  "pt": "O firmware v1.55 refina o layout das configura\u00e7\u00f5es de data, alterando a ordem do seletor de data para DD.MM.AAAA, proporcionando uma experi\u00eancia de usu\u00e1rio mais intuitiva."
+  "en": "Firmware v1.56 refines the date settings layout by changing the date selector order to DD.MM.YYYY, providing a more intuitive user experience, and improves UI icons.",
+  "de": "Firmware v1.56 verfeinert das Layout der Datumseinstellungen, indem die Reihenfolge der Datumsauswahl auf TT.MM.JJJJ ge\u00e4ndert wird, um eine intuitivere Benutzererfahrung zu bieten, und verbessert UI-Symbole.",
+  "pl": "Firmware v1.56 udoskonala uk\u0142ad ustawie\u0144 daty, zmieniaj\u0105c kolejno\u015b\u0107 wyboru daty na DD.MM.RRRR, zapewniaj\u0105c bardziej intuicyjne wra\u017cenia u\u017cytkownika i poprawia ikony interfejsu.",
+  "fr": "Le firmware v1.56 affine la disposition des param\u00e8tres de date en modifiant l'ordre du s\u00e9lecteur de date en JJ.MM.AAAA, offrant une exp\u00e9rience utilisateur plus intuitive, et am\u00e9liore les ic\u00f4nes de l'interface utilisateur.",
+  "es": "El firmware v1.56 refina el dise\u00f1o de los ajustes de fecha cambiando el orden del selector de fecha a DD.MM.AAAA, proporcionando una experiencia de usuario m\u00e1s intuitiva, y mejora los iconos de la interfaz de usuario.",
+  "pt": "O firmware v1.56 refina o layout das configura\u00e7\u00f5es de data, alterando a ordem do seletor de data para DD.MM.AAAA, proporcionando uma experi\u00eancia de usu\u00e1rio mais intuitiva, e melhora os \u00edcones da interface do usu\u00e1rio."
 };
