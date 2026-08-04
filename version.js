@@ -1,4 +1,4 @@
-window.SMARTROSARY_VERSION = "v1.56";
+window.SMARTROSARY_VERSION = "v1.57";
 window.SMARTROSARY_LANG_VERSION = "v1.37";
 window.SMARTROSARY_BREAKING_CHANGES = {
   "versions": { "before": "v1.49" },
@@ -12,10 +12,10 @@ window.SMARTROSARY_BREAKING_CHANGES = {
   }
 };
 window.SMARTROSARY_RELEASE_MESSAGE = {
-  "en": "Firmware v1.56 refines the date settings layout by changing the date selector order to DD.MM.YYYY, providing a more intuitive user experience, and improves UI icons.",
-  "de": "Firmware v1.56 verfeinert das Layout der Datumseinstellungen, indem die Reihenfolge der Datumsauswahl auf TT.MM.JJJJ ge\u00e4ndert wird, um eine intuitivere Benutzererfahrung zu bieten, und verbessert UI-Symbole.",
-  "pl": "Firmware v1.56 udoskonala uk\u0142ad ustawie\u0144 daty, zmieniaj\u0105c kolejno\u015b\u0107 wyboru daty na DD.MM.RRRR, zapewniaj\u0105c bardziej intuicyjne wra\u017cenia u\u017cytkownika i poprawia ikony interfejsu.",
-  "fr": "Le firmware v1.56 affine la disposition des param\u00e8tres de date en modifiant l'ordre du s\u00e9lecteur de date en JJ.MM.AAAA, offrant une exp\u00e9rience utilisateur plus intuitive, et am\u00e9liore les ic\u00f4nes de l'interface utilisateur.",
-  "es": "El firmware v1.56 refina el dise\u00f1o de los ajustes de fecha cambiando el orden del selector de fecha a DD.MM.AAAA, proporcionando una experiencia de usuario m\u00e1s intuitiva, y mejora los iconos de la interfaz de usuario.",
-  "pt": "O firmware v1.56 refina o layout das configura\u00e7\u00f5es de data, alterando a ordem do seletor de data para DD.MM.AAAA, proporcionando uma experi\u00eancia de usu\u00e1rio mais intuitiva, e melhora os \u00edcones da interface do usu\u00e1rio."
+  "en": "Firmware v1.57 adds rosary audio autoplay support and auto-play indicator for ESP32-S3, fixes cross intro activation on ESP32-C3, and protects manual mystery/part selection from intention scheduler overrides.",
+  "de": "Firmware v1.57 bringt Audio-Autoplay-Unterst\u00fctzung und Autoplay-Anzeige f\u00fcr ESP32-S3, behebt die Kreuz-Aktivierung auf ESP32-C3 und sch\u00fctzt die manuelle Geheimnis-/Teilauswahl vor \u00dcberschreibungen durch den Anliegen-Scheduler.",
+  "pl": "Firmware v1.57 dodaje obs\u0142ug\u0119 autoodtwarzania audio i wska\u017anik autoodtwarzania dla ESP32-S3, poprawia aktywacj\u0119 krzy\u017cyka na ESP32-C3 oraz zabezpiecza r\u0119czny wyb\u00f3r tajemnicy i cz\u0119\u015bci przed nadpisaniem przez harmonogram intencji.",
+  "fr": "Le firmware v1.57 ajoute la lecture audio automatique et un indicateur pour l'ESP32-S3, corrige l'activation de la croix sur l'ESP32-C3 et prot\u00e8ge la s\u00e9lection manuelle du myst\u00e8re contre le planificateur d'intentions.",
+  "es": "El firmware v1.57 a\u00f1ade reproducci\u00f3n autom\u00e1tica de audio e indicador para ESP32-S3, corrige la activaci\u00f3n de la cruz en ESP32-C3 y protege la selecci\u00f3n manual de misterios frente al programador de intenciones.",
+  "pt": "O firmware v1.57 adiciona suporte \u00e0 reprodu\u00e7\u00e3o autom\u00e1tica de \u00e1udio e indicador para ESP32-S3, corrige a ativa\u00e7\u00e3o da cruz no ESP32-C3 e protege a sele\u00e7\u00e3o manual do mist\u00e9rio contra o agendador de inten\u00e7\u00f5es."
 };

@@ -1,6 +1,24 @@
 // Generated from /Users/lech/Projects/PlatformIO/esp32c3-rosary release commits after 622ef97.
 window.SmartRosaryChangelog = [
   {
+    version: "v1.57",
+    releaseCommit: "4f1e819",
+    changes: [
+      { hash: "b3e6f59", text: "Restricts cross intro activation on button press to S3 audio and protects manual mystery/part selection from intention scheduler overrides." },
+      { hash: "dee4291", text: "Updates audio autoplay indicator and status display." },
+      { hash: "4fcedfb", text: "Adds rosary audio autoplay support and auto-advance playback flow." },
+      { hash: "0e0e78a", text: "Moves audio settings tile under mystery selector." },
+      { hash: "be8a371", text: "Selects Marek Polish audio variant." },
+      { hash: "bbfd9cb", text: "Refines rosary audio bead flow." },
+      { hash: "88a6d47", text: "Implements S3 rosary audio playback flow." },
+      { hash: "1112051", text: "Tunes S3 audio volume controls." },
+      { hash: "21ca352", text: "Adds S3 audio playback settings." },
+      { hash: "1741420", text: "Fixes S3 wallpaper uploadfs partition." },
+      { hash: "576132a", text: "Generates content filesystems from external assets." },
+      { hash: "4f1e819", text: "Release firmware v1.57." }
+    ]
+  },
+  {
     version: "v1.56",
     releaseCommit: "0526ff9",
     changes: [
