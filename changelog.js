@@ -1,6 +1,14 @@
 // Generated from /Users/lech/Projects/PlatformIO/esp32c3-rosary release commits after 622ef97.
 window.SmartRosaryChangelog = [
   {
+    version: "v1.58",
+    releaseCommit: "62c2fdb",
+    changes: [
+      { hash: "f116564", text: "Fixes intention roller preloading and ensures intention flag is invalidated on manual roller change." },
+      { hash: "62c2fdb", text: "Release firmware v1.58." }
+    ]
+  },
+  {
     version: "v1.57",
     releaseCommit: "4f1e819",
     changes: [
