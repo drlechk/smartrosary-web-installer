@@ -204,6 +204,14 @@ window.SmartRosaryChangelog = [
     ]
   },
   {
+    version: "v1.38",
+    releaseCommit: "57c879e",
+    changes: [
+      { hash: "57c879e", text: "Add audio setting tile translations (l059-l063) for all 7 supported device languages" },
+      { hash: "57c879e", text: "Release v1.38 language binaries with audio playback and alternating prayer setting strings" }
+    ]
+  },
+  {
     version: "v1.37",
     releaseCommit: "ee2b8a3",
     changes: [
