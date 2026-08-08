@@ -1,0 +1,116 @@
+{
+  "format": "smartrosary-audio-manifest-v1",
+  "version": "1.0",
+  "partition": "audio-rosary",
+  "hardwareId": "esp32-s3-touch-amoled-1-75",
+  "items": [
+    {
+      "id": "de-florian",
+      "language": "de",
+      "voice": "Florian Multilingual",
+      "label": "Deutsch - Florian",
+      "version": "1.0",
+      "path": "audio/de-florian/audio-rosary.bin",
+      "size": 1261568
+    },
+    {
+      "id": "de-seraphina",
+      "language": "de",
+      "voice": "Seraphina Multilingual",
+      "label": "Deutsch - Seraphina",
+      "version": "1.0",
+      "path": "audio/de-seraphina/audio-rosary.bin",
+      "size": 1261568
+    },
+    {
+      "id": "en-florian",
+      "language": "en",
+      "voice": "Florian Multilingual",
+      "label": "English - Florian",
+      "version": "1.0",
+      "path": "audio/en-florian/audio-rosary.bin",
+      "size": 1261568
+    },
+    {
+      "id": "en-seraphina",
+      "language": "en",
+      "voice": "Seraphina Multilingual",
+      "label": "English - Seraphina",
+      "version": "1.0",
+      "path": "audio/en-seraphina/audio-rosary.bin",
+      "size": 1261568
+    },
+    {
+      "id": "es-florian",
+      "language": "es",
+      "voice": "Florian Multilingual",
+      "label": "Español - Florian",
+      "version": "1.0",
+      "path": "audio/es-florian/audio-rosary.bin",
+      "size": 1261568
+    },
+    {
+      "id": "es-seraphina",
+      "language": "es",
+      "voice": "Seraphina Multilingual",
+      "label": "Español - Seraphina",
+      "version": "1.0",
+      "path": "audio/es-seraphina/audio-rosary.bin",
+      "size": 1261568
+    },
+    {
+      "id": "fr-florian",
+      "language": "fr",
+      "voice": "Florian Multilingual",
+      "label": "Français - Florian",
+      "version": "1.0",
+      "path": "audio/fr-florian/audio-rosary.bin",
+      "size": 1261568
+    },
+    {
+      "id": "fr-seraphina",
+      "language": "fr",
+      "voice": "Seraphina Multilingual",
+      "label": "Français - Seraphina",
+      "version": "1.0",
+      "path": "audio/fr-seraphina/audio-rosary.bin",
+      "size": 1261568
+    },
+    {
+      "id": "pl-florian",
+      "language": "pl",
+      "voice": "Florian Multilingual",
+      "label": "Polski - Florian",
+      "version": "1.0",
+      "path": "audio/pl-florian/audio-rosary.bin",
+      "size": 1261568
+    },
+    {
+      "id": "pl-seraphina",
+      "language": "pl",
+      "voice": "Seraphina Multilingual",
+      "label": "Polski - Seraphina",
+      "version": "1.0",
+      "path": "audio/pl-seraphina/audio-rosary.bin",
+      "size": 1261568
+    },
+    {
+      "id": "pt-florian",
+      "language": "pt",
+      "voice": "Florian Multilingual",
+      "label": "Português - Florian",
+      "version": "1.0",
+      "path": "audio/pt-florian/audio-rosary.bin",
+      "size": 1261568
+    },
+    {
+      "id": "pt-seraphina",
+      "language": "pt",
+      "voice": "Seraphina Multilingual",
+      "label": "Português - Seraphina",
+      "version": "1.0",
+      "path": "audio/pt-seraphina/audio-rosary.bin",
+      "size": 1261568
+    }
+  ]
+}

@@ -129,6 +129,8 @@
       .changelog-list li { display: grid; grid-template-columns: 68px minmax(0, 1fr); gap: 10px; padding: 8px 0; border-top: 1px solid var(--border); }
       .commit-hash { color: var(--muted); font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace; font-size: 12px; line-height: 1.7; }
       .change-text { min-width: 0; overflow-wrap: anywhere; }
+      .hint { color: var(--muted); font-size: 12px; margin: 8px 0 0; text-align: center; }
+      .is-hidden { display: none; }
 
       /* Mobile: stack labels and inputs to avoid overflow */
       @media (max-width: 560px) {
@@ -352,6 +354,18 @@
         </div>
       </div>
 
+      <!-- Bluetooth: Audio -->
+      <div class="uploadBox is-hidden" id="otaAudioBox">
+        <h2 id="audioTitle">Upload audio via Bluetooth</h2>
+        <p class="hint" id="audioVersionHint"></p>
+        <div style="text-align: center; margin-top: 1em;">
+          <select id="audioFileSelect"></select>
+        </div>
+        <div style="text-align: center; margin-top: 1em;">
+          <button id="uploadAudioBtn" class="uploadBtn">Connect & Upload</button>
+        </div>
+      </div>
+
       <!-- Bluetooth: Intentions -->
       <div class="uploadBox" id="otaIntsBox">
         <h2 id="intentsTitle">Upload intentions via Bluetooth</h2>
@@ -394,6 +408,13 @@
 	                </select>
 	              </td>
 	            </tr>
+            <tr>
+              <td><label for="audioLanguage" id="audioLanguageLabel">Audio language:</label></td>
+              <td>
+                <select id="audioLanguage"></select>
+                <p class="hint" id="audioUsbHint">Audio is only installed on the ESP32-S3 AMOLED rosary.</p>
+              </td>
+            </tr>
 	          </table>
 	        </div>
         <p align="center">
@@ -503,6 +524,9 @@
       // ---------- 0) Firmware version ----------
       const FW_VERSION = window.SMARTROSARY_VERSION;
       const LANG_VERSION = window.SMARTROSARY_LANG_VERSION ? " " + window.SMARTROSARY_LANG_VERSION : "";
+      const S3_AMOLED_HARDWARE_ID = 'esp32-s3-touch-amoled-1-75';
+      let audioManifest = null;
+      let audioManifestLoadPromise = null;
 
       // ---------- 1) UI i18n ----------
       const localeFactories = window.SmartRosaryLocales || {};
@@ -625,6 +649,12 @@
         if (langTitle) langTitle.textContent = dict.langTitle;
         const intentsTitle = document.getElementById("intentsTitle");
         if (intentsTitle) intentsTitle.textContent = dict.intentsTitle;
+        const audioTitle = document.getElementById("audioTitle");
+        if (audioTitle) audioTitle.textContent = dict.audioTitle || i18n.en.audioTitle;
+        const audioLanguageLabel = document.getElementById("audioLanguageLabel");
+        if (audioLanguageLabel) audioLanguageLabel.textContent = dict.audioLanguageLabel || i18n.en.audioLanguageLabel;
+        const audioUsbHint = document.getElementById("audioUsbHint");
+        if (audioUsbHint) audioUsbHint.textContent = dict.audioUsbHint || i18n.en.audioUsbHint;
         const fwLabel = document.getElementById("fwLangLabel");
         if (fwLabel) fwLabel.textContent = dict.fwLangLabel;
         const intentsLabel = document.getElementById("intentionsLabel");
@@ -661,6 +691,91 @@
         if (deployInfo) deployInfo.setAttribute("aria-label", dict.deployLabel || i18n.en.deployLabel);
 
         renderChangelog();
+        updateAudioVersionHint();
+      }
+
+      async function loadAudioManifest() {
+        if (audioManifest) return audioManifest;
+        if (audioManifestLoadPromise) return audioManifestLoadPromise;
+        audioManifestLoadPromise = fetch('audio/manifest.json', { cache: 'no-cache' })
+          .then(resp => {
+            if (!resp.ok) throw new Error('Audio manifest missing');
+            return resp.json();
+          })
+          .then(json => {
+            audioManifest = json;
+            populateAudioSelectors();
+            updateAudioVersionHint();
+            return audioManifest;
+          })
+          .catch(err => {
+            console.warn('[AUDIO] Manifest load failed:', err);
+            audioManifestLoadPromise = null;
+            return null;
+          });
+        return audioManifestLoadPromise;
+      }
+
+      function audioItems() {
+        return audioManifest && Array.isArray(audioManifest.items) ? audioManifest.items : [];
+      }
+
+      function preferredAudioId() {
+        const items = audioItems();
+        const byUiLanguage = items.find(item => item.language === currentLang && String(item.id || '').endsWith('-seraphina'));
+        if (byUiLanguage) return byUiLanguage.id;
+        const byLanguage = items.find(item => item.language === currentLang);
+        if (byLanguage) return byLanguage.id;
+        return items[0]?.id || '';
+      }
+
+      function selectedAudioItem(selectId = 'audioFileSelect') {
+        const select = document.getElementById(selectId);
+        const id = select?.value || preferredAudioId();
+        return audioItems().find(item => item.id === id) || audioItems()[0] || null;
+      }
+
+      function populateAudioSelectors() {
+        const items = audioItems();
+        for (const select of [
+          document.getElementById('audioFileSelect'),
+          document.getElementById('audioLanguage'),
+        ]) {
+          if (!select || !items.length) continue;
+          const previous = select.value || preferredAudioId();
+          select.innerHTML = '';
+          items.forEach(item => {
+            const option = document.createElement('option');
+            option.value = item.id;
+            option.textContent = `${item.label} (v${item.version || audioManifest.version || '1.0'})`;
+            select.appendChild(option);
+          });
+          select.value = items.some(item => item.id === previous) ? previous : preferredAudioId();
+        }
+      }
+
+      function updateAudioVersionHint() {
+        const item = selectedAudioItem();
+        const hint = document.getElementById('audioVersionHint');
+        if (!hint) return;
+        const dict = getTranslation();
+        if (!item) {
+          hint.textContent = dict.audioManifestLoading || i18n.en.audioManifestLoading;
+          return;
+        }
+        hint.textContent = (dict.audioVersionHint || i18n.en.audioVersionHint)
+          .replace('{version}', item.version || audioManifest?.version || '1.0')
+          .replace('{label}', item.label || item.id);
+      }
+
+      function syncAudioSelects(sourceId) {
+        const source = document.getElementById(sourceId);
+        if (!source) return;
+        for (const id of ['audioFileSelect', 'audioLanguage']) {
+          const select = document.getElementById(id);
+          if (select && select !== source) select.value = source.value;
+        }
+        updateAudioVersionHint();
       }
 
 	      (() => {
@@ -668,6 +783,9 @@
 	        const initialLang = (uiLangSelect && uiLangSelect.value) ? uiLangSelect.value : currentLang;
 	        populateChangelog();
 	        setLanguage(initialLang);
+	        loadAudioManifest();
+	        document.getElementById('audioFileSelect')?.addEventListener('change', () => syncAudioSelects('audioFileSelect'));
+	        document.getElementById('audioLanguage')?.addEventListener('change', () => syncAudioSelects('audioLanguage'));
 
 	        const deployInfo = document.getElementById("deployInfo");
 	        if (deployInfo) {
@@ -733,15 +851,24 @@
           if (activateBtn) activateBtn.disabled = false;
           const selLang = document.getElementById("language");
           const selInt  = document.getElementById("intentions");
+          const selAudio = document.getElementById("audioLanguage");
           const origin  = window.location.origin;
 
           // On-disk locations (adjust to your structure)
-          const firmwareParts = [
+          const firmwarePartsC3 = [
             { path: "smartrosary-web-installer/firmware/bootloader.bin", offset: 0x000000 },
             { path: "smartrosary-web-installer/firmware/partitions.bin", offset: 0x008000 },
             { path: "smartrosary-web-installer/firmware/boot_app0.bin",  offset: 0x00E000 },
             { path: "smartrosary-web-installer/firmware/firmware.bin",   offset: 0x010000 },
             { path: "smartrosary-web-installer/wallpaper/littlefs.bin",    offset: 0x323000 }
+          ];
+
+          const firmwarePartsS3 = [
+            { path: "smartrosary-web-installer/firmware/s3/bootloader.bin", offset: 0x000000 },
+            { path: "smartrosary-web-installer/firmware/s3/partitions.bin", offset: 0x008000 },
+            { path: "smartrosary-web-installer/firmware/s3/boot_app0.bin",  offset: 0x00E000 },
+            { path: "smartrosary-web-installer/firmware/s3/firmware.bin",   offset: 0x010000 },
+            { path: "smartrosary-web-installer/wallpaper/s3/littlefs.bin",  offset: 0x83F000 }
           ];
 
           const languages = {
@@ -753,6 +880,11 @@
             la: { name: "Latina", path: "smartrosary-web-installer/lang/nvs-lang-la.bin", offset: 0x2F5000 },
             pt: { name: "Português", path: "smartrosary-web-installer/lang/nvs-lang-pt.bin", offset: 0x2F5000 }
           };
+
+          const languagesS3 = Object.fromEntries(Object.entries(languages).map(([key, value]) => [
+            key,
+            { ...value, offset: 0x7F5000 }
+          ]));
 
 	          const intentions = {
 	            none: null,
@@ -768,31 +900,53 @@
 	            }
 	          };
 
-          function buildManifest() {
-            if (btn._blobUrl) URL.revokeObjectURL(btn._blobUrl);
+          const intentionsS3 = Object.fromEntries(Object.entries(intentions).map(([key, value]) => [
+            key,
+            value ? { ...value, offset: 0x7F0000 } : null
+          ]));
 
-            const rawParts = [...firmwareParts];
-
-            // include chosen language
-            const lang = languages[selLang.value];
-            rawParts.splice(1, 0, { path: lang.path, offset: lang.offset });
-
-            // include chosen intentions (optional)
-            const intent = intentions[selInt.value];
-            if (intent) rawParts.push({ path: intent.path, offset: intent.offset });
-
-            // absolute URLs
-            const parts = rawParts.map(p => ({
+          function absoluteParts(rawParts) {
+            return rawParts.map(p => ({
               offset: p.offset,
               path: p.path.startsWith("http") ? p.path : `${origin}/${p.path}`
             }));
+          }
+
+          function buildManifest() {
+            if (btn._blobUrl) URL.revokeObjectURL(btn._blobUrl);
+
+            const rawPartsC3 = [...firmwarePartsC3];
+            const rawPartsS3 = [...firmwarePartsS3];
+
+            // include chosen language
+            const lang = languages[selLang.value];
+            const langS3 = languagesS3[selLang.value];
+            rawPartsC3.splice(1, 0, { path: lang.path, offset: lang.offset });
+            rawPartsS3.splice(1, 0, { path: langS3.path, offset: langS3.offset });
+
+            // include chosen intentions (optional)
+            const intent = intentions[selInt.value];
+            const intentS3 = intentionsS3[selInt.value];
+            if (intent) rawPartsC3.push({ path: intent.path, offset: intent.offset });
+            if (intentS3) rawPartsS3.push({ path: intentS3.path, offset: intentS3.offset });
+
+            const audio = selectedAudioItem('audioLanguage');
+            if (audio) {
+              rawPartsS3.push({
+                path: `smartrosary-web-installer/${audio.path}`,
+                offset: 0xD3F000
+              });
+            }
 
             const manifest = {
-              name:    `SmartRosary (${lang.name}${intent ? " / " + intent.name : ""})`,
+              name:    `SmartRosary (${lang.name}${intent ? " / " + intent.name : ""}${audio ? " / " + audio.label + " audio" : ""})`,
               version: FW_VERSION,     // <-- uses single version variable
               funding_url: "",
               new_install_prompt_erase: true,
-              builds: [{ chipFamily: "ESP32-C3", improv: false, parts }]
+              builds: [
+                { chipFamily: "ESP32-C3", improv: false, parts: absoluteParts(rawPartsC3) },
+                { chipFamily: "ESP32-S3", improv: false, parts: absoluteParts(rawPartsS3) }
+              ]
             };
 
             const blobUrl = URL.createObjectURL(new Blob([JSON.stringify(manifest)], { type: "application/json" }));
@@ -803,6 +957,8 @@
 
           selLang.addEventListener("change", buildManifest);
           selInt .addEventListener("change", buildManifest);
+          selAudio?.addEventListener("change", buildManifest);
+          loadAudioManifest().then(buildManifest);
           buildManifest();
         });
       })();
@@ -815,6 +971,7 @@
       const FIRMWARE_CHAR_UUID = '12345678-1234-5678-1234-56789abcdef1';
       const INTENTS_CHAR_UUID  = '12345678-1234-5678-1234-56789abcde10';
       const LANG_CHAR_UUID     = '12345678-1234-5678-1234-56789abcde20';
+      const AUDIO_CHAR_UUID    = '12345678-1234-5678-1234-56789abcde30';
       const STATUS_CHAR_UUID   = '12345678-1234-5678-1234-56789abcdef2';
       const INFO_CTRL_UUID     = 'b8a7a0e2-1a5d-4c1e-9d93-2c9e2b9e10ff';
       const INFO_SETTINGS_UUID = 'b8a7a0e2-1a5d-4c1e-9d93-2c9e2b9e1002';
@@ -860,6 +1017,21 @@
           alert(msg);
         }
       });
+      document.getElementById('uploadAudioBtn').addEventListener('click', async (ev) => {
+        preventStandby();
+        try { await startAudioBluetooth(ev.currentTarget); }
+        catch (e) {
+          const msg = e.message || t('errorAudioFailed');
+          if (window.GlobalUI) GlobalUI.error(msg);
+          alert(msg);
+        }
+      });
+
+      function updateBleAudioCardVisibility() {
+        const box = document.getElementById('otaAudioBox');
+        if (!box) return;
+        box.classList.toggle('is-hidden', connectedHardwareId !== S3_AMOLED_HARDWARE_ID);
+      }
 
       async function helloAndAwaitConsent(svc) {
         // Get control + status characteristics
@@ -996,6 +1168,7 @@
              connectedHardwareId = 'esp32-c3-01';
              console.log(`[BLE OTA] Empty payload. Defaulting to legacy hardwareId:`, connectedHardwareId);
              if (window.GlobalUI) GlobalUI.setDevice(connectedHardwareId);
+             updateBleAudioCardVisibility();
              return '';
           }
           let fwVersion = '';
@@ -1022,6 +1195,7 @@
 
           console.log(`[BLE OTA] Parsed hardwareId:`, connectedHardwareId);
           if (window.GlobalUI) GlobalUI.setDevice(connectedHardwareId);
+          updateBleAudioCardVisibility();
           
           return fwVersion;
         } catch (err) {
@@ -1071,6 +1245,7 @@
         writeChar  = await svc.getCharacteristic(charUuid);
         connectedFirmwareVersion = await readFirmwareVersion(svc);
         console.log(`[BLE OTA] Connected device version:`, connectedFirmwareVersion);
+        updateBleAudioCardVisibility();
 
         // 6) Keep a global statusChar for “ready/ACK” pacing (also used above in consent)
         try {
@@ -1177,6 +1352,34 @@
 
         await sendNVS(data,filename);
         if (window.GlobalUI) GlobalUI.announce(t('completeLanguage'));
+      }
+
+      async function startAudioBluetooth(btn){
+        const manifest = await loadAudioManifest();
+        const audio = selectedAudioItem('audioFileSelect');
+        if (!manifest || !audio) {
+          const msg = t('errorAudioMissing');
+          if (window.GlobalUI) GlobalUI.error(msg);
+          alert(msg);
+          return;
+        }
+        const resp=await fetch(audio.path);
+        if(!resp.ok){
+          const msg = t('errorAudioMissing');
+          if (window.GlobalUI) GlobalUI.error(msg);
+          alert(msg);
+          return;
+        }
+        const data=new Uint8Array(await resp.arrayBuffer());
+
+        await connectBLE(SERVICE_UUID,AUDIO_CHAR_UUID);
+        if (connectedHardwareId !== S3_AMOLED_HARDWARE_ID) {
+          throw new Error(t('errorAudioUnsupported'));
+        }
+        if (window.GlobalUI) GlobalUI.showProgress(t('progressAudio'));
+
+        await sendNVS(data,'audio-rosary.bin');
+        if (window.GlobalUI) GlobalUI.announce(t('completeAudio'));
       }
 
       function crc32(buf) { let crc=0xFFFFFFFF; for(let b of buf){crc^=b; for(let i=0;i<8;i++) crc=(crc>>>1)^(0xEDB88320&-(crc&1));} return (crc^0xFFFFFFFF)>>>0; }
