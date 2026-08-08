@@ -130,6 +130,7 @@
       .commit-hash { color: var(--muted); font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace; font-size: 12px; line-height: 1.7; }
       .change-text { min-width: 0; overflow-wrap: anywhere; }
       .hint { color: var(--muted); font-size: 12px; margin: 8px 0 0; text-align: center; }
+      .version-hint { color: var(--accent); font-weight: 600; }
       .is-hidden { display: none; }
 
       /* Mobile: stack labels and inputs to avoid overflow */
@@ -355,9 +356,9 @@
       </div>
 
       <!-- Bluetooth: Audio -->
-      <div class="uploadBox is-hidden" id="otaAudioBox">
+      <div class="uploadBox" id="otaAudioBox">
         <h2 id="audioTitle">Upload audio via Bluetooth</h2>
-        <p class="hint" id="audioVersionHint"></p>
+        <p class="hint version-hint" id="audioVersionHint" aria-live="polite"></p>
         <p class="hint" id="audioBleHint">Audio is installed only on the ESP32-S3 AMOLED rosary.</p>
         <div style="text-align: center; margin-top: 1em;">
           <select id="audioFileSelect"></select>
@@ -413,7 +414,7 @@
               <td><label for="audioLanguage" id="audioLanguageLabel">Audio language:</label></td>
               <td>
                 <select id="audioLanguage"></select>
-                <p class="hint" id="audioUsbVersionHint"></p>
+                <p class="hint version-hint" id="audioUsbVersionHint"></p>
                 <p class="hint" id="audioUsbHint">Audio is only installed on the ESP32-S3 AMOLED rosary.</p>
               </td>
             </tr>
@@ -1040,7 +1041,7 @@
       function updateBleAudioCardVisibility() {
         const box = document.getElementById('otaAudioBox');
         if (!box) return;
-        box.classList.toggle('is-hidden', connectedHardwareId !== S3_AMOLED_HARDWARE_ID);
+        box.classList.remove('is-hidden');
       }
 
       async function helloAndAwaitConsent(svc) {
