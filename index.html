@@ -358,6 +358,7 @@
       <div class="uploadBox is-hidden" id="otaAudioBox">
         <h2 id="audioTitle">Upload audio via Bluetooth</h2>
         <p class="hint" id="audioVersionHint"></p>
+        <p class="hint" id="audioBleHint">Audio is installed only on the ESP32-S3 AMOLED rosary.</p>
         <div style="text-align: center; margin-top: 1em;">
           <select id="audioFileSelect"></select>
         </div>
@@ -412,6 +413,7 @@
               <td><label for="audioLanguage" id="audioLanguageLabel">Audio language:</label></td>
               <td>
                 <select id="audioLanguage"></select>
+                <p class="hint" id="audioUsbVersionHint"></p>
                 <p class="hint" id="audioUsbHint">Audio is only installed on the ESP32-S3 AMOLED rosary.</p>
               </td>
             </tr>
@@ -655,6 +657,8 @@
         if (audioLanguageLabel) audioLanguageLabel.textContent = dict.audioLanguageLabel || i18n.en.audioLanguageLabel;
         const audioUsbHint = document.getElementById("audioUsbHint");
         if (audioUsbHint) audioUsbHint.textContent = dict.audioUsbHint || i18n.en.audioUsbHint;
+        const audioBleHint = document.getElementById("audioBleHint");
+        if (audioBleHint) audioBleHint.textContent = dict.audioBleHint || dict.audioUsbHint || i18n.en.audioBleHint || i18n.en.audioUsbHint;
         const fwLabel = document.getElementById("fwLangLabel");
         if (fwLabel) fwLabel.textContent = dict.fwLangLabel;
         const intentsLabel = document.getElementById("intentionsLabel");
@@ -756,16 +760,22 @@
 
       function updateAudioVersionHint() {
         const item = selectedAudioItem();
-        const hint = document.getElementById('audioVersionHint');
-        if (!hint) return;
+        const hints = [
+          document.getElementById('audioVersionHint'),
+          document.getElementById('audioUsbVersionHint'),
+        ].filter(Boolean);
+        if (!hints.length) return;
         const dict = getTranslation();
         if (!item) {
-          hint.textContent = dict.audioManifestLoading || i18n.en.audioManifestLoading;
+          hints.forEach(hint => {
+            hint.textContent = dict.audioManifestLoading || i18n.en.audioManifestLoading;
+          });
           return;
         }
-        hint.textContent = (dict.audioVersionHint || i18n.en.audioVersionHint)
+        const text = (dict.audioVersionHint || i18n.en.audioVersionHint)
           .replace('{version}', item.version || audioManifest?.version || '1.0')
           .replace('{label}', item.label || item.id);
+        hints.forEach(hint => { hint.textContent = text; });
       }
 
       function syncAudioSelects(sourceId) {
@@ -1205,7 +1215,7 @@
       }
 
       // More robust BLE discovery: prefer service filter, fallback to acceptAllDevices
-      async function connectBLE(svcUuid, charUuid){
+      async function connectBLE(svcUuid, charUuid, options = {}){
         if (window.GlobalUI) GlobalUI.setStatus(t('statusConnecting'));
         // 1) Pick device (prefer service filter; fallback acceptAllDevices)
         try {
@@ -1240,12 +1250,18 @@
           throw new Error(t('errorConsent'));
         }
 
-        // 5) Now it’s safe to use your target write characteristic
-        //    (firmware / language / intentions are separate chars under the same service)
-        writeChar  = await svc.getCharacteristic(charUuid);
         connectedFirmwareVersion = await readFirmwareVersion(svc);
         console.log(`[BLE OTA] Connected device version:`, connectedFirmwareVersion);
         updateBleAudioCardVisibility();
+
+        if (options.requiredHardwareId && connectedHardwareId !== options.requiredHardwareId) {
+          if (device && device.gatt.connected) device.gatt.disconnect();
+          throw new Error(options.unsupportedMessage || t('errorAudioUnsupported'));
+        }
+
+        // 5) Now it’s safe to use your target write characteristic
+        //    (firmware / language / intentions / audio are separate chars under the same service)
+        writeChar = await svc.getCharacteristic(charUuid);
 
         // 6) Keep a global statusChar for “ready/ACK” pacing (also used above in consent)
         try {
@@ -1372,10 +1388,10 @@
         }
         const data=new Uint8Array(await resp.arrayBuffer());
 
-        await connectBLE(SERVICE_UUID,AUDIO_CHAR_UUID);
-        if (connectedHardwareId !== S3_AMOLED_HARDWARE_ID) {
-          throw new Error(t('errorAudioUnsupported'));
-        }
+        await connectBLE(SERVICE_UUID,AUDIO_CHAR_UUID, {
+          requiredHardwareId: S3_AMOLED_HARDWARE_ID,
+          unsupportedMessage: t('errorAudioUnsupported'),
+        });
         if (window.GlobalUI) GlobalUI.showProgress(t('progressAudio'));
 
         await sendNVS(data,'audio-rosary.bin');

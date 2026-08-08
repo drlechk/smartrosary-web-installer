@@ -13,6 +13,7 @@ window.SmartRosaryLocales.es = (FW_VERSION, LANG_VERSION) => ({
   intentionsLabel: "Intenciones:",
   audioLanguageLabel: "Idioma del audio:",
   audioUsbHint: "El audio solo se instala en el rosario ESP32-S3 AMOLED. Otras placas ignoran esta selección.",
+  audioBleHint: "La subida de audio solo esta disponible para el rosario ESP32-S3 AMOLED.",
   audioManifestLoading: "Cargando paquetes de audio…",
   audioVersionHint: "Paquete de audio v{version}: {label}",
   noneOption: "Ninguna",

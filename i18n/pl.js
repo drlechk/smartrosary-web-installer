@@ -13,6 +13,7 @@ window.SmartRosaryLocales.pl = (FW_VERSION, LANG_VERSION) => ({
   intentionsLabel: "Intencje:",
   audioLanguageLabel: "Język audio:",
   audioUsbHint: "Audio jest instalowane tylko na różańcu ESP32-S3 AMOLED. Inne płytki ignorują ten wybór.",
+  audioBleHint: "Wgrywanie audio jest dostępne tylko dla różańca ESP32-S3 AMOLED.",
   audioManifestLoading: "Ładowanie pakietów audio…",
   audioVersionHint: "Pakiet audio v{version}: {label}",
   noneOption: "Brak",
