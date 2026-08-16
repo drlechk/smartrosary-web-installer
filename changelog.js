@@ -1,6 +1,14 @@
 // Generated from /Users/lech/Projects/PlatformIO/esp32c3-rosary release commits after 622ef97.
 window.SmartRosaryChangelog = [
   {
+    version: "v1.59",
+    releaseCommit: "e454e35",
+    changes: [
+      { hash: "60ff41d", text: "Adds safe BLE intentions record uploads so apps can update intentions without erasing existing records." },
+      { hash: "e454e35", text: "Release firmware v1.59." }
+    ]
+  },
+  {
     version: "v1.58",
     releaseCommit: "62c2fdb",
     changes: [

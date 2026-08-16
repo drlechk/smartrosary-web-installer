@@ -1,4 +1,4 @@
-window.SMARTROSARY_VERSION = "v1.58";
+window.SMARTROSARY_VERSION = "v1.59";
 window.SMARTROSARY_LANG_VERSION = "v1.38";
 window.SMARTROSARY_BREAKING_CHANGES = {
   "versions": { "before": "v1.49" },
@@ -12,10 +12,10 @@ window.SMARTROSARY_BREAKING_CHANGES = {
   }
 };
 window.SMARTROSARY_RELEASE_MESSAGE = {
-  "en": "Firmware v1.58 fixes intention roller preloading according to scheduler settings and refines history intention flagging on manual roller selection.",
-  "de": "Firmware v1.58 behebt das Vorladen des Anliegen-Rollers gem\u00e4\u00df Scheduler-Einstellungen und verfeinert die Anliegen-Historienkennzeichnung bei manueller Rollerauswahl.",
-  "pl": "Firmware v1.58 naprawia wst\u0119pne \u0142adowanie na rolce intencji zgodnie z harmonogramem oraz dopracowuje oznaczanie intencji w historii przy r\u0119cznym wyborze.",
-  "fr": "Le firmware v1.58 corrige le pr\u00e9chargement du rouleau d'intentions selon le planificateur et affine le marquage des intentions dans l'historique.",
-  "es": "El firmware v1.58 corrige la precarga del rodillo de intenciones seg\u00fan el programador y refina el marcado de intenciones en el historial.",
-  "pt": "O firmware v1.58 corrige o pr\u00e9-carregamento do rolo de inten\u00e7\u00f5es de acordo com o agendador e aprimora a marca\u00e7\u00e3o de inten\u00e7\u00f5es no hist\u00f3rico."
+  "en": "Firmware v1.59 supports safe BLE intentions record uploads so existing intentions are not erased. Legacy full intentions transfers remain available only as a guarded fallback and may overwrite installed intentions; update firmware to avoid that path.",
+  "de": "Firmware v1.59 unterst\u00fctzt sichere BLE-Uploads einzelner Anliegen-Datens\u00e4tze, damit vorhandene Anliegen nicht gel\u00f6scht werden. Vollst\u00e4ndige Legacy-Anliegen-Transfers bleiben nur als gesch\u00fctzter Fallback verf\u00fcgbar und k\u00f6nnen installierte Anliegen \u00fcberschreiben; aktualisieren Sie die Firmware, um diesen Weg zu vermeiden.",
+  "pl": "Firmware v1.59 obs\u0142uguje bezpieczne przesy\u0142anie pojedynczych rekord\u00f3w intencji przez BLE, dzi\u0119ki czemu istniej\u0105ce intencje nie s\u0105 usuwane. Pe\u0142ne starsze transfery intencji pozostaj\u0105 dost\u0119pne tylko jako chroniony tryb awaryjny i mog\u0105 nadpisa\u0107 zainstalowane intencje; zaktualizuj firmware, aby go unikn\u0105\u0107.",
+  "fr": "Le firmware v1.59 prend en charge les envois BLE s\u00e9curis\u00e9s des enregistrements d'intentions afin de ne pas effacer les intentions existantes. Les transferts complets d'intentions h\u00e9rit\u00e9s restent disponibles uniquement comme solution de secours prot\u00e9g\u00e9e et peuvent \u00e9craser les intentions install\u00e9es; mettez le firmware \u00e0 jour pour \u00e9viter ce chemin.",
+  "es": "El firmware v1.59 admite cargas BLE seguras de registros de intenciones para que no se borren las intenciones existentes. Las transferencias completas heredadas de intenciones siguen disponibles solo como alternativa protegida y pueden sobrescribir las intenciones instaladas; actualice el firmware para evitar esa ruta.",
+  "pt": "O firmware v1.59 oferece suporte a envios BLE seguros de registros de inten\u00e7\u00f5es para que as inten\u00e7\u00f5es existentes n\u00e3o sejam apagadas. As transfer\u00eancias completas legadas de inten\u00e7\u00f5es continuam dispon\u00edveis apenas como fallback protegido e podem sobrescrever inten\u00e7\u00f5es instaladas; atualize o firmware para evitar esse caminho."
 };
