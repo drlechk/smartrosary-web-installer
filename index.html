@@ -511,6 +511,7 @@
         <h2 id="intentsTitle">Upload intentions via Bluetooth</h2>
         <div style="text-align: center; margin-top: 1em;">
 	          <select id="intentionsFileSelect">
+	            <option value="intentions/nvs-intentions-duchowa-adopcja.bin">Duchowa Adopcja</option>
 	            <option value="intentions/nvs-intentions-pmkdus-2026.bin">Żywy Różaniec 2026 (PMK Düsseldorf)</option>
 	            <option value="intentions/nvs-intentions-pmkdus-2025.bin">Żywy Różaniec 2025 (PMK Düsseldorf)</option>
 	          </select>
@@ -544,6 +545,7 @@
               <td>
 	                <select id="intentions">
 	                  <option value="none">None</option>
+	                  <option value="duchowaAdopcja">Duchowa Adopcja</option>
 	                  <option value="rosary">Żywy Różaniec 2025 (PMK Düsseldorf)</option>
 	                  <option value="rosary2026">Żywy Różaniec 2026 (PMK Düsseldorf)</option>
 	                </select>
@@ -1045,6 +1047,11 @@
 
 	          const intentions = {
 	            none: null,
+	            duchowaAdopcja: {
+	              name: "Duchowa Adopcja",
+	              path: "smartrosary-web-installer/intentions/nvs-intentions-duchowa-adopcja.bin",
+	              offset: 0x2F0000
+	            },
 	            rosary: {
 	              name: "Żywy Różaniec 2025",
 	              path: "smartrosary-web-installer/intentions/nvs-intentions-pmkdus-2025.bin",
