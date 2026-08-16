@@ -421,6 +421,7 @@
     <script src="i18n/fr.js"></script>
     <script src="i18n/it.js"></script>
     <script src="i18n/pt.js"></script>
+    <script src="intentions-nvs.js"></script>
     <script type="module" src="https://unpkg.com/esp-web-tools@10.1.0/dist/web/install-button.js"></script>
   </head>
 	  <body>
@@ -1129,6 +1130,7 @@
       const LANG_CHAR_UUID     = '12345678-1234-5678-1234-56789abcde20';
       const AUDIO_CHAR_UUID    = '12345678-1234-5678-1234-56789abcde30';
       const STATUS_CHAR_UUID   = '12345678-1234-5678-1234-56789abcdef2';
+      const INFO_INTENT_ENTRY_UUID = 'b8a7a0e2-1a5d-4c1e-9d93-2c9e2b9e1011';
       const INFO_CTRL_UUID     = 'b8a7a0e2-1a5d-4c1e-9d93-2c9e2b9e10ff';
       const INFO_SETTINGS_UUID = 'b8a7a0e2-1a5d-4c1e-9d93-2c9e2b9e1002';
       const FIRMWARE_STABLE_OTA_WORKER_VERSION = '1.44';
@@ -1407,7 +1409,14 @@
 
         // 5) Now it’s safe to use your target write characteristic
         //    (firmware / language / intentions / audio are separate chars under the same service)
-        writeChar = await svc.getCharacteristic(charUuid);
+        let usedFallback = false;
+        try {
+          writeChar = await svc.getCharacteristic(charUuid);
+        } catch (error) {
+          if (!options.fallbackCharUuid) throw error;
+          writeChar = await svc.getCharacteristic(options.fallbackCharUuid);
+          usedFallback = true;
+        }
 
         // 6) Keep a global statusChar for “ready/ACK” pacing (also used above in consent)
         try {
@@ -1420,6 +1429,7 @@
           // optional
         }
         if (window.GlobalUI) GlobalUI.setStatus(t('statusPreparing'));
+        return { usedFallback };
       }
 
       function setProgress(sent,total){
@@ -1486,13 +1496,21 @@
           return;
         }
         const data=new Uint8Array(await resp.arrayBuffer());
+        const model = window.IntentionsNVS.parseIntentions(data);
         const filename = path.split('/').pop();
 
         // Connect first, then show progress
-        await connectBLE(SERVICE_UUID,INTENTS_CHAR_UUID);
+        const transfer = await connectBLE(SERVICE_UUID,INFO_INTENT_ENTRY_UUID, {
+          fallbackCharUuid: INTENTS_CHAR_UUID,
+        });
+        if (transfer.usedFallback) {
+          const ok = window.confirm ? window.confirm(t('legacyIntentionsOverwriteWarning')) : false;
+          if (!ok) return;
+        }
         if (window.GlobalUI) GlobalUI.showProgress(t('progressIntentions'));
 
-        await sendNVS(data,filename);
+        if (transfer.usedFallback) await sendNVS(data,filename);
+        else await sendIntentionsModel(model);
         if (window.GlobalUI) GlobalUI.announce(t('completeIntentions'));
       }
 
@@ -1562,6 +1580,60 @@
           await writePaced(packet);
           offset+=len; setProgress(offset,data.length);
         }
+      }
+
+      function le16(n) {
+        const v = Number(n) >>> 0;
+        return [v & 0xff, (v >> 8) & 0xff];
+      }
+
+      function le32(n) {
+        const v = Number(n) >>> 0;
+        return [v & 0xff, (v >> 8) & 0xff, (v >> 16) & 0xff, (v >> 24) & 0xff];
+      }
+
+      async function sendIntentionsField(index, field, text) {
+        const bytes = new TextEncoder().encode(String(text ?? ''));
+        await writePaced(Uint8Array.of(0x81, ...le16(index), field & 0xff, ...le32(bytes.length)));
+        let offset = 0;
+        const chunkSize = 240;
+        while (offset < bytes.length) {
+          const len = Math.min(chunkSize, bytes.length - offset);
+          const packet = new Uint8Array(6 + len);
+          packet[0] = 0x82;
+          packet[1] = index & 0xff;
+          packet[2] = (index >> 8) & 0xff;
+          packet[3] = field & 0xff;
+          packet[4] = offset & 0xff;
+          packet[5] = (offset >> 8) & 0xff;
+          packet.set(bytes.slice(offset, offset + len), 6);
+          await writePaced(packet);
+          offset += len;
+        }
+        return bytes.length;
+      }
+
+      async function sendIntentionsModel(model) {
+        const count = Math.max(0, Math.min(Number(model.numIntentions) || 0, 32));
+        await writePaced(Uint8Array.of(0x80, ...le16(count)));
+
+        let totalBytes = 0;
+        for (let idx = 0; idx < count; idx++) {
+          totalBytes += new TextEncoder().encode(String(model.titles?.[idx] ?? '')).length;
+          totalBytes += new TextEncoder().encode(String(model.descs?.[idx] ?? '')).length;
+        }
+
+        let sentBytes = 0;
+        const update = () => setProgress(totalBytes ? sentBytes : 1, totalBytes || 1);
+        update();
+        for (let idx = 0; idx < count; idx++) {
+          sentBytes += await sendIntentionsField(idx, 0, model.titles?.[idx] ?? '');
+          update();
+          sentBytes += await sendIntentionsField(idx, 1, model.descs?.[idx] ?? '');
+          update();
+        }
+        await writePaced(Uint8Array.of(0x83));
+        setProgress(1, 1);
       }
     </script>
   </body>

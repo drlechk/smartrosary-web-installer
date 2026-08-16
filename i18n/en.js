@@ -29,6 +29,7 @@ window.SmartRosaryLocales.en = (FW_VERSION, LANG_VERSION) => ({
   errorAudioUnsupported: "Audio upload is supported only on the ESP32-S3 AMOLED rosary.",
   errorFirmwareFailed: "Bluetooth firmware upload failed.",
   errorIntentionsFailed: "Bluetooth intentions upload failed.",
+  legacyIntentionsOverwriteWarning: "Legacy intentions transfer will flash the full intentions NVS image and overwrite any intentions already stored on the device. A firmware update is available that prevents this by using the safer intentions transfer. Continue?",
   errorLanguageFailed: "Bluetooth language upload failed.",
   errorAudioFailed: "Bluetooth audio upload failed.",
   progressFirmware: "Bluetooth firmware upload",
