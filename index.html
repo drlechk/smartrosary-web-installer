@@ -1176,6 +1176,7 @@
       const LANG_CHAR_UUID     = '12345678-1234-5678-1234-56789abcde20';
       const AUDIO_CHAR_UUID    = '12345678-1234-5678-1234-56789abcde30';
       const STATUS_CHAR_UUID   = '12345678-1234-5678-1234-56789abcdef2';
+      const INFO_INTENTIONS_UUID = 'b8a7a0e2-1a5d-4c1e-9d93-2c9e2b9e1010';
       const INFO_INTENT_ENTRY_UUID = 'b8a7a0e2-1a5d-4c1e-9d93-2c9e2b9e1011';
       const INFO_CTRL_UUID     = 'b8a7a0e2-1a5d-4c1e-9d93-2c9e2b9e10ff';
       const INFO_SETTINGS_UUID = 'b8a7a0e2-1a5d-4c1e-9d93-2c9e2b9e1002';
@@ -1475,7 +1476,7 @@
           // optional
         }
         if (window.GlobalUI) GlobalUI.setStatus(t('statusPreparing'));
-        return { usedFallback };
+        return { usedFallback, service: svc };
       }
 
       function setProgress(sent,total){
@@ -1564,7 +1565,7 @@
         if (window.GlobalUI) GlobalUI.showProgress(t('progressIntentions'));
 
         if (transfer.usedFallback) await sendNVS(data,filename);
-        else await sendIntentionsModel(model);
+        else await sendIntentionsModel(model, transfer.service);
         if (window.GlobalUI) GlobalUI.announce(t('completeIntentions'));
       }
 
@@ -1667,9 +1668,30 @@
         return bytes.length;
       }
 
-      async function sendIntentionsModel(model) {
+      async function readInstalledIntentionsCount(svc) {
+        try {
+          const ch = await svc.getCharacteristic(INFO_INTENTIONS_UUID);
+          const value = await ch.readValue();
+          const text = new TextDecoder().decode(new Uint8Array(value.buffer, value.byteOffset, value.byteLength));
+          const summary = JSON.parse(text);
+          if (summary.requireConsent === true) {
+            throw new Error('On-device consent is required for intentions.');
+          }
+          return Math.max(0, Math.min(Number(summary.count) || 0, 32));
+        } catch (error) {
+          console.warn('[BLE OTA] Could not read current intentions count.', error);
+          throw new Error('Could not read the installed intentions count; no installed intentions were changed.');
+        }
+      }
+
+      async function sendIntentionsModel(model, svc) {
         const count = Math.max(0, Math.min(Number(model.numIntentions) || 0, 32));
-        await writePaced(Uint8Array.of(0x80, ...le16(count)));
+        const startIndex = await readInstalledIntentionsCount(svc);
+        const finalCount = startIndex + count;
+        if (finalCount > 32) {
+          throw new Error(`The rosary has ${startIndex} installed intentions and this package has ${count}. There is room for ${32 - startIndex}; no installed intentions were changed.`);
+        }
+        await writePaced(Uint8Array.of(0x80, ...le16(finalCount)));
 
         let totalBytes = 0;
         for (let idx = 0; idx < count; idx++) {
@@ -1681,9 +1703,10 @@
         const update = () => setProgress(totalBytes ? sentBytes : 1, totalBytes || 1);
         update();
         for (let idx = 0; idx < count; idx++) {
-          sentBytes += await sendIntentionsField(idx, 0, model.titles?.[idx] ?? '');
+          const targetIndex = startIndex + idx;
+          sentBytes += await sendIntentionsField(targetIndex, 0, model.titles?.[idx] ?? '');
           update();
-          sentBytes += await sendIntentionsField(idx, 1, model.descs?.[idx] ?? '');
+          sentBytes += await sendIntentionsField(targetIndex, 1, model.descs?.[idx] ?? '');
           update();
         }
         await writePaced(Uint8Array.of(0x83));
