@@ -77,6 +77,24 @@
       "size": 1261568
     },
     {
+      "id": "it-florian",
+      "language": "it",
+      "voice": "Florian Multilingual",
+      "label": "Italiano - Florian",
+      "version": "1.1",
+      "path": "audio/it-florian/audio-rosary.bin",
+      "size": 1261568
+    },
+    {
+      "id": "it-seraphina",
+      "language": "it",
+      "voice": "Seraphina Multilingual",
+      "label": "Italiano - Seraphina",
+      "version": "1.1",
+      "path": "audio/it-seraphina/audio-rosary.bin",
+      "size": 1261568
+    },
+    {
       "id": "pl-florian",
       "language": "pl",
       "voice": "Florian Multilingual",
