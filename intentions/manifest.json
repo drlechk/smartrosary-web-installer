@@ -1,0 +1,33 @@
+{
+  "format": "smartrosary-intentions-manifest-v1",
+  "version": "1.0",
+  "items": [
+    {
+      "id": "duchowa-adopcja",
+      "label": "Duchowa Adopcja",
+      "type": "intention",
+      "path": "intentions/nvs-intentions-duchowa-adopcja.bin",
+      "filename": "nvs-intentions-duchowa-adopcja.bin",
+      "count": 1,
+      "size": 20480
+    },
+    {
+      "id": "pmkdus-2025",
+      "label": "Żywy Różaniec 2025 (PMK Düsseldorf)",
+      "type": "package",
+      "path": "intentions/nvs-intentions-pmkdus-2025.bin",
+      "filename": "nvs-intentions-pmkdus-2025.bin",
+      "count": 12,
+      "size": 20480
+    },
+    {
+      "id": "pmkdus-2026",
+      "label": "Żywy Różaniec 2026 (PMK Düsseldorf)",
+      "type": "package",
+      "path": "intentions/nvs-intentions-pmkdus-2026.bin",
+      "filename": "nvs-intentions-pmkdus-2026.bin",
+      "count": 12,
+      "size": 20480
+    }
+  ]
+}

@@ -510,11 +510,7 @@
       <div class="uploadBox" id="otaIntsBox">
         <h2 id="intentsTitle">Upload intentions via Bluetooth</h2>
         <div style="text-align: center; margin-top: 1em;">
-	          <select id="intentionsFileSelect">
-	            <option value="intentions/nvs-intentions-duchowa-adopcja.bin">Duchowa Adopcja</option>
-	            <option value="intentions/nvs-intentions-pmkdus-2026.bin">Żywy Różaniec 2026 (PMK Düsseldorf)</option>
-	            <option value="intentions/nvs-intentions-pmkdus-2025.bin">Żywy Różaniec 2025 (PMK Düsseldorf)</option>
-	          </select>
+	          <select id="intentionsFileSelect"></select>
 	        </div>
         <div style="text-align: center; margin-top: 1em;">
           <button id="uploadIntentionsBtn" class="uploadBtn">Connect & Upload</button>
@@ -545,9 +541,6 @@
               <td>
 	                <select id="intentions">
 	                  <option value="none">None</option>
-	                  <option value="duchowaAdopcja">Duchowa Adopcja</option>
-	                  <option value="rosary">Żywy Różaniec 2025 (PMK Düsseldorf)</option>
-	                  <option value="rosary2026">Żywy Różaniec 2026 (PMK Düsseldorf)</option>
 	                </select>
 	              </td>
 	            </tr>
@@ -675,6 +668,8 @@
       const S3_AMOLED_HARDWARE_ID = 'esp32-s3-touch-amoled-1-75';
       let audioManifest = null;
       let audioManifestLoadPromise = null;
+      let intentionsManifest = null;
+      let intentionsManifestLoadPromise = null;
 
       // ---------- 1) UI i18n ----------
       const localeFactories = window.SmartRosaryLocales || {};
@@ -936,6 +931,72 @@
         updateAudioVersionHint();
       }
 
+      async function loadIntentionsManifest() {
+        if (intentionsManifest) return intentionsManifest;
+        if (intentionsManifestLoadPromise) return intentionsManifestLoadPromise;
+        intentionsManifestLoadPromise = fetch('intentions/manifest.json', { cache: 'no-cache' })
+          .then(resp => {
+            if (!resp.ok) throw new Error('Intentions manifest missing');
+            return resp.json();
+          })
+          .then(json => {
+            intentionsManifest = json;
+            populateIntentionsSelectors();
+            return intentionsManifest;
+          })
+          .catch(err => {
+            console.warn('[INTENTIONS] Manifest load failed:', err);
+            intentionsManifestLoadPromise = null;
+            return null;
+          });
+        return intentionsManifestLoadPromise;
+      }
+
+      function intentionsItems() {
+        return intentionsManifest && Array.isArray(intentionsManifest.items) ? intentionsManifest.items : [];
+      }
+
+      function populateIntentionsSelectors() {
+        const items = intentionsItems();
+        const bleSelect = document.getElementById('intentionsFileSelect');
+        if (bleSelect) {
+          const previous = bleSelect.value;
+          bleSelect.innerHTML = '';
+          items.forEach(item => {
+            const option = document.createElement('option');
+            option.value = item.path;
+            option.textContent = item.label || item.id || item.path;
+            bleSelect.appendChild(option);
+          });
+          bleSelect.value = items.some(item => item.path === previous) ? previous : (items[0]?.path || '');
+        }
+
+        const usbSelect = document.getElementById('intentions');
+        if (usbSelect) {
+          const previous = usbSelect.value;
+          const dict = getTranslation();
+          usbSelect.innerHTML = '';
+          const none = document.createElement('option');
+          none.value = 'none';
+          none.textContent = dict.noneOption || i18n.en.noneOption || 'None';
+          usbSelect.appendChild(none);
+          items.forEach(item => {
+            const option = document.createElement('option');
+            option.value = item.id;
+            option.textContent = item.label || item.id || item.path;
+            usbSelect.appendChild(option);
+          });
+          usbSelect.value = previous === 'none' || items.some(item => item.id === previous) ? previous : 'none';
+        }
+      }
+
+      function selectedIntentionsItem(selectId) {
+        const select = document.getElementById(selectId);
+        if (!select || select.value === 'none') return null;
+        const items = intentionsItems();
+        return items.find(item => item.id === select.value || item.path === select.value) || null;
+      }
+
 	      (() => {
 	        const uiLangSelect = document.getElementById("uiLangSelect");
 	        const initialLang = (uiLangSelect && uiLangSelect.value) ? uiLangSelect.value : currentLang;
@@ -1045,30 +1106,6 @@
             { ...value, offset: 0x7F5000 }
           ]));
 
-	          const intentions = {
-	            none: null,
-	            duchowaAdopcja: {
-	              name: "Duchowa Adopcja",
-	              path: "smartrosary-web-installer/intentions/nvs-intentions-duchowa-adopcja.bin",
-	              offset: 0x2F0000
-	            },
-	            rosary: {
-	              name: "Żywy Różaniec 2025",
-	              path: "smartrosary-web-installer/intentions/nvs-intentions-pmkdus-2025.bin",
-	              offset: 0x2F0000
-	            },
-	            rosary2026: {
-	              name: "Żywy Różaniec 2026",
-	              path: "smartrosary-web-installer/intentions/nvs-intentions-pmkdus-2026.bin",
-	              offset: 0x2F0000
-	            }
-	          };
-
-          const intentionsS3 = Object.fromEntries(Object.entries(intentions).map(([key, value]) => [
-            key,
-            value ? { ...value, offset: 0x7F0000 } : null
-          ]));
-
           function absoluteParts(rawParts) {
             return rawParts.map(p => ({
               offset: p.offset,
@@ -1089,10 +1126,11 @@
             rawPartsS3.splice(1, 0, { path: langS3.path, offset: langS3.offset });
 
             // include chosen intentions (optional)
-            const intent = intentions[selInt.value];
-            const intentS3 = intentionsS3[selInt.value];
-            if (intent) rawPartsC3.push({ path: intent.path, offset: intent.offset });
-            if (intentS3) rawPartsS3.push({ path: intentS3.path, offset: intentS3.offset });
+            const intent = selectedIntentionsItem('intentions');
+            if (intent) {
+              rawPartsC3.push({ path: `smartrosary-web-installer/${intent.path}`, offset: 0x2F0000 });
+              rawPartsS3.push({ path: `smartrosary-web-installer/${intent.path}`, offset: 0x7F0000 });
+            }
 
             const audio = selectedAudioItem('audioLanguage');
             if (audio) {
@@ -1103,7 +1141,7 @@
             }
 
             const manifest = {
-              name:    `SmartRosary (${lang.name}${intent ? " / " + intent.name : ""}${audio ? " / " + audio.label + " audio" : ""})`,
+              name:    `SmartRosary (${lang.name}${intent ? " / " + (intent.label || intent.id) : ""}${audio ? " / " + audio.label + " audio" : ""})`,
               version: FW_VERSION,     // <-- uses single version variable
               funding_url: "",
               new_install_prompt_erase: true,
@@ -1123,6 +1161,7 @@
           selInt .addEventListener("change", buildManifest);
           selAudio?.addEventListener("change", buildManifest);
           loadAudioManifest().then(buildManifest);
+          loadIntentionsManifest().then(buildManifest);
           buildManifest();
         });
       })();
@@ -1494,7 +1533,15 @@
       }
 
       async function startIntentionsBluetooth(btn){
-        const path=document.getElementById('intentionsFileSelect').value;
+        await loadIntentionsManifest();
+        const selected = selectedIntentionsItem('intentionsFileSelect');
+        if (!selected) {
+          const msg = t('errorIntentionsMissing');
+          if (window.GlobalUI) GlobalUI.error(msg);
+          alert(msg);
+          return;
+        }
+        const path=selected.path;
         const resp=await fetch(path);
         if(!resp.ok){
           const msg = t('errorIntentionsMissing');
@@ -1504,7 +1551,7 @@
         }
         const data=new Uint8Array(await resp.arrayBuffer());
         const model = window.IntentionsNVS.parseIntentions(data);
-        const filename = path.split('/').pop();
+        const filename = selected.filename || path.split('/').pop();
 
         // Connect first, then show progress
         const transfer = await connectBLE(SERVICE_UUID,INFO_INTENT_ENTRY_UUID, {
