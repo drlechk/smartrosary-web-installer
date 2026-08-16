@@ -5,94 +5,112 @@
     <title>SmartRosary Installer</title>
     <meta name="description" content="Easily install SmartRosary firmware on the web." />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-    <meta name="color-scheme" content="dark light" />
+    <meta name="color-scheme" content="light" />
     <link rel="icon" type="image/svg+xml" href="favicon.svg">
     <style>
-      *, *::before, *::after { box-sizing: border-box; }
       :root {
-        color-scheme: dark;
-        /* Landing/dashboard palette */
+        color-scheme: light;
         --bg: linear-gradient(180deg, #0f5aa0 0%, #0b4f8f 55%, #09457e 100%);
-        --text: #eaf0f6;
-        --muted: #95a7ba;
-        --card: #101722;
-        --border: #172231;
+        --text: #14223d;
+        --muted: #5b6b86;
+        --card: #ffffffcc;
+        --surface: #ffffff;
+        --soft: #f3f8fd;
+        --border: #b7d6f5;
         --accent: #0974cc;
+        --accent-dark: #075b9f;
         --accent-contrast: #ffffff;
-        --bar: #0b4f8f;
-        --top-border: rgba(183, 214, 245, 0.25);
-        --toolbar-track: rgba(18, 34, 52, 0.55);
-        --header-button-bg: #1f2937;
-        --header-button-border: #263244;
-        --header-button-text: #eaf0f6;
-        --control-bg: #101b2c;
-        --control-border: #233144;
-        --control-text: #eaf0f6;
-        --progress-bg: #0d131c;
+        --toolbar-track: rgba(9, 116, 204, 0.16);
+        --warning: #7c2d12;
+        --warning-bg: #fff7ed;
       }
 
       html.theme-light {
         color-scheme: light;
         --bg: linear-gradient(180deg, #0f5aa0 0%, #0b4f8f 55%, #09457e 100%);
         --text: #0f172a;
-        --muted: #64748b;
+        --muted: #5b6b86;
         --card: #ffffffcc;
-        --border: #cbd5f5;
+        --surface: #ffffff;
+        --soft: #f3f8fd;
+        --border: #b7d6f5;
         --accent: #0974cc;
+        --accent-dark: #075b9f;
         --accent-contrast: #ffffff;
-        --bar: #0b4f8f;
-        --top-border: rgba(183, 214, 245, 0.25);
-        --toolbar-track: rgba(18, 34, 52, 0.55);
-        --header-button-bg: #f1f5f9;
-        --header-button-border: #cbd5f5;
-        --header-button-text: #1e3a8a;
-        --control-bg: #ffffff;
-        --control-border: #cbd5f5;
-        --control-text: #0f172a;
-        --progress-bg: #e2e8f0;
+        --toolbar-track: rgba(9, 116, 204, 0.16);
+        --warning: #7c2d12;
+        --warning-bg: #fff7ed;
       }
 
       html { min-height: 100%; background: var(--bg); }
-      body { font-family: -apple-system, system-ui, BlinkMacSystemFont, "Segoe UI", Roboto, Ubuntu, sans-serif; padding: 0; margin: 0; line-height: 1.4; background: var(--bg); color: var(--text); min-height: 100vh; min-height: 100dvh; display: flex; flex-direction: column; }
+      body {
+        font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+        padding: 0;
+        margin: 0;
+        line-height: 1.4;
+        background: var(--bg);
+        color: var(--text);
+        min-height: 100vh;
+        min-height: 100dvh;
+        display: flex;
+        flex-direction: column;
+      }
       a { color: var(--accent); }
       *, *::before, *::after { box-sizing: border-box; }
 
-      /* Header bar */
-      .top-shell { position: sticky; top: 0; z-index: 1000; background: var(--bar); width: 100%; }
       .header-with-lang {
-        position: relative;
-        display:flex;
-        align-items:center;
-        justify-content:flex-start;
-        padding: 18px 12px 16px;
-        background: var(--bar);
-        border-bottom: 1px solid var(--top-border);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 1rem;
+        padding: 1rem 1.25rem;
+        max-width: 1120px;
+        margin: 0 auto;
         width: 100%;
       }
-      .header-with-lang h1 {
-        margin: 0;
-        font-size: 20px;
+      .home-link {
+        color: #fff;
+        text-decoration: none;
         font-weight: 700;
-        text-align: center;
-        flex: 1;
-      }
-      .deploy-info {
-        font-size: 10px;
-        letter-spacing: 0.2px;
-        color: var(--muted);
-        opacity: 0.8;
-        pointer-events: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
         white-space: nowrap;
       }
-      .page-footer { padding: 12px; text-align: center; }
-      .header-controls { position:absolute; right:12px; display:flex; align-items:center; gap:8px; }
-      #themeToggle { padding: 8px 14px; border-radius: 10px; border: 1px solid var(--header-button-border); background: var(--header-button-bg); color: var(--header-button-text); font-weight: 600; cursor: pointer; transition: transform .05s ease; }
-      #themeToggle:active { transform: scale(0.98); }
-      .header-with-lang select { font-size: 14px; padding: 6px 10px; background: var(--control-bg); color: var(--control-text); border: 1px solid var(--control-border); border-radius: 8px; }
-      .toolbar-wrap { padding: 8px 12px 14px; }
-      .toolbar { max-width: 720px; margin: 0 auto; display:flex; flex-direction:column; align-items:center; gap:6px; }
-      .toolbar-status { font-size: 12px; color: var(--muted); text-align:center; letter-spacing: .02em; }
-      .toolbar-device { font-size: 11px; color: var(--accent); text-align:center; font-weight: 500; min-height: 14px; }
+      .home-link img { width: 28px; height: 28px; }
+      .selector-row { display: flex; align-items: center; justify-content: flex-end; gap: 0.75rem; flex-wrap: wrap; }
+      .ui-label {
+        color: #fff;
+        font-size: 0.9rem;
+        font-weight: 700;
+        width: auto;
+        margin: 0;
+      }
+      .deploy-info {
+        margin-top: 0.35rem;
+        font-size: 0.72rem;
+        letter-spacing: 0.02em;
+        opacity: 0.78;
+      }
+      .page-footer { padding: 1rem 1.25rem; text-align: center; color: rgba(255,255,255,0.88); font-size: 0.9rem; }
+      .page-footer a {
+        color: inherit;
+        margin-left: 0.75rem;
+        text-underline-offset: 0.2em;
+      }
+      .page-footer a:hover { color: #fff; }
+      .top-shell {
+        position: relative;
+        margin: 1rem 0 1.25rem;
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        background: var(--soft);
+        overflow: hidden;
+      }
+      .toolbar-wrap { padding: 0.85rem 1rem 1rem; }
+      .toolbar { margin: 0 auto; display:flex; flex-direction:column; align-items:center; gap:6px; }
+      .toolbar-status { font-size: 0.86rem; color: var(--muted); text-align:center; font-weight: 700; letter-spacing: .01em; }
+      .toolbar-device { font-size: 0.78rem; color: var(--accent-dark); text-align:center; font-weight: 700; min-height: 14px; }
       .toolbar-progress {
         position: absolute;
         left: 0;
@@ -109,20 +127,84 @@
       .toolbar-progress .bar { height: 100%; width: 0%; background: var(--accent); transition: width .2s ease; }
       .toolbar-progress.is-active { opacity: 1; }
 
-      /* Layout */
-      .content { max-width: 720px; margin: 0 auto; padding: 12px; flex: 1; width: 100%; }
-      h2 { margin-top: 1.0em; text-align: center; }
-
-      /* Cards */
-      .uploadBox { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 14px; margin-top: 14px; box-shadow: 0 12px 28px rgba(9, 17, 28, 0.18); }
-      .footer{text-align: center;}
-
-      /* Controls */
+      .content {
+        display: grid;
+        place-items: start center;
+        max-width: 1120px;
+        margin: 0 auto;
+        padding: 1rem 1.25rem 3rem;
+        flex: 1;
+        width: 100%;
+      }
+      .card {
+        width: 100%;
+        background: var(--card);
+        backdrop-filter: blur(6px);
+        border: 1px solid var(--border);
+        border-radius: 16px;
+        padding: 2rem;
+        box-shadow: 0 10px 30px #00000014;
+      }
+      .hero {
+        display: grid;
+        grid-template-columns: auto minmax(0, 1fr);
+        gap: 1rem;
+        align-items: center;
+        margin-bottom: 1.25rem;
+      }
+      .hero-icon { width: 78px; height: 78px; }
+      h1 {
+        font-size: clamp(2rem, 5vw, 3.1rem);
+        line-height: 1;
+        margin: 0;
+      }
+      h2 {
+        margin: 0 0 1rem;
+        font-size: 1.05rem;
+        line-height: 1.35;
+      }
+      .action-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 0.75rem;
+      }
+      .uploadBox {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        padding: 1rem;
+        box-shadow: 0 2px 8px #0000000a;
+        min-width: 0;
+      }
+      #usbBox,
+      #changelogBox {
+        grid-column: 1 / -1;
+      }
+      .footer { text-align: center; color: var(--muted); font-size: 0.9rem; }
       .controls-container {display: flex; justify-content: center; margin-bottom: 1rem; width: 100%;}
       .controls-table {border-collapse: collapse; width: 100%; table-layout: fixed;}
-      .controls-table td {border: none; padding: 0.3rem 0.5rem; vertical-align: middle;}
-      label { display: inline-block; width: 160px; max-width: 100%; }
-      .content select { padding: 8px 10px; background: var(--control-bg); color: var(--control-text); border:1px solid var(--control-border); border-radius:8px; width: 100%; max-width: 100%; }
+      .controls-table td {border: none; padding: 0.35rem 0.5rem; vertical-align: top;}
+      label { display: inline-block; width: 160px; max-width: 100%; color: var(--muted); font-weight: 700; }
+      select {
+        padding: 0.4rem 0.6rem;
+        border: 1px solid rgba(255,255,255,0.6);
+        border-radius: 8px;
+        background: transparent;
+        color: #fff;
+        font-size: 0.95rem;
+      }
+      select:focus { outline: 2px solid rgba(255,255,255,0.85); outline-offset: 2px; }
+      select option { color: #111; }
+      .content select {
+        padding: 0.48rem 0.65rem;
+        background: var(--surface);
+        color: var(--text);
+        border:1px solid var(--border);
+        border-radius:8px;
+        width: 100%;
+        max-width: 100%;
+      }
+      .content select:focus { outline: 2px solid var(--accent); outline-offset: 2px; }
       .changelog-controls { display: grid; grid-template-columns: 160px minmax(0, 1fr); gap: 10px; align-items: center; margin-top: 12px; }
       .changelog-meta { margin: 12px 0 0; color: var(--muted); font-size: 12px; text-align: center; }
       .changelog-list { margin: 12px 0 0; padding-left: 0; list-style: none; }
@@ -133,40 +215,81 @@
       .version-hint { color: var(--accent); font-weight: 600; }
       .is-hidden { display: none; }
 
-      /* Mobile: stack labels and inputs to avoid overflow */
-      @media (max-width: 560px) {
-        .controls-container { padding: 0 2px; }
-        .controls-table, .controls-table tr, .controls-table td { display: block; width: 100%; }
-        .controls-table tr { margin-bottom: 10px; }
-        label { width: 100%; margin-bottom: 6px; }
-        .changelog-controls { grid-template-columns: 1fr; gap: 6px; }
-        .changelog-list li { grid-template-columns: 1fr; gap: 2px; }
-      }
-
-      /* Buttons */
-      .uploadBtn { cursor: pointer; font-size: 14px; font-weight: 600; padding: 10px 16px; color: var(--accent-contrast); background-color: var(--accent); border: none; border-radius: 10px; transition: transform .05s ease; }
-      .uploadBtn:active { transform: scale(0.98); }
-      esp-web-install-button::part(button) {
+      .uploadBtn {
         cursor: pointer;
         font-size: 14px;
-        font-weight: 600;
+        font-weight: 700;
+        min-height: 40px;
         padding: 10px 16px;
         color: var(--accent-contrast);
         background-color: var(--accent);
         border: none;
         border-radius: 10px;
-        transition: transform .05s ease;
+        transition: background .2s ease, box-shadow .2s ease, transform .06s ease;
       }
+      .uploadBtn:hover { background: var(--accent-dark); box-shadow: 0 4px 14px #00000014; transform: translateY(-1px); }
+      .uploadBtn:active { transform: scale(0.98); }
+      esp-web-install-button::part(button) {
+        cursor: pointer;
+        font-size: 14px;
+        font-weight: 700;
+        min-height: 40px;
+        padding: 10px 16px;
+        color: var(--accent-contrast);
+        background-color: var(--accent);
+        border: none;
+        border-radius: 10px;
+        transition: background .2s ease, box-shadow .2s ease, transform .06s ease;
+      }
+      esp-web-install-button::part(button):hover { background: var(--accent-dark); box-shadow: 0 4px 14px #00000014; transform: translateY(-1px); }
       esp-web-install-button::part(button):active { transform: scale(0.98); }
+      esp-web-install-button { display: block; text-align: center; }
+      #ewtUnsupported {
+        display: block;
+        max-width: 640px;
+        margin: 0.75rem auto 0;
+        color: var(--muted);
+        line-height: 1.45;
+      }
 
-      html.theme-light body { color: var(--text); }
-      html.theme-light .header-with-lang h1 { color: var(--accent-contrast); }
-      html.theme-light .toolbar-status { color: var(--accent-contrast); }
-      html.theme-light a { color: #1d4ed8; }
-      html.theme-light label { color: var(--text); }
+      @media (max-width: 800px) {
+        .header-with-lang {
+          align-items: flex-start;
+          flex-direction: column;
+          padding: 0.75rem 0.9rem;
+        }
+        .selector-row { justify-content: flex-start; }
+        .content { padding: 1rem 0.85rem 2rem; }
+        .card {
+          padding: 1rem;
+          border-radius: 12px;
+        }
+        .hero {
+          grid-template-columns: 1fr;
+          text-align: center;
+          justify-items: center;
+        }
+        .hero-icon {
+          width: 54px;
+          height: 54px;
+        }
+        .action-grid { grid-template-columns: 1fr; }
+        .controls-container { padding: 0 2px; }
+        .controls-table, .controls-table tr, .controls-table td { display: block; width: 100%; }
+        .controls-table tr { margin-bottom: 10px; }
+        label { width: 100%; margin-bottom: 6px; }
+        .ui-label { width: auto; margin-bottom: 0; }
+        .changelog-controls { grid-template-columns: 1fr; gap: 6px; }
+        .changelog-list li { grid-template-columns: 1fr; gap: 2px; }
+        .page-footer a {
+          display: block;
+          margin: 0.35rem 0 0;
+        }
+        .deploy-info { display: none; }
+      }
 
       /* Safe-area handling for iOS/modern devices */
-      .safe-top-fill { position: fixed; top: 0; left: 0; right: 0; height: 0; background: var(--bar); z-index: 1001; display: none; }
+      .safe-top-fill { position: fixed; top: 0; left: 0; right: 0; height: 0; background: #0f5aa0; z-index: 1001; display: none; }
       @supports (padding: env(safe-area-inset-top)) {
         .header-with-lang {
           padding-top: calc(18px + env(safe-area-inset-top));
@@ -303,9 +426,12 @@
 	  <body>
 	    <div class="safe-top-fill" aria-hidden="true"></div>
 	    <header class="header-with-lang">
-	      <h1 id="title">SmartRosary Web Installer</h1>
-	      <div class="header-controls">
-	        <button id="themeToggle" type="button" aria-pressed="false" title="Switch to light mode">Light</button>
+	      <a class="home-link" href="https://drlechk.github.io/smartrosary/" target="_blank" rel="noopener">
+	        <img src="favicon.svg" alt="" role="presentation">
+	        <span>Smart Rosary</span>
+	      </a>
+	      <div class="header-controls selector-row">
+	        <label id="uiLangLabel" class="ui-label" for="uiLangSelect">Language</label>
 	        <select id="uiLangSelect" aria-label="Interface language">
 	          <option value="pl" selected>PL</option>
           <option value="en">EN</option>
@@ -317,18 +443,26 @@
         </select>
       </div>
     </header>
-    <div class="top-shell">
-      <div class="toolbar-wrap">
-        <div class="toolbar">
-          <div class="toolbar-status" id="globalStatus">Ready.</div>
-          <div class="toolbar-device" id="globalDevice"></div>
+    <main class="content">
+      <section class="card">
+        <div class="hero">
+          <img class="hero-icon" src="favicon.svg" alt="" role="presentation">
+          <div>
+            <h1 id="title">SmartRosary Web Installer</h1>
+          </div>
         </div>
-      </div>
-      <div id="globalProg" class="toolbar-progress">
-        <div class="bar"></div>
-      </div>
-    </div>
-    <div class="content">
+        <div class="top-shell">
+          <div class="toolbar-wrap">
+            <div class="toolbar">
+              <div class="toolbar-status" id="globalStatus">Ready.</div>
+              <div class="toolbar-device" id="globalDevice"></div>
+            </div>
+          </div>
+          <div id="globalProg" class="toolbar-progress">
+            <div class="bar"></div>
+          </div>
+        </div>
+        <div class="action-grid">
 
       <!-- Bluetooth: Firmware -->
       <div class="uploadBox" id="otaFwBox">
@@ -444,9 +578,13 @@
         <ul class="changelog-list" id="changelogList"></ul>
       </div>
 
+        </div>
 	      <div id="log" style="display:none;"></div>
-	    </div>
+      </section>
+	    </main>
 	    <footer id="pageFooter" class="page-footer" aria-label="Footer">
+	      <span>© 2026 SmartRosary</span>
+	      <a href="https://github.com/drlechk/smartrosary-web-installer" target="_blank" rel="noopener">GitHub</a>
 	      <div id="deployInfo" class="deploy-info" aria-label="Last deploy"></div>
 	    </footer>
 
@@ -629,6 +767,8 @@
           uiLangSelect.setAttribute("aria-label", dict.uiLangAria);
           uiLangSelect.value = currentLang;
         }
+        const uiLangLabel = document.getElementById("uiLangLabel");
+        if (uiLangLabel) uiLangLabel.textContent = dict.langLabel || i18n.en.langLabel;
 
         const languageFileSelect = document.getElementById("languageFileSelect");
         if (languageFileSelect) {
