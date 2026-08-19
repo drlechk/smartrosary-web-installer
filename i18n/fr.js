@@ -14,6 +14,8 @@ window.SmartRosaryLocales.fr = (FW_VERSION, LANG_VERSION) => ({
   audioLanguageLabel: "Langue audio :",
   audioUsbHint: "L’audio est installé uniquement sur le chapelet ESP32-S3 AMOLED. Les autres cartes ignorent cette sélection.",
   audioBleHint: "Le televersement audio est disponible uniquement pour le chapelet ESP32-S3 AMOLED.",
+  audioPreviewHint: "Les voix audio peuvent être écoutées avant l’installation.",
+  audioPreviewLink: "Ouvrir l’aperçu audio",
   audioManifestLoading: "Chargement des paquets audio…",
   audioVersionHint: "Paquet audio v{version} : {label}",
   noneOption: "Aucune",

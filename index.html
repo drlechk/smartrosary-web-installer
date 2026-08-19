@@ -498,6 +498,10 @@
         <h2 id="audioTitle">Upload audio via Bluetooth</h2>
         <p class="hint version-hint" id="audioVersionHint" aria-live="polite"></p>
         <p class="hint" id="audioBleHint">Audio is installed only on the ESP32-S3 AMOLED rosary.</p>
+        <p class="hint">
+          <span data-audio-preview-hint>Audio voices can be previewed before installing.</span>
+          <a href="https://drlechk.github.io/smartrosary-audio/" target="_blank" rel="noopener" data-audio-preview-link>Open audio preview</a>
+        </p>
         <div style="text-align: center; margin-top: 1em;">
           <select id="audioFileSelect"></select>
         </div>
@@ -550,6 +554,10 @@
                 <select id="audioLanguage"></select>
                 <p class="hint version-hint" id="audioUsbVersionHint"></p>
                 <p class="hint" id="audioUsbHint">Audio is only installed on the ESP32-S3 AMOLED rosary.</p>
+                <p class="hint">
+                  <span data-audio-preview-hint>Audio voices can be previewed before installing.</span>
+                  <a href="https://drlechk.github.io/smartrosary-audio/" target="_blank" rel="noopener" data-audio-preview-link>Open audio preview</a>
+                </p>
               </td>
             </tr>
 	          </table>
@@ -802,6 +810,12 @@
         if (audioUsbHint) audioUsbHint.textContent = dict.audioUsbHint || i18n.en.audioUsbHint;
         const audioBleHint = document.getElementById("audioBleHint");
         if (audioBleHint) audioBleHint.textContent = dict.audioBleHint || dict.audioUsbHint || i18n.en.audioBleHint || i18n.en.audioUsbHint;
+        document.querySelectorAll("[data-audio-preview-hint]").forEach(el => {
+          el.textContent = dict.audioPreviewHint || i18n.en.audioPreviewHint;
+        });
+        document.querySelectorAll("[data-audio-preview-link]").forEach(el => {
+          el.textContent = dict.audioPreviewLink || i18n.en.audioPreviewLink;
+        });
         const fwLabel = document.getElementById("fwLangLabel");
         if (fwLabel) fwLabel.textContent = dict.fwLangLabel;
         const intentsLabel = document.getElementById("intentionsLabel");

@@ -14,6 +14,8 @@ window.SmartRosaryLocales.de = (FW_VERSION, LANG_VERSION) => ({
   audioLanguageLabel: "Audiosprache:",
   audioUsbHint: "Audio wird nur auf dem ESP32-S3 AMOLED-Rosenkranz installiert. Andere Boards ignorieren diese Auswahl.",
   audioBleHint: "Audio-Upload ist nur fur den ESP32-S3 AMOLED-Rosenkranz verfugbar.",
+  audioPreviewHint: "Audiostimmen können vor der Installation angehört werden.",
+  audioPreviewLink: "Audiovorschau öffnen",
   audioManifestLoading: "Audiopakete werden geladen…",
   audioVersionHint: "Audiopaket v{version}: {label}",
   noneOption: "Keine",
