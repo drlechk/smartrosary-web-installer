@@ -1,4 +1,4 @@
-window.SMARTROSARY_VERSION = "v1.60";
+window.SMARTROSARY_VERSION = "v1.61";
 window.SMARTROSARY_LANG_VERSION = "v1.38";
 window.SMARTROSARY_BREAKING_CHANGES = {
   "versions": { "before": "v1.49" },
@@ -12,10 +12,10 @@ window.SMARTROSARY_BREAKING_CHANGES = {
   }
 };
 window.SMARTROSARY_RELEASE_MESSAGE = {
-  "en": "Firmware v1.60 adds ESP32-S3 Touch AMOLED 1.8 portrait and landscape builds, correctly sized rectangular wallpapers, and tuned rectangular display spacing.",
-  "de": "Firmware v1.60 f\u00fcgt ESP32-S3 Touch AMOLED 1.8 Builds f\u00fcr Hoch- und Querformat hinzu, mit passend skalierten rechteckigen Hintergrundbildern und verbessertem Layout-Abstand.",
-  "pl": "Firmware v1.60 dodaje buildy ESP32-S3 Touch AMOLED 1.8 dla pionu i poziomu, poprawnie dopasowane prostok\u0105tne tapety oraz dopracowane odst\u0119py interfejsu.",
-  "fr": "Le firmware v1.60 ajoute les builds ESP32-S3 Touch AMOLED 1.8 en portrait et paysage, des fonds d'\u00e9cran rectangulaires adapt\u00e9s et un espacement d'interface ajust\u00e9.",
-  "es": "El firmware v1.60 agrega builds ESP32-S3 Touch AMOLED 1.8 en vertical y horizontal, fondos rectangulares con el tama\u00f1o correcto y ajustes de espaciado de la interfaz.",
-  "pt": "O firmware v1.60 adiciona builds ESP32-S3 Touch AMOLED 1.8 em retrato e paisagem, papeis de parede retangulares no tamanho correto e espa\u00e7amento de interface ajustado."
+  "en": "Firmware v1.61 fixes an issue where the C3 model would power off entirely when pressing the physical button to advance the bead on battery power.",
+  "de": "Firmware v1.61 behebt ein Problem, bei dem das C3-Modell im Akkubetrieb vollständig abgeschaltet wurde, wenn die physische Taste gedrückt wurde.",
+  "pl": "Firmware v1.61 rozwiązuje problem polegający na całkowitym wyłączeniu modelu C3 po naciśnięciu fizycznego przycisku przy zasilaniu bateryjnym.",
+  "fr": "Le firmware v1.61 résout un problème où le modèle C3 s'éteignait complètement en appuyant sur le bouton physique sur batterie.",
+  "es": "El firmware v1.61 soluciona un problema por el cual el modelo C3 se apagaba por completo al presionar el botón físico en batería.",
+  "pt": "O firmware v1.61 corrige um problema em que o modelo C3 desligava completamente ao pressionar o botão físico na bateria."
 };
