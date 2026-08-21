@@ -527,6 +527,17 @@
         <div class="controls-container">
           <table class="controls-table">
             <tr>
+              <td><label for="firmwareHardware" id="firmwareHardwareLabel">Hardware:</label></td>
+              <td>
+                <select id="firmwareHardware">
+                  <option value="esp32-c3-01" selected>SmartRosary ESP32-C3</option>
+                  <option value="esp32-s3-touch-amoled-1-75">ESP32-S3 Touch AMOLED 1.75</option>
+                  <option value="esp32-s3-touch-amoled-1-8-portrait">ESP32-S3 Touch AMOLED 1.8 portrait</option>
+                  <option value="esp32-s3-touch-amoled-1-8-landscape">ESP32-S3 Touch AMOLED 1.8 landscape</option>
+                </select>
+              </td>
+            </tr>
+            <tr>
               <td><label for="language" id="fwLangLabel">Language (firmware data):</label></td>
               <td>
                 <select id="language">
@@ -673,7 +684,69 @@
       // ---------- 0) Firmware version ----------
       const FW_VERSION = window.SMARTROSARY_VERSION;
       const LANG_VERSION = window.SMARTROSARY_LANG_VERSION ? " " + window.SMARTROSARY_LANG_VERSION : "";
-      const S3_AMOLED_HARDWARE_ID = 'esp32-s3-touch-amoled-1-75';
+      const S3_AMOLED_HARDWARE_IDS = new Set([
+        'esp32-s3-touch-amoled-1-75',
+        'esp32-s3-touch-amoled-1-8-portrait',
+        'esp32-s3-touch-amoled-1-8-landscape',
+      ]);
+      const FIRMWARE_TARGETS = {
+        'esp32-c3-01': {
+          label: 'SmartRosary ESP32-C3',
+          chipFamily: 'ESP32-C3',
+          languageOffset: 0x2F5000,
+          intentionsOffset: 0x2F0000,
+          audioOffset: null,
+          parts: [
+            { path: 'firmware/bootloader.bin', offset: 0x000000 },
+            { path: 'firmware/partitions.bin', offset: 0x008000 },
+            { path: 'firmware/boot_app0.bin',  offset: 0x00E000 },
+            { path: 'firmware/firmware.bin',   offset: 0x010000 },
+            { path: 'wallpaper/littlefs.bin',  offset: 0x323000 },
+          ],
+        },
+        'esp32-s3-touch-amoled-1-75': {
+          label: 'ESP32-S3 Touch AMOLED 1.75',
+          chipFamily: 'ESP32-S3',
+          languageOffset: 0x7F5000,
+          intentionsOffset: 0x7F0000,
+          audioOffset: 0xD3F000,
+          parts: [
+            { path: 'firmware/s3/bootloader.bin', offset: 0x000000 },
+            { path: 'firmware/s3/partitions.bin', offset: 0x008000 },
+            { path: 'firmware/s3/boot_app0.bin',  offset: 0x00E000 },
+            { path: 'firmware/s3/firmware.bin',   offset: 0x010000 },
+            { path: 'wallpaper/s3/littlefs.bin',  offset: 0x83F000 },
+          ],
+        },
+        'esp32-s3-touch-amoled-1-8-portrait': {
+          label: 'ESP32-S3 Touch AMOLED 1.8 portrait',
+          chipFamily: 'ESP32-S3',
+          languageOffset: 0x7F5000,
+          intentionsOffset: 0x7F0000,
+          audioOffset: 0xD3F000,
+          parts: [
+            { path: 'firmware/s3-amoled-1-8-portrait/bootloader.bin', offset: 0x000000 },
+            { path: 'firmware/s3-amoled-1-8-portrait/partitions.bin', offset: 0x008000 },
+            { path: 'firmware/s3-amoled-1-8-portrait/boot_app0.bin',  offset: 0x00E000 },
+            { path: 'firmware/s3-amoled-1-8-portrait/firmware.bin',   offset: 0x010000 },
+            { path: 'wallpaper/s3-amoled-1-8-portrait/littlefs.bin',  offset: 0x83F000 },
+          ],
+        },
+        'esp32-s3-touch-amoled-1-8-landscape': {
+          label: 'ESP32-S3 Touch AMOLED 1.8 landscape',
+          chipFamily: 'ESP32-S3',
+          languageOffset: 0x7F5000,
+          intentionsOffset: 0x7F0000,
+          audioOffset: 0xD3F000,
+          parts: [
+            { path: 'firmware/s3-amoled-1-8-landscape/bootloader.bin', offset: 0x000000 },
+            { path: 'firmware/s3-amoled-1-8-landscape/partitions.bin', offset: 0x008000 },
+            { path: 'firmware/s3-amoled-1-8-landscape/boot_app0.bin',  offset: 0x00E000 },
+            { path: 'firmware/s3-amoled-1-8-landscape/firmware.bin',   offset: 0x010000 },
+            { path: 'wallpaper/s3-amoled-1-8-landscape/littlefs.bin',  offset: 0x83F000 },
+          ],
+        },
+      };
       let audioManifest = null;
       let audioManifestLoadPromise = null;
       let intentionsManifest = null;
@@ -806,6 +879,8 @@
         if (audioTitle) audioTitle.textContent = dict.audioTitle || i18n.en.audioTitle;
         const audioLanguageLabel = document.getElementById("audioLanguageLabel");
         if (audioLanguageLabel) audioLanguageLabel.textContent = dict.audioLanguageLabel || i18n.en.audioLanguageLabel;
+        const firmwareHardwareLabel = document.getElementById("firmwareHardwareLabel");
+        if (firmwareHardwareLabel) firmwareHardwareLabel.textContent = dict.firmwareHardwareLabel || i18n.en.firmwareHardwareLabel;
         const audioUsbHint = document.getElementById("audioUsbHint");
         if (audioUsbHint) audioUsbHint.textContent = dict.audioUsbHint || i18n.en.audioUsbHint;
         const audioBleHint = document.getElementById("audioBleHint");
@@ -1082,86 +1157,61 @@
           const btn     = document.querySelector("esp-web-install-button");
           const activateBtn = document.getElementById("usbInstallActivate");
           if (activateBtn) activateBtn.disabled = false;
+          const selHardware = document.getElementById("firmwareHardware");
           const selLang = document.getElementById("language");
           const selInt  = document.getElementById("intentions");
           const selAudio = document.getElementById("audioLanguage");
           const origin  = window.location.origin;
 
-          // On-disk locations (adjust to your structure)
-          const firmwarePartsC3 = [
-            { path: "smartrosary-web-installer/firmware/bootloader.bin", offset: 0x000000 },
-            { path: "smartrosary-web-installer/firmware/partitions.bin", offset: 0x008000 },
-            { path: "smartrosary-web-installer/firmware/boot_app0.bin",  offset: 0x00E000 },
-            { path: "smartrosary-web-installer/firmware/firmware.bin",   offset: 0x010000 },
-            { path: "smartrosary-web-installer/wallpaper/littlefs.bin",    offset: 0x323000 }
-          ];
-
-          const firmwarePartsS3 = [
-            { path: "smartrosary-web-installer/firmware/s3/bootloader.bin", offset: 0x000000 },
-            { path: "smartrosary-web-installer/firmware/s3/partitions.bin", offset: 0x008000 },
-            { path: "smartrosary-web-installer/firmware/s3/boot_app0.bin",  offset: 0x00E000 },
-            { path: "smartrosary-web-installer/firmware/s3/firmware.bin",   offset: 0x010000 },
-            { path: "smartrosary-web-installer/wallpaper/s3/littlefs.bin",  offset: 0x83F000 }
-          ];
-
           const languages = {
-            pl: { name: "Polski",  path: "smartrosary-web-installer/lang/nvs-lang-pl.bin", offset: 0x2F5000 },
-            en: { name: "English", path: "smartrosary-web-installer/lang/nvs-lang-en.bin", offset: 0x2F5000 },
-            de: { name: "Deutsch", path: "smartrosary-web-installer/lang/nvs-lang-de.bin", offset: 0x2F5000 },
-            es: { name: "Español", path: "smartrosary-web-installer/lang/nvs-lang-es.bin", offset: 0x2F5000 },
-            fr: { name: "Français", path: "smartrosary-web-installer/lang/nvs-lang-fr.bin", offset: 0x2F5000 },
-            it: { name: "Italiano", path: "smartrosary-web-installer/lang/nvs-lang-it.bin", offset: 0x2F5000 },
-            la: { name: "Latina", path: "smartrosary-web-installer/lang/nvs-lang-la.bin", offset: 0x2F5000 },
-            pt: { name: "Português", path: "smartrosary-web-installer/lang/nvs-lang-pt.bin", offset: 0x2F5000 }
+            pl: { name: "Polski",  path: "lang/nvs-lang-pl.bin" },
+            en: { name: "English", path: "lang/nvs-lang-en.bin" },
+            de: { name: "Deutsch", path: "lang/nvs-lang-de.bin" },
+            es: { name: "Español", path: "lang/nvs-lang-es.bin" },
+            fr: { name: "Français", path: "lang/nvs-lang-fr.bin" },
+            it: { name: "Italiano", path: "lang/nvs-lang-it.bin" },
+            la: { name: "Latina", path: "lang/nvs-lang-la.bin" },
+            pt: { name: "Português", path: "lang/nvs-lang-pt.bin" }
           };
-
-          const languagesS3 = Object.fromEntries(Object.entries(languages).map(([key, value]) => [
-            key,
-            { ...value, offset: 0x7F5000 }
-          ]));
 
           function absoluteParts(rawParts) {
             return rawParts.map(p => ({
               offset: p.offset,
-              path: p.path.startsWith("http") ? p.path : `${origin}/${p.path}`
+              path: p.path.startsWith("http") ? p.path : `${origin}/smartrosary-web-installer/${p.path}`
             }));
           }
 
           function buildManifest() {
             if (btn._blobUrl) URL.revokeObjectURL(btn._blobUrl);
 
-            const rawPartsC3 = [...firmwarePartsC3];
-            const rawPartsS3 = [...firmwarePartsS3];
+            const target = FIRMWARE_TARGETS[selHardware?.value] || FIRMWARE_TARGETS['esp32-c3-01'];
+            const rawParts = [...target.parts];
 
             // include chosen language
             const lang = languages[selLang.value];
-            const langS3 = languagesS3[selLang.value];
-            rawPartsC3.splice(1, 0, { path: lang.path, offset: lang.offset });
-            rawPartsS3.splice(1, 0, { path: langS3.path, offset: langS3.offset });
+            rawParts.splice(1, 0, { path: lang.path, offset: target.languageOffset });
 
             // include chosen intentions (optional)
             const intent = selectedIntentionsItem('intentions');
             if (intent) {
-              rawPartsC3.push({ path: `smartrosary-web-installer/${intent.path}`, offset: 0x2F0000 });
-              rawPartsS3.push({ path: `smartrosary-web-installer/${intent.path}`, offset: 0x7F0000 });
+              rawParts.push({ path: intent.path, offset: target.intentionsOffset });
             }
 
             const audio = selectedAudioItem('audioLanguage');
-            if (audio) {
-              rawPartsS3.push({
-                path: `smartrosary-web-installer/${audio.path}`,
-                offset: 0xD3F000
+            if (audio && target.audioOffset !== null) {
+              rawParts.push({
+                path: audio.path,
+                offset: target.audioOffset
               });
             }
 
             const manifest = {
-              name:    `SmartRosary (${lang.name}${intent ? " / " + (intent.label || intent.id) : ""}${audio ? " / " + audio.label + " audio" : ""})`,
+              name:    `SmartRosary ${target.label} (${lang.name}${intent ? " / " + (intent.label || intent.id) : ""}${audio && target.audioOffset !== null ? " / " + audio.label + " audio" : ""})`,
               version: FW_VERSION,     // <-- uses single version variable
               funding_url: "",
               new_install_prompt_erase: true,
               builds: [
-                { chipFamily: "ESP32-C3", improv: false, parts: absoluteParts(rawPartsC3) },
-                { chipFamily: "ESP32-S3", improv: false, parts: absoluteParts(rawPartsS3) }
+                { name: target.label, chipFamily: target.chipFamily, improv: false, parts: absoluteParts(rawParts) }
               ]
             };
 
@@ -1171,6 +1221,7 @@
             console.log("Using manifest blob URL:", blobUrl);
           }
 
+          selHardware?.addEventListener("change", buildManifest);
           selLang.addEventListener("change", buildManifest);
           selInt .addEventListener("change", buildManifest);
           selAudio?.addEventListener("change", buildManifest);
@@ -1463,6 +1514,11 @@
         console.log(`[BLE OTA] Connected device version:`, connectedFirmwareVersion);
         updateBleAudioCardVisibility();
 
+        if (options.requiredHardwareIds && !options.requiredHardwareIds.has(connectedHardwareId)) {
+          if (device && device.gatt.connected) device.gatt.disconnect();
+          throw new Error(options.unsupportedMessage || t('errorAudioUnsupported'));
+        }
+
         if (options.requiredHardwareId && connectedHardwareId !== options.requiredHardwareId) {
           if (device && device.gatt.connected) device.gatt.disconnect();
           throw new Error(options.unsupportedMessage || t('errorAudioUnsupported'));
@@ -1500,11 +1556,10 @@
       async function startFirmwareBluetooth(btn){
         // Connect first, to read the hardware ID
         await connectBLE(SERVICE_UUID,FIRMWARE_CHAR_UUID);
-        
-        let fwPath = 'firmware/firmware.bin';
-        if (connectedHardwareId === 'esp32-s3-touch-amoled-1-75') {
-          fwPath = 'firmware/s3/firmware.bin';
-        }
+
+        const target = FIRMWARE_TARGETS[connectedHardwareId] || FIRMWARE_TARGETS['esp32-c3-01'];
+        const firmwarePart = target.parts.find(part => part.offset === 0x010000);
+        const fwPath = firmwarePart?.path || 'firmware/firmware.bin';
 
         const resp = await fetch(fwPath);
         if(!resp.ok){
@@ -1622,7 +1677,7 @@
         const data=new Uint8Array(await resp.arrayBuffer());
 
         await connectBLE(SERVICE_UUID,AUDIO_CHAR_UUID, {
-          requiredHardwareId: S3_AMOLED_HARDWARE_ID,
+          requiredHardwareIds: S3_AMOLED_HARDWARE_IDS,
           unsupportedMessage: t('errorAudioUnsupported'),
         });
         if (window.GlobalUI) GlobalUI.showProgress(t('progressAudio'));

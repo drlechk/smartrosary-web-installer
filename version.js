@@ -1,4 +1,4 @@
-window.SMARTROSARY_VERSION = "v1.59";
+window.SMARTROSARY_VERSION = "v1.60";
 window.SMARTROSARY_LANG_VERSION = "v1.38";
 window.SMARTROSARY_BREAKING_CHANGES = {
   "versions": { "before": "v1.49" },
@@ -12,10 +12,10 @@ window.SMARTROSARY_BREAKING_CHANGES = {
   }
 };
 window.SMARTROSARY_RELEASE_MESSAGE = {
-  "en": "Firmware v1.59 supports safe BLE intentions record uploads so existing intentions are not erased. Legacy full intentions transfers remain available only as a guarded fallback and may overwrite installed intentions; update firmware to avoid that path.",
-  "de": "Firmware v1.59 unterst\u00fctzt sichere BLE-Uploads einzelner Anliegen-Datens\u00e4tze, damit vorhandene Anliegen nicht gel\u00f6scht werden. Vollst\u00e4ndige Legacy-Anliegen-Transfers bleiben nur als gesch\u00fctzter Fallback verf\u00fcgbar und k\u00f6nnen installierte Anliegen \u00fcberschreiben; aktualisieren Sie die Firmware, um diesen Weg zu vermeiden.",
-  "pl": "Firmware v1.59 obs\u0142uguje bezpieczne przesy\u0142anie pojedynczych rekord\u00f3w intencji przez BLE, dzi\u0119ki czemu istniej\u0105ce intencje nie s\u0105 usuwane. Pe\u0142ne starsze transfery intencji pozostaj\u0105 dost\u0119pne tylko jako chroniony tryb awaryjny i mog\u0105 nadpisa\u0107 zainstalowane intencje; zaktualizuj firmware, aby go unikn\u0105\u0107.",
-  "fr": "Le firmware v1.59 prend en charge les envois BLE s\u00e9curis\u00e9s des enregistrements d'intentions afin de ne pas effacer les intentions existantes. Les transferts complets d'intentions h\u00e9rit\u00e9s restent disponibles uniquement comme solution de secours prot\u00e9g\u00e9e et peuvent \u00e9craser les intentions install\u00e9es; mettez le firmware \u00e0 jour pour \u00e9viter ce chemin.",
-  "es": "El firmware v1.59 admite cargas BLE seguras de registros de intenciones para que no se borren las intenciones existentes. Las transferencias completas heredadas de intenciones siguen disponibles solo como alternativa protegida y pueden sobrescribir las intenciones instaladas; actualice el firmware para evitar esa ruta.",
-  "pt": "O firmware v1.59 oferece suporte a envios BLE seguros de registros de inten\u00e7\u00f5es para que as inten\u00e7\u00f5es existentes n\u00e3o sejam apagadas. As transfer\u00eancias completas legadas de inten\u00e7\u00f5es continuam dispon\u00edveis apenas como fallback protegido e podem sobrescrever inten\u00e7\u00f5es instaladas; atualize o firmware para evitar esse caminho."
+  "en": "Firmware v1.60 adds ESP32-S3 Touch AMOLED 1.8 portrait and landscape builds, correctly sized rectangular wallpapers, and tuned rectangular display spacing.",
+  "de": "Firmware v1.60 f\u00fcgt ESP32-S3 Touch AMOLED 1.8 Builds f\u00fcr Hoch- und Querformat hinzu, mit passend skalierten rechteckigen Hintergrundbildern und verbessertem Layout-Abstand.",
+  "pl": "Firmware v1.60 dodaje buildy ESP32-S3 Touch AMOLED 1.8 dla pionu i poziomu, poprawnie dopasowane prostok\u0105tne tapety oraz dopracowane odst\u0119py interfejsu.",
+  "fr": "Le firmware v1.60 ajoute les builds ESP32-S3 Touch AMOLED 1.8 en portrait et paysage, des fonds d'\u00e9cran rectangulaires adapt\u00e9s et un espacement d'interface ajust\u00e9.",
+  "es": "El firmware v1.60 agrega builds ESP32-S3 Touch AMOLED 1.8 en vertical y horizontal, fondos rectangulares con el tama\u00f1o correcto y ajustes de espaciado de la interfaz.",
+  "pt": "O firmware v1.60 adiciona builds ESP32-S3 Touch AMOLED 1.8 em retrato e paisagem, papeis de parede retangulares no tamanho correto e espa\u00e7amento de interface ajustado."
 };

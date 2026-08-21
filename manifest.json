@@ -1,9 +1,10 @@
 {
   "name": "SmartRosary Polski",
-  "version": "v1.59",
+  "version": "v1.60",
   "funding_url": "https://esphome.io/guides/supporters.html",
   "builds": [
     {
+      "name": "SmartRosary ESP32-C3",
       "chipFamily": "ESP32-C3",
       "parts": [
         {
@@ -33,6 +34,7 @@
       ]
     },
     {
+      "name": "ESP32-S3 Touch AMOLED 1.75",
       "chipFamily": "ESP32-S3",
       "parts": [
         {
@@ -57,6 +59,66 @@
         },
         {
           "path": "wallpaper/s3/littlefs.bin",
+          "offset": 8646656
+        }
+      ]
+    },
+    {
+      "name": "ESP32-S3 Touch AMOLED 1.8 portrait",
+      "chipFamily": "ESP32-S3",
+      "parts": [
+        {
+          "path": "firmware/s3-amoled-1-8-portrait/bootloader.bin",
+          "offset": 0
+        },
+        {
+          "path": "firmware/s3-amoled-1-8-portrait/partitions.bin",
+          "offset": 32768
+        },
+        {
+          "path": "firmware/s3-amoled-1-8-portrait/boot_app0.bin",
+          "offset": 57344
+        },
+        {
+          "path": "firmware/s3-amoled-1-8-portrait/firmware.bin",
+          "offset": 65536
+        },
+        {
+          "path": "lang/nvs-lang-pl.bin",
+          "offset": 8343552
+        },
+        {
+          "path": "wallpaper/s3-amoled-1-8-portrait/littlefs.bin",
+          "offset": 8646656
+        }
+      ]
+    },
+    {
+      "name": "ESP32-S3 Touch AMOLED 1.8 landscape",
+      "chipFamily": "ESP32-S3",
+      "parts": [
+        {
+          "path": "firmware/s3-amoled-1-8-landscape/bootloader.bin",
+          "offset": 0
+        },
+        {
+          "path": "firmware/s3-amoled-1-8-landscape/partitions.bin",
+          "offset": 32768
+        },
+        {
+          "path": "firmware/s3-amoled-1-8-landscape/boot_app0.bin",
+          "offset": 57344
+        },
+        {
+          "path": "firmware/s3-amoled-1-8-landscape/firmware.bin",
+          "offset": 65536
+        },
+        {
+          "path": "lang/nvs-lang-pl.bin",
+          "offset": 8343552
+        },
+        {
+          "path": "wallpaper/s3-amoled-1-8-landscape/littlefs.bin",
           "offset": 8646656
         }
       ]

@@ -1,6 +1,18 @@
 // Generated from /Users/lech/Projects/PlatformIO/esp32c3-rosary release commits after 622ef97.
 window.SmartRosaryChangelog = [
   {
+    version: "v1.60",
+    releaseCommit: "3ae6a6a",
+    changes: [
+      { hash: "8d56242", text: "Adds Waveshare ESP32-S3 Touch AMOLED 1.8 hardware support." },
+      { hash: "c9069b1", text: "Gives the AMOLED 1.8 portrait and landscape builds separate hardware IDs." },
+      { hash: "2b2d9ba", text: "Requires explicit orientation build targets for the AMOLED 1.8 firmware." },
+      { hash: "8c9a242", text: "Uses portrait wallpaper assets for the AMOLED 1.8 portrait build." },
+      { hash: "654ad82", text: "Tunes rectangular UI scaling, landscape bead spacing, status placement, and the AMOLED 1.8 landscape wallpaper source." },
+      { hash: "3ae6a6a", text: "Release firmware v1.60." }
+    ]
+  },
+  {
     version: "v1.59",
     releaseCommit: "e454e35",
     changes: [

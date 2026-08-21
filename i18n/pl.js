@@ -9,6 +9,7 @@ window.SmartRosaryLocales.pl = (FW_VERSION, LANG_VERSION) => ({
   intentsTitle: "Wgraj intencje przez Bluetooth",
   audioTitle: "Wgraj audio przez Bluetooth",
   connectUpload: "Połącz i wgraj",
+  firmwareHardwareLabel: "Sprzęt:",
   fwLangLabel: "Język:",
   intentionsLabel: "Intencje:",
   audioLanguageLabel: "Język audio:",

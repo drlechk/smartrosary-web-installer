@@ -9,6 +9,7 @@ window.SmartRosaryLocales.en = (FW_VERSION, LANG_VERSION) => ({
   intentsTitle: "Upload intentions via Bluetooth",
   audioTitle: "Upload audio via Bluetooth",
   connectUpload: "Connect & Upload",
+  firmwareHardwareLabel: "Hardware:",
   fwLangLabel: "Language:",
   intentionsLabel: "Intentions:",
   audioLanguageLabel: "Audio language:",
