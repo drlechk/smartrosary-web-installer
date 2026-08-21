@@ -1,6 +1,13 @@
 // Generated from /Users/lech/Projects/PlatformIO/esp32c3-rosary release commits after 622ef97.
 window.SmartRosaryChangelog = [
   {
+    version: "v1.61",
+    releaseCommit: "f97eeda",
+    changes: [
+      { hash: "f97eeda", text: "Fix C3 PMIC short press shutdown bug." }
+    ]
+  },
+  {
     version: "v1.60",
     releaseCommit: "3ae6a6a",
     changes: [
