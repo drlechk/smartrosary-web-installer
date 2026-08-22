@@ -1,6 +1,13 @@
 // Generated from /Users/lech/Projects/PlatformIO/esp32c3-rosary release commits after 622ef97.
 window.SmartRosaryChangelog = [
   {
+    version: "v1.63",
+    releaseCommit: "4231446",
+    changes: [
+      { hash: "4231446", text: "Fixes wallpaper swipes while rosary mystery text is scrolling by clipping paused text, safely refreshing the cached background, and restarting circular text scroll after the swipe." }
+    ]
+  },
+  {
     version: "v1.62",
     releaseCommit: "bed5a94",
     changes: [

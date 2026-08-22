@@ -1,4 +1,4 @@
-window.SMARTROSARY_VERSION = "v1.62";
+window.SMARTROSARY_VERSION = "v1.63";
 window.SMARTROSARY_LANG_VERSION = "v1.38";
 window.SMARTROSARY_BREAKING_CHANGES = {
   "versions": { "before": "v1.49" },
@@ -12,10 +12,10 @@ window.SMARTROSARY_BREAKING_CHANGES = {
   }
 };
 window.SMARTROSARY_RELEASE_MESSAGE = {
-  "en": "Firmware v1.62 restores reliable C3 battery auto-shutdown through the PMIC, so the device powers off after inactivity and starts again with one button press.",
-  "de": "Firmware v1.62 stellt die zuverl\u00e4ssige automatische Abschaltung des C3 im Akkubetrieb \u00fcber den PMIC wieder her, sodass sich das Ger\u00e4t nach Inaktivit\u00e4t ausschaltet und mit einem Tastendruck wieder startet.",
-  "pl": "Firmware v1.62 przywraca niezawodne automatyczne wy\u0142\u0105czanie modelu C3 na baterii przez PMIC, dzi\u0119ki czemu urz\u0105dzenie wy\u0142\u0105cza si\u0119 po bezczynno\u015bci i uruchamia ponownie jednym naci\u015bni\u0119ciem przycisku.",
-  "fr": "Le firmware v1.62 r\u00e9tablit l'arr\u00eat automatique fiable du C3 sur batterie via le PMIC, afin que l'appareil s'\u00e9teigne apr\u00e8s inactivit\u00e9 et red\u00e9marre avec un seul appui sur le bouton.",
-  "es": "El firmware v1.62 restaura el apagado autom\u00e1tico fiable del C3 con bater\u00eda mediante el PMIC, para que el dispositivo se apague tras la inactividad y vuelva a encenderse con una sola pulsaci\u00f3n.",
-  "pt": "O firmware v1.62 restaura o desligamento autom\u00e1tico confi\u00e1vel do C3 na bateria pelo PMIC, para que o dispositivo desligue ap\u00f3s inatividade e ligue novamente com um \u00fanico toque no bot\u00e3o."
+  "en": "Firmware v1.63 fixes wallpaper swipes while rosary text is scrolling, preventing crashes and restarting text scrolling after the swipe.",
+  "de": "Firmware v1.63 behebt Abstuerze beim Hintergrundbild-Wechsel, waehrend Rosary-Text scrollt, und startet den Textlauf nach der Wischgeste neu.",
+  "pl": "Firmware v1.63 naprawia awarie podczas zmiany tapety, gdy tekst rozanca sie przewija, i ponownie uruchamia przewijanie po gescie.",
+  "fr": "Le firmware v1.63 corrige les balayages de fond d'ecran pendant le defilement du texte du rosaire et relance le defilement apres le geste.",
+  "es": "El firmware v1.63 corrige los cambios de fondo durante el desplazamiento del texto del rosario y reinicia el desplazamiento despues del gesto.",
+  "pt": "O firmware v1.63 corrige a troca de papel de parede enquanto o texto do rosario rola e reinicia a rolagem apos o gesto."
 };
