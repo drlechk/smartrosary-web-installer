@@ -1,4 +1,4 @@
-window.SMARTROSARY_VERSION = "v1.61";
+window.SMARTROSARY_VERSION = "v1.62";
 window.SMARTROSARY_LANG_VERSION = "v1.38";
 window.SMARTROSARY_BREAKING_CHANGES = {
   "versions": { "before": "v1.49" },
@@ -12,10 +12,10 @@ window.SMARTROSARY_BREAKING_CHANGES = {
   }
 };
 window.SMARTROSARY_RELEASE_MESSAGE = {
-  "en": "Firmware v1.61 fixes an issue where the C3 model would power off entirely when pressing the physical button to advance the bead on battery power.",
-  "de": "Firmware v1.61 behebt ein Problem, bei dem das C3-Modell im Akkubetrieb vollständig abgeschaltet wurde, wenn die physische Taste gedrückt wurde.",
-  "pl": "Firmware v1.61 rozwiązuje problem polegający na całkowitym wyłączeniu modelu C3 po naciśnięciu fizycznego przycisku przy zasilaniu bateryjnym.",
-  "fr": "Le firmware v1.61 résout un problème où le modèle C3 s'éteignait complètement en appuyant sur le bouton physique sur batterie.",
-  "es": "El firmware v1.61 soluciona un problema por el cual el modelo C3 se apagaba por completo al presionar el botón físico en batería.",
-  "pt": "O firmware v1.61 corrige um problema em que o modelo C3 desligava completamente ao pressionar o botão físico na bateria."
+  "en": "Firmware v1.62 restores reliable C3 battery auto-shutdown through the PMIC, so the device powers off after inactivity and starts again with one button press.",
+  "de": "Firmware v1.62 stellt die zuverlässige automatische Abschaltung des C3 im Akkubetrieb über den PMIC wieder her, sodass sich das Gerät nach Inaktivität ausschaltet und mit einem Tastendruck wieder startet.",
+  "pl": "Firmware v1.62 przywraca niezawodne automatyczne wyłączanie modelu C3 na baterii przez PMIC, dzięki czemu urządzenie wyłącza się po bezczynności i uruchamia ponownie jednym naciśnięciem przycisku.",
+  "fr": "Le firmware v1.62 rétablit l'arrêt automatique fiable du C3 sur batterie via le PMIC, afin que l'appareil s'éteigne après inactivité et redémarre avec un seul appui sur le bouton.",
+  "es": "El firmware v1.62 restaura el apagado automático fiable del C3 con batería mediante el PMIC, para que el dispositivo se apague tras la inactividad y vuelva a encenderse con una sola pulsación.",
+  "pt": "O firmware v1.62 restaura o desligamento automático confiável do C3 na bateria pelo PMIC, para que o dispositivo desligue após inatividade e ligue novamente com um único toque no botão."
 };

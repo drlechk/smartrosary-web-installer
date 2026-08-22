@@ -1,6 +1,15 @@
 // Generated from /Users/lech/Projects/PlatformIO/esp32c3-rosary release commits after 622ef97.
 window.SmartRosaryChangelog = [
   {
+    version: "v1.62",
+    releaseCommit: "bed5a94",
+    changes: [
+      { hash: "63abb0b", text: "Refactors C3 IP5306 register access for clearer, live read-modify-write PMIC updates." },
+      { hash: "f352288", text: "Uses IP5306 light-load power-down on C3 so battery auto-shutdown fully powers off and one short button press starts the device again." },
+      { hash: "bed5a94", text: "Release firmware v1.62." }
+    ]
+  },
+  {
     version: "v1.61",
     releaseCommit: "f97eeda",
     changes: [
