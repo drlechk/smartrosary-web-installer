@@ -1,6 +1,14 @@
 // Generated from /Users/lech/Projects/PlatformIO/esp32c3-rosary release commits after 622ef97.
 window.SmartRosaryChangelog = [
   {
+    version: "v1.65",
+    releaseCommit: "c1c712d",
+    changes: [
+      { hash: "586d937", text: "Fixes S3 status indicator layering." },
+      { hash: "c1c712d", text: "Preserves complete duration averages and totals in compact BLE statistics responses so the mobile app and dashboard no longer show all timing values as zero." }
+    ]
+  },
+  {
     version: "v1.64",
     releaseCommit: "afeadfc",
     changes: [

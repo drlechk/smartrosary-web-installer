@@ -1,4 +1,4 @@
-window.SMARTROSARY_VERSION = "v1.64";
+window.SMARTROSARY_VERSION = "v1.65";
 window.SMARTROSARY_LANG_VERSION = "v1.45";
 window.SMARTROSARY_BREAKING_CHANGES = {
   "versions": { "before": "v1.49" },
@@ -12,10 +12,11 @@ window.SMARTROSARY_BREAKING_CHANGES = {
   }
 };
 window.SMARTROSARY_RELEASE_MESSAGE = {
-  "en": "Firmware v1.64 adds the Rosary of Peace with seven groups of the Our Father, Hail Mary, and Glory Be, plus separate history and statistics tracking.",
-  "de": "Firmware v1.64 fügt den Friedensrosenkranz mit sieben Gruppen aus Vaterunser, Ave Maria und Ehre sei dem Vater sowie separater Verlaufs- und Statistik-Erfassung hinzu.",
-  "pl": "Firmware v1.64 dodaje Różaniec Pokoju z siedmioma grupami modlitw Ojcze nasz, Zdrowaś Maryjo i Chwała Ojcu oraz osobną historią i statystykami.",
-  "fr": "Le firmware v1.64 ajoute le Rosaire de la Paix avec sept groupes composés du Notre Père, du Je vous salue Marie et du Gloire au Père, ainsi qu'un suivi séparé dans l'historique et les statistiques.",
-  "es": "El firmware v1.64 añade el Rosario de la Paz con siete grupos de Padre Nuestro, Ave María y Gloria al Padre, además de historial y estadísticas independientes.",
-  "pt": "O firmware v1.64 adiciona o Rosário da Paz com sete grupos de Pai-Nosso, Ave-Maria e Glória ao Pai, além de histórico e estatísticas separados."
+  "en": "Firmware v1.65 restores duration statistics in the mobile app and dashboard by preserving complete timing data in compact BLE responses.",
+  "de": "Firmware v1.65 stellt die Zeitstatistiken in der mobilen App und im Dashboard wieder her, indem vollständige Zeitdaten in kompakten BLE-Antworten erhalten bleiben.",
+  "pl": "Firmware v1.65 przywraca statystyki czasu w aplikacji mobilnej i panelu, zachowując kompletne dane czasowe w skróconych odpowiedziach BLE.",
+  "fr": "Le firmware v1.65 rétablit les statistiques de durée dans l’application mobile et le tableau de bord en conservant toutes les données temporelles dans les réponses BLE compactes.",
+  "es": "El firmware v1.65 restaura las estadísticas de duración en la aplicación móvil y el panel conservando todos los datos de tiempo en las respuestas BLE compactas.",
+  "it": "Il firmware v1.65 ripristina le statistiche delle durate nell’app mobile e nella dashboard conservando tutti i dati temporali nelle risposte BLE compatte.",
+  "pt": "O firmware v1.65 restaura as estatísticas de duração no aplicativo móvel e no painel, preservando todos os dados de tempo nas respostas BLE compactas."
 };
