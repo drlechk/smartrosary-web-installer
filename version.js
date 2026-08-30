@@ -1,4 +1,4 @@
-window.SMARTROSARY_VERSION = "v1.63";
+window.SMARTROSARY_VERSION = "v1.64";
 window.SMARTROSARY_LANG_VERSION = "v1.42";
 window.SMARTROSARY_BREAKING_CHANGES = {
   "versions": { "before": "v1.49" },
@@ -12,10 +12,10 @@ window.SMARTROSARY_BREAKING_CHANGES = {
   }
 };
 window.SMARTROSARY_RELEASE_MESSAGE = {
-  "en": "Firmware v1.63 fixes wallpaper swipes while rosary text is scrolling, preventing crashes and restarting text scrolling after the swipe.",
-  "de": "Firmware v1.63 behebt Abstuerze beim Hintergrundbild-Wechsel, waehrend Rosary-Text scrollt, und startet den Textlauf nach der Wischgeste neu.",
-  "pl": "Firmware v1.63 naprawia awarie podczas zmiany tapety, gdy tekst rozanca sie przewija, i ponownie uruchamia przewijanie po gescie.",
-  "fr": "Le firmware v1.63 corrige les balayages de fond d'ecran pendant le defilement du texte du rosaire et relance le defilement apres le geste.",
-  "es": "El firmware v1.63 corrige los cambios de fondo durante el desplazamiento del texto del rosario y reinicia el desplazamiento despues del gesto.",
-  "pt": "O firmware v1.63 corrige a troca de papel de parede enquanto o texto do rosario rola e reinicia a rolagem apos o gesto."
+  "en": "Firmware v1.64 adds the Rosary of Peace with seven groups of the Our Father, Hail Mary, and Glory Be, plus separate history and statistics tracking.",
+  "de": "Firmware v1.64 fügt den Friedensrosenkranz mit sieben Gruppen aus Vaterunser, Ave Maria und Ehre sei dem Vater sowie separater Verlaufs- und Statistik-Erfassung hinzu.",
+  "pl": "Firmware v1.64 dodaje Różaniec Pokoju z siedmioma grupami modlitw Ojcze nasz, Zdrowaś Maryjo i Chwała Ojcu oraz osobną historią i statystykami.",
+  "fr": "Le firmware v1.64 ajoute le Rosaire de la Paix avec sept groupes composés du Notre Père, du Je vous salue Marie et du Gloire au Père, ainsi qu'un suivi séparé dans l'historique et les statistiques.",
+  "es": "El firmware v1.64 añade el Rosario de la Paz con siete grupos de Padre Nuestro, Ave María y Gloria al Padre, además de historial y estadísticas independientes.",
+  "pt": "O firmware v1.64 adiciona o Rosário da Paz com sete grupos de Pai-Nosso, Ave-Maria e Glória ao Pai, além de histórico e estatísticas separados."
 };

@@ -1,6 +1,14 @@
 // Generated from /Users/lech/Projects/PlatformIO/esp32c3-rosary release commits after 622ef97.
 window.SmartRosaryChangelog = [
   {
+    version: "v1.64",
+    releaseCommit: "afeadfc",
+    changes: [
+      { hash: "e0f8034", text: "Adds the Rosary of Peace with seven prayer groups, dedicated round and rectangular display layouts, audio progression, separate history and statistics, BLE state, localized naming, and backward-compatible state reporting." },
+      { hash: "afeadfc", text: "Release firmware v1.64." }
+    ]
+  },
+  {
     version: "v1.63",
     releaseCommit: "4231446",
     changes: [
