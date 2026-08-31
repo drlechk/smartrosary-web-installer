@@ -1,4 +1,4 @@
-window.SMARTROSARY_VERSION = "v1.65";
+window.SMARTROSARY_VERSION = "v1.66";
 window.SMARTROSARY_LANG_VERSION = "v1.46";
 window.SMARTROSARY_BREAKING_CHANGES = {
   "versions": { "before": "v1.49" },
@@ -12,11 +12,11 @@ window.SMARTROSARY_BREAKING_CHANGES = {
   }
 };
 window.SMARTROSARY_RELEASE_MESSAGE = {
-  "en": "Firmware v1.65 restores duration statistics in the mobile app and dashboard by preserving complete timing data in compact BLE responses.",
-  "de": "Firmware v1.65 stellt die Zeitstatistiken in der mobilen App und im Dashboard wieder her, indem vollständige Zeitdaten in kompakten BLE-Antworten erhalten bleiben.",
-  "pl": "Firmware v1.65 przywraca statystyki czasu w aplikacji mobilnej i panelu, zachowując kompletne dane czasowe w skróconych odpowiedziach BLE.",
-  "fr": "Le firmware v1.65 rétablit les statistiques de durée dans l’application mobile et le tableau de bord en conservant toutes les données temporelles dans les réponses BLE compactes.",
-  "es": "El firmware v1.65 restaura las estadísticas de duración en la aplicación móvil y el panel conservando todos los datos de tiempo en las respuestas BLE compactas.",
-  "it": "Il firmware v1.65 ripristina le statistiche delle durate nell’app mobile e nella dashboard conservando tutti i dati temporali nelle risposte BLE compatte.",
-  "pt": "O firmware v1.65 restaura as estatísticas de duração no aplicativo móvel e no painel, preservando todos os dados de tempo nas respostas BLE compactas."
+  "en": "Firmware v1.66 adds the localized intention to every Rosary of Peace bead, plays it before the prayer, and keeps audio progression manual.",
+  "de": "Firmware v1.66 ergänzt jedes Gebet des Friedensrosenkranzes um die lokalisierte Intention, spielt sie vor dem Gebet ab und schaltet im Audiomodus nur manuell weiter.",
+  "pl": "Firmware v1.66 dodaje zlokalizowaną intencję do każdego paciorka Różańca Pokoju, odtwarza ją przed modlitwą i pozostawia ręczne przechodzenie w trybie audio.",
+  "fr": "Le firmware v1.66 ajoute l’intention localisée à chaque grain du Rosaire de la Paix, la lit avant la prière et conserve une progression audio manuelle.",
+  "es": "El firmware v1.66 añade la intención localizada a cada cuenta del Rosario de la Paz, la reproduce antes de la oración y mantiene el avance de audio manual.",
+  "it": "Il firmware v1.66 aggiunge l’intenzione localizzata a ogni grano del Rosario della Pace, la riproduce prima della preghiera e mantiene manuale l’avanzamento audio.",
+  "pt": "O firmware v1.66 adiciona a intenção localizada a cada conta do Rosário da Paz, reproduz a intenção antes da oração e mantém o avanço do áudio manual."
 };

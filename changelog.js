@@ -1,6 +1,14 @@
 // Generated from /Users/lech/Projects/PlatformIO/esp32c3-rosary release commits after 622ef97.
 window.SmartRosaryChangelog = [
   {
+    version: "v1.66",
+    releaseCommit: "0f6e75d",
+    changes: [
+      { hash: "0f6e75d", text: "Adds localized Rosary of Peace intentions to every bead, with the final Queen of Peace invocation." },
+      { hash: "0f6e75d", text: "Plays each Peace dedication before its prayer and requires a button press to advance every Peace bead, independently of ordinary Rosary auto-play." }
+    ]
+  },
+  {
     version: "v1.65",
     releaseCommit: "c1c712d",
     changes: [
