@@ -1,5 +1,5 @@
 window.SMARTROSARY_VERSION = "v1.65";
-window.SMARTROSARY_LANG_VERSION = "v1.45";
+window.SMARTROSARY_LANG_VERSION = "v1.46";
 window.SMARTROSARY_BREAKING_CHANGES = {
   "versions": { "before": "v1.49" },
   "messages": {
