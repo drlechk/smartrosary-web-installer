@@ -1,5 +1,5 @@
-window.SMARTROSARY_VERSION = "v1.66";
-window.SMARTROSARY_LANG_VERSION = "v1.46";
+window.SMARTROSARY_VERSION = "v1.67";
+window.SMARTROSARY_LANG_VERSION = "v1.47";
 window.SMARTROSARY_BREAKING_CHANGES = {
   "versions": { "before": "v1.49" },
   "messages": {
@@ -12,11 +12,11 @@ window.SMARTROSARY_BREAKING_CHANGES = {
   }
 };
 window.SMARTROSARY_RELEASE_MESSAGE = {
-  "en": "Firmware v1.66 adds the localized intention to every Rosary of Peace bead, plays it before the prayer, and keeps audio progression manual.",
-  "de": "Firmware v1.66 ergänzt jedes Gebet des Friedensrosenkranzes um die lokalisierte Intention, spielt sie vor dem Gebet ab und schaltet im Audiomodus nur manuell weiter.",
-  "pl": "Firmware v1.66 dodaje zlokalizowaną intencję do każdego paciorka Różańca Pokoju, odtwarza ją przed modlitwą i pozostawia ręczne przechodzenie w trybie audio.",
-  "fr": "Le firmware v1.66 ajoute l’intention localisée à chaque grain du Rosaire de la Paix, la lit avant la prière et conserve une progression audio manuelle.",
-  "es": "El firmware v1.66 añade la intención localizada a cada cuenta del Rosario de la Paz, la reproduce antes de la oración y mantiene el avance de audio manual.",
-  "it": "Il firmware v1.66 aggiunge l’intenzione localizzata a ogni grano del Rosario della Pace, la riproduce prima della preghiera e mantiene manuale l’avanzamento audio.",
-  "pt": "O firmware v1.66 adiciona a intenção localizada a cada conta do Rosário da Paz, reproduz a intenção antes da oração e mantém o avanço do áudio manual."
+  "en": "Firmware v1.67 renames Rosary of Peace to Chaplet of Peace and displays each intention and prayer on separate white lines, with a clear separator in the scrolling intention.",
+  "de": "Firmware v1.67 benennt den Friedensrosenkranz in Friedenskrone um und zeigt Intention und Gebet in getrennten weißen Zeilen; eine klare Trennmarke kennzeichnet den Anfang des Lauftexts.",
+  "pl": "Firmware v1.67 zmienia nazwę Różańca Pokoju na Koronkę Pokoju oraz wyświetla intencję i modlitwę w osobnych białych wierszach, z wyraźnym separatorem w przewijanej intencji.",
+  "fr": "Le firmware v1.67 renomme le Rosaire de la Paix en Chapelet de la Paix et affiche l’intention et la prière sur deux lignes blanches distinctes, avec un séparateur clair dans l’intention défilante.",
+  "es": "El firmware v1.67 cambia el nombre de Rosario de la Paz a Coronilla de la Paz y muestra la intención y la oración en líneas blancas separadas, con un separador claro en la intención desplazable.",
+  "it": "Il firmware v1.67 rinomina il Rosario della Pace in Coroncina della Pace e mostra intenzione e preghiera su righe bianche separate, con un separatore chiaro nell’intenzione scorrevole.",
+  "pt": "O firmware v1.67 renomeia o Rosário da Paz para Terço da Paz e mostra a intenção e a oração em linhas brancas separadas, com um separador claro na intenção em movimento."
 };

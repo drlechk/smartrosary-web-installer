@@ -1,6 +1,14 @@
 // Generated from /Users/lech/Projects/PlatformIO/esp32c3-rosary release commits after 622ef97.
 window.SmartRosaryChangelog = [
   {
+    version: "v1.67",
+    releaseCommit: "eba7c55",
+    changes: [
+      { hash: "eba7c55", text: "Renames Rosary of Peace to Chaplet of Peace in the firmware fallback and language packages." },
+      { hash: "eba7c55", text: "Shows the Peace intention on the first scrolling line and the prayer on a separate white second line, with a trailing separator that makes the beginning recognizable." }
+    ]
+  },
+  {
     version: "v1.66",
     releaseCommit: "0f6e75d",
     changes: [
