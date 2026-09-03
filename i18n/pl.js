@@ -26,6 +26,8 @@ window.SmartRosaryLocales.pl = (FW_VERSION, LANG_VERSION) => ({
   errorNotRosary: "Wybrane urządzenie to nie różaniec (błąd nazwy).",
   errorConsent: "Urządzenie odmówiło zgody lub upłynął czas. Dotknij \"Allow\" i spróbuj ponownie.",
   errorFirmwareMissing: "Nie znaleziono paczki firmware.",
+  errorHardwareUnknown: "Urządzenie nie podało modelu sprzętu, dlatego aktualizacja firmware przez Bluetooth została zatrzymana, aby nie wgrać niewłaściwego pliku. Wykonaj jedną aktualizację przez USB, wybierając właściwy sprzęt.",
+  unknownHardwareLabel: "nieznany sprzęt",
   errorIntentionsMissing: "Nie znaleziono pliku z intencjami.",
   errorLanguageMissing: "Nie znaleziono pliku językowego.",
   errorAudioMissing: "Nie znaleziono pakietu audio.",

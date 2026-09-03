@@ -1,4 +1,4 @@
-window.SMARTROSARY_VERSION = "v1.68";
+window.SMARTROSARY_VERSION = "v1.69";
 window.SMARTROSARY_LANG_VERSION = "v1.47";
 window.SMARTROSARY_BREAKING_CHANGES = {
   "versions": { "before": "v1.49" },
@@ -12,11 +12,11 @@ window.SMARTROSARY_BREAKING_CHANGES = {
   }
 };
 window.SMARTROSARY_RELEASE_MESSAGE = {
-  "en": "Firmware v1.68 fixes the device history view so entries, date ranges, and charts use local CET/CEST time, including daylight-saving transitions.",
-  "de": "Firmware v1.68 korrigiert die Verlaufsansicht auf dem Gerät: Einträge, Datumsbereiche und Diagramme verwenden nun die lokale CET/CEST-Zeit, einschließlich der Zeitumstellungen.",
-  "pl": "Firmware v1.68 poprawia widok historii na urządzeniu: wpisy, zakresy dat i wykresy używają teraz lokalnego czasu CET/CEST, również podczas zmiany czasu.",
-  "fr": "Le firmware v1.68 corrige l’affichage de l’historique sur l’appareil : les entrées, plages de dates et graphiques utilisent désormais l’heure locale CET/CEST, y compris lors des changements d’heure.",
-  "es": "El firmware v1.68 corrige la vista del historial del dispositivo: las entradas, los intervalos de fechas y los gráficos usan ahora la hora local CET/CEST, incluidos los cambios de horario.",
-  "it": "Il firmware v1.68 corregge la cronologia sul dispositivo: voci, intervalli di date e grafici usano ora l’ora locale CET/CEST, inclusi i cambi dell’ora legale.",
-  "pt": "O firmware v1.68 corrige a vista do histórico no dispositivo: entradas, intervalos de datas e gráficos passam a usar a hora local CET/CEST, incluindo as mudanças de horário."
+  "en": "Firmware v1.69 restores device, firmware, hardware, and last-mystery details on S3 devices by keeping essential BLE status data within the safe read limit.",
+  "de": "Firmware v1.69 stellt Geräte-, Firmware-, Hardware- und Letztes-Geheimnis-Angaben auf S3-Geräten wieder her, indem wichtige BLE-Statusdaten innerhalb des sicheren Leselimits bleiben.",
+  "pl": "Firmware v1.69 przywraca na urządzeniach S3 nazwę urządzenia, wersję firmware, model sprzętu i ostatnią tajemnicę, utrzymując najważniejsze dane BLE w bezpiecznym limicie odczytu.",
+  "fr": "Le firmware v1.69 rétablit sur les appareils S3 les informations d’appareil, de firmware, de matériel et de dernier mystère en maintenant les données BLE essentielles sous la limite de lecture sûre.",
+  "es": "El firmware v1.69 restaura en los dispositivos S3 los datos del dispositivo, firmware, hardware y último misterio, manteniendo los datos BLE esenciales dentro del límite seguro de lectura.",
+  "it": "Il firmware v1.69 ripristina sui dispositivi S3 i dati di dispositivo, firmware, hardware e ultimo mistero, mantenendo i dati BLE essenziali entro il limite di lettura sicuro.",
+  "pt": "O firmware v1.69 restaura nos dispositivos S3 os dados do dispositivo, firmware, hardware e último mistério, mantendo os dados BLE essenciais dentro do limite seguro de leitura."
 };

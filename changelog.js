@@ -1,6 +1,14 @@
 // Generated from /Users/lech/Projects/PlatformIO/esp32c3-rosary release commits after 622ef97.
 window.SmartRosaryChangelog = [
   {
+    version: "v1.69",
+    releaseCommit: "e986892",
+    changes: [
+      { hash: "e986892", text: "Restores S3 device, firmware, and hardware identity in dashboard and mobile app BLE status views." },
+      { hash: "e986892", text: "Restores the last-mystery value when the firmware uses its compact BLE statistics response." }
+    ]
+  },
+  {
     version: "v1.68",
     releaseCommit: "4a0efa4",
     changes: [

@@ -26,6 +26,8 @@ window.SmartRosaryLocales.fr = (FW_VERSION, LANG_VERSION) => ({
   errorNotRosary: "L'appareil sélectionné n'est pas un chapelet (échec de la vérification du nom).",
   errorConsent: "L'appareil a refusé l'autorisation ou le délai a expiré. Touchez \"Allow\" sur l'appareil et réessayez.",
   errorFirmwareMissing: "Package du firmware introuvable.",
+  errorHardwareUnknown: "L’appareil n’a pas indiqué son modèle matériel. La mise à jour Bluetooth a été arrêtée afin d’éviter d’installer un firmware incorrect. Effectuez une mise à jour par USB en sélectionnant le bon matériel.",
+  unknownHardwareLabel: "matériel inconnu",
   errorIntentionsMissing: "Fichier des intentions introuvable.",
   errorLanguageMissing: "Fichier de langue introuvable.",
   errorAudioMissing: "Paquet audio introuvable.",

@@ -26,6 +26,8 @@ window.SmartRosaryLocales.de = (FW_VERSION, LANG_VERSION) => ({
   errorNotRosary: "Ausgewähltes Gerät ist kein Rosenkranz (Namensprüfung fehlgeschlagen).",
   errorConsent: "Gerät verweigert Zustimmung oder Zeitüberschreitung. Bitte \"Allow\" am Gerät wählen und erneut versuchen.",
   errorFirmwareMissing: "Firmware-Paket nicht gefunden.",
+  errorHardwareUnknown: "Das Gerät hat sein Hardwaremodell nicht gemeldet. Das Bluetooth-Firmwareupdate wurde gestoppt, damit keine falsche Firmware installiert wird. Aktualisieren Sie einmal per USB mit der richtigen Hardwareauswahl.",
+  unknownHardwareLabel: "unbekannte Hardware",
   errorIntentionsMissing: "Intentionen-Datei nicht gefunden.",
   errorLanguageMissing: "Sprachdatei nicht gefunden.",
   errorAudioMissing: "Audiopaket nicht gefunden.",

@@ -1258,7 +1258,7 @@
       let device, writeChar, statusChar;
       let ready = true;
       let connectedFirmwareVersion = '';
-      let connectedHardwareId = 'esp32-c3-01';
+      let connectedHardwareId = '';
 
       document.getElementById('uploadFirmwareBtn').addEventListener('click', async (ev) => {
         preventStandby();
@@ -1427,6 +1427,7 @@
       }
 
       async function readFirmwareVersion(svc) {
+        connectedHardwareId = '';
         try {
           const settingsChar = await svc.getCharacteristic(INFO_SETTINGS_UUID);
           const value = await settingsChar.readValue();
@@ -1435,9 +1436,8 @@
           console.log(`[BLE OTA] INFO_SETTINGS_UUID payload:`, text);
           
           if (!text || text === '{}') {
-             connectedHardwareId = 'esp32-c3-01';
-             console.log(`[BLE OTA] Empty payload. Defaulting to legacy hardwareId:`, connectedHardwareId);
-             if (window.GlobalUI) GlobalUI.setDevice(connectedHardwareId);
+             console.warn(`[BLE OTA] Empty settings payload; hardware target is unknown.`);
+             if (window.GlobalUI) GlobalUI.setDevice(t('unknownHardwareLabel'));
              updateBleAudioCardVisibility();
              return '';
           }
@@ -1447,8 +1447,6 @@
             const json = JSON.parse(text);
             if (json && json.hardwareId) {
               connectedHardwareId = String(json.hardwareId);
-            } else {
-              connectedHardwareId = 'esp32-c3-01';
             }
             if (json && json.fwVersion) fwVersion = String(json.fwVersion);
           } catch (e) {
@@ -1456,20 +1454,19 @@
             const hwMatch = text.match(/"hardwareId"\s*:\s*"([^"]+)"/);
             if (hwMatch) {
               connectedHardwareId = hwMatch[1];
-            } else {
-              connectedHardwareId = 'esp32-c3-01';
             }
             const fwMatch = text.match(/"fwVersion"\s*:\s*"([^"]+)"/);
             if (fwMatch) fwVersion = fwMatch[1];
           }
 
           console.log(`[BLE OTA] Parsed hardwareId:`, connectedHardwareId);
-          if (window.GlobalUI) GlobalUI.setDevice(connectedHardwareId);
+          if (window.GlobalUI) GlobalUI.setDevice(connectedHardwareId || t('unknownHardwareLabel'));
           updateBleAudioCardVisibility();
           
           return fwVersion;
         } catch (err) {
           console.error("[BLE OTA] Failed to read firmware version:", err);
+          if (window.GlobalUI) GlobalUI.setDevice(t('unknownHardwareLabel'));
           return '';
         }
       }
@@ -1557,7 +1554,11 @@
         // Connect first, to read the hardware ID
         await connectBLE(SERVICE_UUID,FIRMWARE_CHAR_UUID);
 
-        const target = FIRMWARE_TARGETS[connectedHardwareId] || FIRMWARE_TARGETS['esp32-c3-01'];
+        const target = FIRMWARE_TARGETS[connectedHardwareId];
+        if (!target) {
+          if (device && device.gatt.connected) device.gatt.disconnect();
+          throw new Error(t('errorHardwareUnknown'));
+        }
         const firmwarePart = target.parts.find(part => part.offset === 0x010000);
         const fwPath = firmwarePart?.path || 'firmware/firmware.bin';
 

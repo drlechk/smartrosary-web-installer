@@ -26,6 +26,8 @@ window.SmartRosaryLocales.en = (FW_VERSION, LANG_VERSION) => ({
   errorNotRosary: "Picked device is not a rosary (name check failed).",
   errorConsent: "Device denied consent or timed out. Please tap \"Allow\" on the device and try again.",
   errorFirmwareMissing: "Firmware package not found.",
+  errorHardwareUnknown: "The device did not report its hardware model, so Bluetooth firmware upload was stopped to prevent installing the wrong firmware. Update once via USB with the correct hardware selected.",
+  unknownHardwareLabel: "unknown hardware",
   errorIntentionsMissing: "Intentions file not found.",
   errorLanguageMissing: "Language file not found.",
   errorAudioMissing: "Audio package not found.",

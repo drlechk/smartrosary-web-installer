@@ -26,6 +26,8 @@ window.SmartRosaryLocales.es = (FW_VERSION, LANG_VERSION) => ({
   errorNotRosary: "El dispositivo seleccionado no es un rosario (falló la comprobación del nombre).",
   errorConsent: "El dispositivo rechazó el permiso o se agotó el tiempo. Toca \"Allow\" en el dispositivo e inténtalo de nuevo.",
   errorFirmwareMissing: "No se encontró el paquete de firmware.",
+  errorHardwareUnknown: "El dispositivo no informó su modelo de hardware. La actualización por Bluetooth se detuvo para evitar instalar un firmware incorrecto. Actualice una vez por USB seleccionando el hardware correcto.",
+  unknownHardwareLabel: "hardware desconocido",
   errorIntentionsMissing: "No se encontró el archivo de intenciones.",
   errorLanguageMissing: "No se encontró el archivo de idioma.",
   errorAudioMissing: "No se encontró el paquete de audio.",

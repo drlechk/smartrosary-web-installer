@@ -26,6 +26,8 @@ window.SmartRosaryLocales.it = (FW_VERSION, LANG_VERSION) => ({
   errorNotRosary: "Il dispositivo scelto non è un rosario (controllo nome fallito).",
   errorConsent: "Il dispositivo ha negato il consenso o è scaduto il tempo. Tocca \"Consenti\" sul dispositivo e riprova.",
   errorFirmwareMissing: "Pacchetto firmware non trovato.",
+  errorHardwareUnknown: "Il dispositivo non ha comunicato il modello hardware. L’aggiornamento Bluetooth è stato interrotto per evitare di installare il firmware errato. Esegui un aggiornamento tramite USB selezionando l’hardware corretto.",
+  unknownHardwareLabel: "hardware sconosciuto",
   errorIntentionsMissing: "File intenzioni non trovato.",
   errorLanguageMissing: "File lingua non trovato.",
   errorAudioMissing: "Pacchetto audio non trovato.",
