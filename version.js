@@ -1,4 +1,4 @@
-window.SMARTROSARY_VERSION = "v1.67";
+window.SMARTROSARY_VERSION = "v1.68";
 window.SMARTROSARY_LANG_VERSION = "v1.47";
 window.SMARTROSARY_BREAKING_CHANGES = {
   "versions": { "before": "v1.49" },
@@ -12,11 +12,11 @@ window.SMARTROSARY_BREAKING_CHANGES = {
   }
 };
 window.SMARTROSARY_RELEASE_MESSAGE = {
-  "en": "Firmware v1.67 renames Rosary of Peace to Chaplet of Peace and displays each intention and prayer on separate white lines, with a clear separator in the scrolling intention.",
-  "de": "Firmware v1.67 benennt den Friedensrosenkranz in Friedenskrone um und zeigt Intention und Gebet in getrennten weißen Zeilen; eine klare Trennmarke kennzeichnet den Anfang des Lauftexts.",
-  "pl": "Firmware v1.67 zmienia nazwę Różańca Pokoju na Koronkę Pokoju oraz wyświetla intencję i modlitwę w osobnych białych wierszach, z wyraźnym separatorem w przewijanej intencji.",
-  "fr": "Le firmware v1.67 renomme le Rosaire de la Paix en Chapelet de la Paix et affiche l’intention et la prière sur deux lignes blanches distinctes, avec un séparateur clair dans l’intention défilante.",
-  "es": "El firmware v1.67 cambia el nombre de Rosario de la Paz a Coronilla de la Paz y muestra la intención y la oración en líneas blancas separadas, con un separador claro en la intención desplazable.",
-  "it": "Il firmware v1.67 rinomina il Rosario della Pace in Coroncina della Pace e mostra intenzione e preghiera su righe bianche separate, con un separatore chiaro nell’intenzione scorrevole.",
-  "pt": "O firmware v1.67 renomeia o Rosário da Paz para Terço da Paz e mostra a intenção e a oração em linhas brancas separadas, com um separador claro na intenção em movimento."
+  "en": "Firmware v1.68 fixes the device history view so entries, date ranges, and charts use local CET/CEST time, including daylight-saving transitions.",
+  "de": "Firmware v1.68 korrigiert die Verlaufsansicht auf dem Gerät: Einträge, Datumsbereiche und Diagramme verwenden nun die lokale CET/CEST-Zeit, einschließlich der Zeitumstellungen.",
+  "pl": "Firmware v1.68 poprawia widok historii na urządzeniu: wpisy, zakresy dat i wykresy używają teraz lokalnego czasu CET/CEST, również podczas zmiany czasu.",
+  "fr": "Le firmware v1.68 corrige l’affichage de l’historique sur l’appareil : les entrées, plages de dates et graphiques utilisent désormais l’heure locale CET/CEST, y compris lors des changements d’heure.",
+  "es": "El firmware v1.68 corrige la vista del historial del dispositivo: las entradas, los intervalos de fechas y los gráficos usan ahora la hora local CET/CEST, incluidos los cambios de horario.",
+  "it": "Il firmware v1.68 corregge la cronologia sul dispositivo: voci, intervalli di date e grafici usano ora l’ora locale CET/CEST, inclusi i cambi dell’ora legale.",
+  "pt": "O firmware v1.68 corrige a vista do histórico no dispositivo: entradas, intervalos de datas e gráficos passam a usar a hora local CET/CEST, incluindo as mudanças de horário."
 };

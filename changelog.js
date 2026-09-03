@@ -1,6 +1,14 @@
 // Generated from /Users/lech/Projects/PlatformIO/esp32c3-rosary release commits after 622ef97.
 window.SmartRosaryChangelog = [
   {
+    version: "v1.68",
+    releaseCommit: "4a0efa4",
+    changes: [
+      { hash: "6750639", text: "Fixes on-device history charts and date ranges to group UTC records by local CET/CEST calendar time." },
+      { hash: "6750639", text: "Handles daylight-saving transitions without shifting entries near midnight into the previous day." }
+    ]
+  },
+  {
     version: "v1.67",
     releaseCommit: "eba7c55",
     changes: [
