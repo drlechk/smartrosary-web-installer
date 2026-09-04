@@ -1,4 +1,4 @@
-window.SMARTROSARY_VERSION = "v1.69";
+window.SMARTROSARY_VERSION = "v1.70";
 window.SMARTROSARY_LANG_VERSION = "v1.47";
 window.SMARTROSARY_BREAKING_CHANGES = {
   "versions": { "before": "v1.49" },
@@ -12,11 +12,11 @@ window.SMARTROSARY_BREAKING_CHANGES = {
   }
 };
 window.SMARTROSARY_RELEASE_MESSAGE = {
-  "en": "Firmware v1.69 restores device, firmware, hardware, and last-mystery details on S3 devices by keeping essential BLE status data within the safe read limit.",
-  "de": "Firmware v1.69 stellt Geräte-, Firmware-, Hardware- und Letztes-Geheimnis-Angaben auf S3-Geräten wieder her, indem wichtige BLE-Statusdaten innerhalb des sicheren Leselimits bleiben.",
-  "pl": "Firmware v1.69 przywraca na urządzeniach S3 nazwę urządzenia, wersję firmware, model sprzętu i ostatnią tajemnicę, utrzymując najważniejsze dane BLE w bezpiecznym limicie odczytu.",
-  "fr": "Le firmware v1.69 rétablit sur les appareils S3 les informations d’appareil, de firmware, de matériel et de dernier mystère en maintenant les données BLE essentielles sous la limite de lecture sûre.",
-  "es": "El firmware v1.69 restaura en los dispositivos S3 los datos del dispositivo, firmware, hardware y último misterio, manteniendo los datos BLE esenciales dentro del límite seguro de lectura.",
-  "it": "Il firmware v1.69 ripristina sui dispositivi S3 i dati di dispositivo, firmware, hardware e ultimo mistero, mantenendo i dati BLE essenziali entro il limite di lettura sicuro.",
-  "pt": "O firmware v1.69 restaura nos dispositivos S3 os dados do dispositivo, firmware, hardware e último mistério, mantendo os dados BLE essenciais dentro do limite seguro de leitura."
+  "en": "Firmware v1.70 clears the Peace prayer’s second-line text when switching mid-prayer to another mystery, preventing stale text on the new prayer.",
+  "de": "Firmware v1.70 löscht beim Wechsel während des Gebets zu einem anderen Geheimnis die zweite Textzeile des Friedensgebets, sodass kein alter Text im neuen Gebet stehen bleibt.",
+  "pl": "Firmware v1.70 usuwa drugi wiersz tekstu modlitwy o pokój po przełączeniu w trakcie modlitwy na inną tajemnicę, dzięki czemu stary tekst nie pozostaje w nowej modlitwie.",
+  "fr": "Le firmware v1.70 efface la deuxième ligne de la prière pour la paix lors du passage à un autre mystère en cours de prière, afin qu’aucun ancien texte ne reste affiché.",
+  "es": "El firmware v1.70 borra la segunda línea de la oración por la paz al cambiar a otro misterio durante la oración, evitando que el texto anterior permanezca visible.",
+  "it": "Il firmware v1.70 cancella la seconda riga della preghiera per la pace quando si passa a un altro mistero durante la preghiera, evitando che resti visibile il testo precedente.",
+  "pt": "O firmware v1.70 limpa a segunda linha da oração pela paz ao mudar para outro mistério durante a oração, evitando que o texto anterior permaneça visível."
 };

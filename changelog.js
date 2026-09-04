@@ -1,6 +1,13 @@
 // Generated from /Users/lech/Projects/PlatformIO/esp32c3-rosary release commits after 622ef97.
 window.SmartRosaryChangelog = [
   {
+    version: "v1.70",
+    releaseCommit: "f3e9bec",
+    changes: [
+      { hash: "f3e9bec", text: "Clears stale Peace prayer text from the second line when switching mid-prayer to another mystery." }
+    ]
+  },
+  {
     version: "v1.69",
     releaseCommit: "e986892",
     changes: [
