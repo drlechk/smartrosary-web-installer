@@ -1,4 +1,4 @@
-window.SMARTROSARY_VERSION = "v1.70";
+window.SMARTROSARY_VERSION = "v1.71";
 window.SMARTROSARY_LANG_VERSION = "v1.47";
 window.SMARTROSARY_BREAKING_CHANGES = {
   "versions": { "before": "v1.49" },
@@ -12,11 +12,11 @@ window.SMARTROSARY_BREAKING_CHANGES = {
   }
 };
 window.SMARTROSARY_RELEASE_MESSAGE = {
-  "en": "Firmware v1.70 clears the Peace prayer’s second-line text when switching mid-prayer to another mystery, preventing stale text on the new prayer.",
-  "de": "Firmware v1.70 löscht beim Wechsel während des Gebets zu einem anderen Geheimnis die zweite Textzeile des Friedensgebets, sodass kein alter Text im neuen Gebet stehen bleibt.",
-  "pl": "Firmware v1.70 usuwa drugi wiersz tekstu modlitwy o pokój po przełączeniu w trakcie modlitwy na inną tajemnicę, dzięki czemu stary tekst nie pozostaje w nowej modlitwie.",
-  "fr": "Le firmware v1.70 efface la deuxième ligne de la prière pour la paix lors du passage à un autre mystère en cours de prière, afin qu’aucun ancien texte ne reste affiché.",
-  "es": "El firmware v1.70 borra la segunda línea de la oración por la paz al cambiar a otro misterio durante la oración, evitando que el texto anterior permanezca visible.",
-  "it": "Il firmware v1.70 cancella la seconda riga della preghiera per la pace quando si passa a un altro mistero durante la preghiera, evitando che resti visibile il testo precedente.",
-  "pt": "O firmware v1.70 limpa a segunda linha da oração pela paz ao mudar para outro mistério durante a oração, evitando que o texto anterior permaneça visível."
+  "en": "Firmware v1.71 preserves Polish and other UTF-8 characters when downloading intentions for backup. Previously damaged intention text must be replaced from a clean preset before creating a new backup.",
+  "de": "Firmware v1.71 erhält polnische und andere UTF-8-Zeichen beim Herunterladen von Intentionen für Sicherungen. Bereits beschädigte Texte müssen vor einer neuen Sicherung durch eine unveränderte Vorlage ersetzt werden.",
+  "pl": "Firmware v1.71 zachowuje polskie i inne znaki UTF-8 podczas pobierania intencji do kopii zapasowej. Przed utworzeniem nowej kopii należy zastąpić wcześniej uszkodzony tekst intencji poprawnym wzorcem.",
+  "fr": "Le firmware v1.71 préserve les caractères polonais et UTF-8 lors du téléchargement des intentions pour la sauvegarde. Remplacez les textes déjà endommagés par un modèle intact avant de créer une nouvelle sauvegarde.",
+  "es": "El firmware v1.71 conserva los caracteres polacos y UTF-8 al descargar intenciones para una copia de seguridad. Sustituya los textos ya dañados por una plantilla intacta antes de crear una nueva copia.",
+  "it": "Il firmware v1.71 preserva i caratteri polacchi e UTF-8 durante il download delle intenzioni per il backup. Sostituire i testi già danneggiati con un modello integro prima di creare un nuovo backup.",
+  "pt": "O firmware v1.71 preserva caracteres polacos e UTF-8 ao transferir intenções para cópias de segurança. Substitua os textos já danificados por um modelo intacto antes de criar uma nova cópia."
 };

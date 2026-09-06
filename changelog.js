@@ -1,6 +1,16 @@
 // Generated from /Users/lech/Projects/PlatformIO/esp32c3-rosary release commits after 622ef97.
 window.SmartRosaryChangelog = [
   {
+  "version": "v1.71",
+  "releaseCommit": "e315e97",
+  "changes": [
+    {
+      "hash": "e315e97",
+      "text": "Preserves complete UTF-8 characters in intention downloads so backups no longer replace Polish letters or skip following characters."
+    }
+  ]
+},
+  {
     version: "v1.70",
     releaseCommit: "f3e9bec",
     changes: [
