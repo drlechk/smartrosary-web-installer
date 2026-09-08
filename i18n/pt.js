@@ -20,6 +20,7 @@ window.SmartRosaryLocales.pt = (FW_VERSION, LANG_VERSION) => ({
   intentionsTooLarge: "O texto selecionado excede a capacidade do dispositivo. Seleciona menos intenções.",
   intentionsRetry: "Tentar novamente",
   intentionsLabel: "Intencoes:",
+  audioBackendLabel: "Conjunto de áudio:",
   audioLanguageLabel: "Idioma do áudio:",
   audioUsbHint: "O áudio é instalado apenas no rosário ESP32-S3 AMOLED. Outras placas ignoram esta seleção.",
   audioBleHint: "O envio de áudio esta disponivel apenas para o rosario ESP32-S3 AMOLED.",

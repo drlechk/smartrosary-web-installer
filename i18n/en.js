@@ -20,6 +20,7 @@ window.SmartRosaryLocales.en = (FW_VERSION, LANG_VERSION) => ({
   intentionsTooLarge: "The selected text exceeds device capacity. Select fewer intentions.",
   intentionsRetry: "Retry",
   intentionsLabel: "Intentions:",
+  audioBackendLabel: "Audio set:",
   audioLanguageLabel: "Audio language:",
   audioUsbHint: "Audio is installed only on the ESP32-S3 AMOLED rosary. Other boards ignore this selection.",
   audioBleHint: "Audio upload is available only for the ESP32-S3 AMOLED rosary.",

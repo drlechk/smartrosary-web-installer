@@ -432,6 +432,7 @@
     <script src="i18n/pt.js"></script>
     <script src="intentions-nvs.js"></script>
     <script src="intentions-catalog.js"></script>
+    <script src="audio-catalog.js"></script>
     <script type="module" src="https://unpkg.com/esp-web-tools@10.1.0/dist/web/install-button.js"></script>
   </head>
 	  <body>
@@ -513,7 +514,9 @@
           <a href="https://drlechk.github.io/smartrosary-audio/" target="_blank" rel="noopener" data-audio-preview-link>Open audio preview</a>
         </p>
         <div style="text-align: center; margin-top: 1em;">
-          <select id="audioFileSelect"></select>
+          <label for="audioBackendBle" data-audio-backend-label>Audio set:</label>
+          <select id="audioBackendBle"><option value="chatterbox">Chatterbox</option><option value="omnivoice">OmniVoice</option></select>
+          <select id="audioFileSelect" aria-label="Audio language and voice"></select>
         </div>
         <div style="text-align: center; margin-top: 1em;">
           <button id="uploadAudioBtn" class="uploadBtn">Connect & Upload</button>
@@ -575,6 +578,10 @@
                   <button type="button" data-intentions-retry hidden>Retry</button>
 	              </td>
 	            </tr>
+            <tr>
+              <td><label for="audioBackendUsb" data-audio-backend-label>Audio set:</label></td>
+              <td><select id="audioBackendUsb"><option value="chatterbox">Chatterbox</option><option value="omnivoice">OmniVoice</option></select></td>
+            </tr>
             <tr>
               <td><label for="audioLanguage" id="audioLanguageLabel">Audio language:</label></td>
               <td>
@@ -763,6 +770,7 @@
           ],
         },
       };
+      let audioBackend = 'chatterbox';
       let audioManifest = null;
       let audioManifestLoadPromise = null;
       let intentionsCatalog = null;
@@ -894,6 +902,9 @@
         if (intentsTitle) intentsTitle.textContent = dict.intentsTitle;
         const audioTitle = document.getElementById("audioTitle");
         if (audioTitle) audioTitle.textContent = dict.audioTitle || i18n.en.audioTitle;
+        document.querySelectorAll('[data-audio-backend-label]').forEach(el => {
+          el.textContent = dict.audioBackendLabel || i18n.en.audioBackendLabel;
+        });
         const audioLanguageLabel = document.getElementById("audioLanguageLabel");
         if (audioLanguageLabel) audioLanguageLabel.textContent = dict.audioLanguageLabel || i18n.en.audioLanguageLabel;
         const firmwareHardwareLabel = document.getElementById("firmwareHardwareLabel");
@@ -972,38 +983,44 @@
         return audioManifest && Array.isArray(audioManifest.items) ? audioManifest.items : [];
       }
 
-      function preferredAudioId() {
-        const items = audioItems();
-        const byUiLanguage = items.find(item => item.language === currentLang && String(item.id || '').endsWith('-seraphina'));
-        if (byUiLanguage) return byUiLanguage.id;
-        const byLanguage = items.find(item => item.language === currentLang);
-        if (byLanguage) return byLanguage.id;
-        return items[0]?.id || '';
-      }
-
       function selectedAudioItem(selectId = 'audioFileSelect') {
-        const select = document.getElementById(selectId);
-        const id = select?.value || preferredAudioId();
-        return audioItems().find(item => item.id === id) || audioItems()[0] || null;
+        const id = document.getElementById(selectId)?.value;
+        return audioItems().find(item => item.id === id && AudioCatalog.backendOf(item) === audioBackend) || null;
       }
 
-      function populateAudioSelectors() {
-        const items = audioItems();
-        for (const select of [
-          document.getElementById('audioFileSelect'),
-          document.getElementById('audioLanguage'),
-        ]) {
-          if (!select || !items.length) continue;
-          const previous = select.value || preferredAudioId();
+      function populateAudioSelectors(previousId) {
+        const items = audioItems().filter(item => AudioCatalog.backendOf(item) === audioBackend);
+        const previous = previousId || document.getElementById('audioFileSelect')?.value;
+        const chosen = AudioCatalog.select(audioItems(), audioBackend, previous, currentLang);
+        for (const id of ['audioBackendBle', 'audioBackendUsb']) {
+          const select = document.getElementById(id);
+          if (!select) continue;
+          select.value = audioBackend;
+          for (const option of select.options) {
+            option.disabled = !audioItems().some(item => AudioCatalog.backendOf(item) === option.value);
+          }
+        }
+        for (const id of ['audioFileSelect', 'audioLanguage']) {
+          const select = document.getElementById(id);
+          if (!select) continue;
           select.innerHTML = '';
+          select.disabled = !items.length;
           items.forEach(item => {
             const option = document.createElement('option');
             option.value = item.id;
             option.textContent = `${item.label} (v${item.version || audioManifest.version || '1.0'})`;
             select.appendChild(option);
           });
-          select.value = items.some(item => item.id === previous) ? previous : preferredAudioId();
+          select.value = chosen?.id || '';
         }
+      }
+
+      function changeAudioBackend(sourceId) {
+        const previous = document.getElementById('audioFileSelect')?.value;
+        audioBackend = document.getElementById(sourceId).value;
+        populateAudioSelectors(previous);
+        updateAudioVersionHint();
+        document.dispatchEvent(new Event('audio-selection-change'));
       }
 
       function updateAudioVersionHint() {
@@ -1034,6 +1051,7 @@
           if (select && select !== source) select.value = source.value;
         }
         updateAudioVersionHint();
+        document.dispatchEvent(new Event('audio-selection-change'));
       }
 
       async function loadIntentionsCatalog() {
@@ -1118,6 +1136,9 @@
 	        populateChangelog();
 	        setLanguage(initialLang);
 	        loadAudioManifest();
+        for (const id of ['audioBackendBle', 'audioBackendUsb']) {
+          document.getElementById(id)?.addEventListener('change', () => changeAudioBackend(id));
+        }
         for (const id of ['intentionsFileSelect', 'intentions']) {
           document.getElementById(id).addEventListener('change', updateIntentionsSummaries);
         }
@@ -1269,7 +1290,7 @@
           selHardware?.addEventListener("change", buildManifest);
           selLang.addEventListener("change", buildManifest);
           selInt .addEventListener("change", buildManifest);
-          selAudio?.addEventListener("change", buildManifest);
+          document.addEventListener('audio-selection-change', buildManifest);
           loadAudioManifest().then(buildManifest);
           loadIntentionsCatalog().then(buildManifest);
           buildManifest();

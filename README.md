@@ -34,9 +34,33 @@ consumers, but the picker reads the canonical JSON catalog directly.
 Run regression checks with:
 
 ```sh
-node --test tests/intentions.test.mjs
+node --test tests/*.test.mjs
 ```
 
 Serve this directory over HTTP on localhost for manual UI checks. Verify selecting
 and clearing multiple items in each picker, changing USB hardware, retrying a
 failed catalog load, and uploading through USB/current BLE/legacy BLE on hardware.
+
+## Audio sets
+
+USB and Bluetooth audio pickers offer **Chatterbox** and **OmniVoice**. Switching
+sets preserves the language and speaker when available and synchronizes both
+pickers. USB regenerates its install manifest on either picker's selection change.
+Audio is included only for S3 AMOLED targets; BLE still requires recognized S3
+hardware and its audio-upload characteristic.
+
+Packages live under `audio/chatterbox/<language>-<speaker>/audio-rosary.bin` and
+`audio/omnivoice/<language>-<speaker>/audio-rosary.bin`. Each backend has 16
+packages (eight languages, two speakers), each containing 42 clips. All binaries
+are `0x134000` bytes for the existing S3 partition at `0xD3F000`.
+
+`audio/manifest.json` retains the v1 format and original Chatterbox IDs. OmniVoice
+IDs append `-omnivoice`; entries also carry `backend`, `speakerId`, and `sha256`.
+Mobile consumers can continue using item IDs and paths. The old flat binary URLs
+have moved; deploy the updated manifest and backend folders together.
+
+Build and export packages from the updated `smartrosary-audio` repository using
+its `build_audiofs.py` and `scripts/export-installer-audio.py` workflows. OmniVoice
+sources are encoded into temporary 32 kbit/s mono 24 kHz device copies to fit the
+partition; preview source files retain their original quality. Keep package
+versions aligned with that repository's `audio-package.json`.

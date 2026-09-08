@@ -107,6 +107,7 @@ test('USB manifest uses one generated NVS image, correct hardware offset and rev
   const sandbox = vm.createContext({ Blob, URL: TestURL, console: { log() {} },
     customElements: { whenDefined: () => Promise.resolve() },
     document: { baseURI: 'https://example.com/installer/', querySelector: () => button,
+      addEventListener() {},
       getElementById: id => elements[id] },
     FIRMWARE_TARGETS: { c3: target(0x2f0000), s3: target(0x7f0000) }, FW_VERSION: 'test',
     selectedIntentionsBundle: () => { if (selection instanceof Error) throw selection; return selection; },

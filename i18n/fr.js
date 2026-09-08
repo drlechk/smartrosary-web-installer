@@ -20,6 +20,7 @@ window.SmartRosaryLocales.fr = (FW_VERSION, LANG_VERSION) => ({
   intentionsTooLarge: "Le texte sélectionné dépasse la capacité de l’appareil. Sélectionnez moins d’intentions.",
   intentionsRetry: "Réessayer",
   intentionsLabel: "Intentions :",
+  audioBackendLabel: "Jeu audio :",
   audioLanguageLabel: "Langue audio :",
   audioUsbHint: "L’audio est installé uniquement sur le chapelet ESP32-S3 AMOLED. Les autres cartes ignorent cette sélection.",
   audioBleHint: "Le televersement audio est disponible uniquement pour le chapelet ESP32-S3 AMOLED.",

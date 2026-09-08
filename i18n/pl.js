@@ -20,6 +20,7 @@ window.SmartRosaryLocales.pl = (FW_VERSION, LANG_VERSION) => ({
   intentionsTooLarge: "Wybrany tekst przekracza pojemność urządzenia. Wybierz mniej intencji.",
   intentionsRetry: "Spróbuj ponownie",
   intentionsLabel: "Intencje:",
+  audioBackendLabel: "Zestaw audio:",
   audioLanguageLabel: "Język audio:",
   audioUsbHint: "Audio jest instalowane tylko na różańcu ESP32-S3 AMOLED. Inne płytki ignorują ten wybór.",
   audioBleHint: "Wgrywanie audio jest dostępne tylko dla różańca ESP32-S3 AMOLED.",

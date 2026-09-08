@@ -20,6 +20,7 @@ window.SmartRosaryLocales.de = (FW_VERSION, LANG_VERSION) => ({
   intentionsTooLarge: "Der ausgewählte Text überschreitet die Gerätekapazität. Wähle weniger Intentionen.",
   intentionsRetry: "Erneut versuchen",
   intentionsLabel: "Intentionen:",
+  audioBackendLabel: "Audioset:",
   audioLanguageLabel: "Audiosprache:",
   audioUsbHint: "Audio wird nur auf dem ESP32-S3 AMOLED-Rosenkranz installiert. Andere Boards ignorieren diese Auswahl.",
   audioBleHint: "Audio-Upload ist nur fur den ESP32-S3 AMOLED-Rosenkranz verfugbar.",
