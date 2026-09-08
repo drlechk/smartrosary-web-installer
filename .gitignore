@@ -25,3 +25,14 @@ Icon
 Network Trash Folder
 Temporary Items
 .apdisk
+
+# Generated site and local build tools
+/dist/
+/.site-build-*/
+/.venv/
+__pycache__/
+
+# Content is generated from pinned source submodules
+/audio/
+/lang/
+/intentions/

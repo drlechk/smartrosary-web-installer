@@ -1,0 +1,12 @@
+[submodule "sources/smartrosary-intentions"]
+	path = sources/smartrosary-intentions
+	url = https://github.com/drlechk/smartrosary-intentions.git
+	branch = main
+[submodule "sources/smartrosary-language"]
+	path = sources/smartrosary-language
+	url = https://github.com/drlechk/smartrosary-language.git
+	branch = main
+[submodule "sources/smartrosary-audio"]
+	path = sources/smartrosary-audio
+	url = https://github.com/drlechk/smartrosary-audio.git
+	branch = main

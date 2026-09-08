@@ -21,28 +21,33 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          submodules: true
 
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
           node-version: 20
 
-      - name: Sync manifest version
-        run: node scripts/sync-manifest.mjs
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install content build tools
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y ffmpeg
+          python -m pip install -r scripts/requirements-build.txt
+
+      - name: Build site from pinned content
+        run: node scripts/build-site.mjs
+
+      - name: Validate installer and packages
+        run: node --test tests/*.test.mjs
 
       - name: Configure Pages
         uses: actions/configure-pages@v5
-
-      - name: Prepare site
-        run: |
-          rm -rf dist
-          mkdir dist
-          rsync -a \
-            --exclude '.git/' \
-            --exclude '.github/' \
-            --exclude 'dist/' \
-            ./ dist/
-          touch dist/.nojekyll
 
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v4

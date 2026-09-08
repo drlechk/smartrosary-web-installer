@@ -1,7 +1,7 @@
-// Catalog published by the canonical smartrosary-intentions repository.
+// Catalog built from the pinned canonical smartrosary-intentions submodule.
 (function (global) {
   'use strict';
-  const url = 'https://drlechk.github.io/smartrosary-intentions/intentions-data.json';
+  const url = 'intentions/intentions-data.json';
 
   function validateCatalog(catalog) {
     if (!catalog || !Array.isArray(catalog.items) || !catalog.items.length) {

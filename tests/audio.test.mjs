@@ -5,7 +5,8 @@ import test from 'node:test';
 import vm from 'node:vm';
 
 const root = new URL('../', import.meta.url);
-const manifest = JSON.parse(readFileSync(new URL('audio/manifest.json', root)));
+const assets = new URL('../dist/', import.meta.url);
+const manifest = JSON.parse(readFileSync(new URL('audio/manifest.json', assets)));
 const html = readFileSync(new URL('index.html', root), 'utf8');
 const helper = readFileSync(new URL('audio-catalog.js', root), 'utf8');
 const context = vm.createContext({}); context.window = context;
@@ -21,7 +22,7 @@ test('both sets publish all eight languages, speakers and correct binary hashes'
       assert.deepEqual(items.map(item => item.speakerId).sort(), ['florian', 'seraphina']);
       for (const item of items) {
         assert.equal(item.path, `audio/${backend}/${language}-${item.speakerId}/audio-rosary.bin`);
-        const path = new URL(item.path, root);
+        const path = new URL(item.path, assets);
         assert.equal(statSync(path).size, 0x134000);
         assert.equal(item.size, 0x134000);
         assert.equal(createHash('sha256').update(readFileSync(path)).digest('hex'), item.sha256);
