@@ -213,6 +213,10 @@
       .change-text { min-width: 0; overflow-wrap: anywhere; }
       .hint { color: var(--muted); font-size: 12px; margin: 8px 0 0; text-align: center; }
       .version-hint { color: var(--accent); font-weight: 600; }
+      .intentions-disclosure { border: 1px solid var(--border); border-radius: 8px; text-align: left; }
+      .intentions-disclosure summary { cursor: pointer; padding: 10px; min-height: 44px; color: var(--text); }
+      .intentions-disclosure summary:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 8px; }
+      .intentions-disclosure .intentions-picker { padding: 0 8px 8px; }
       .intentions-picker { display: grid; gap: 6px; max-height: 260px; overflow-y: auto; }
       .intentions-picker label { display: flex; align-items: center; gap: 10px; width: 100%; min-height: 44px; padding: 8px; border: 1px solid var(--border); border-radius: 8px; text-align: left; color: var(--text); font-weight: 400; overflow-wrap: anywhere; }
       .intentions-picker label:has(input:checked) { border-color: var(--accent); background: var(--soft); }
@@ -520,8 +524,10 @@
       <div class="uploadBox" id="otaIntsBox">
         <h2 id="intentsTitle">Upload intentions via Bluetooth</h2>
         <div style="text-align: center; margin-top: 1em;">
-	          <div id="intentionsFileSelect" class="intentions-picker" role="group" aria-labelledby="intentsTitle" aria-describedby="intentionsFileSelectSummary"></div>
-          <p class="hint" id="intentionsFileSelectSummary" aria-live="polite"></p>
+	          <details class="intentions-disclosure">
+                    <summary><span id="intentionsFileSelectSummary" aria-live="polite"></span></summary>
+                    <div id="intentionsFileSelect" class="intentions-picker" role="group" aria-labelledby="intentsTitle" aria-describedby="intentionsFileSelectSummary"></div>
+                  </details>
           <button type="button" data-intentions-retry hidden>Retry</button>
 	        </div>
         <div style="text-align: center; margin-top: 1em;">
@@ -562,8 +568,10 @@
             <tr>
               <td><span id="intentionsLabel">Intentions:</span></td>
               <td>
-	                <div id="intentions" class="intentions-picker" role="group" aria-labelledby="intentionsLabel" aria-describedby="intentionsSummary"></div>
-                  <p class="hint" id="intentionsSummary" aria-live="polite"></p>
+	                <details class="intentions-disclosure">
+                    <summary><span id="intentionsSummary" aria-live="polite"></span></summary>
+                    <div id="intentions" class="intentions-picker" role="group" aria-labelledby="intentionsLabel" aria-describedby="intentionsSummary"></div>
+                  </details>
                   <button type="button" data-intentions-retry hidden>Retry</button>
 	              </td>
 	            </tr>

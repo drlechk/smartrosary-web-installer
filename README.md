@@ -13,8 +13,11 @@ USB can still install firmware without optional intentions.
 
 Selected items are combined in catalog order, preserving each package's entry
 order and text, into one 20,480-byte NVS V2 intentions partition. A package checkbox
-includes all its entries. Nothing is selected by default. The UI displays the
-combined count and blocks selections exceeding 32 entries or partition capacity.
+includes all its entries. Nothing is selected by default. Both pickers are
+collapsed on page load; click or tap the summary to expand or collapse the
+checkboxes. The summary keeps the selection count or validation message visible
+when collapsed. Selections are preserved when the picker is closed. The UI blocks
+selections exceeding 32 entries or partition capacity.
 Overlapping packages preserve their entries; only repeated item IDs are deduplicated.
 
 USB includes the generated image at the selected hardware's intentions offset.
