@@ -213,6 +213,11 @@
       .change-text { min-width: 0; overflow-wrap: anywhere; }
       .hint { color: var(--muted); font-size: 12px; margin: 8px 0 0; text-align: center; }
       .version-hint { color: var(--accent); font-weight: 600; }
+      .intentions-picker { display: grid; gap: 6px; max-height: 260px; overflow-y: auto; }
+      .intentions-picker label { display: flex; align-items: center; gap: 10px; width: 100%; min-height: 44px; padding: 8px; border: 1px solid var(--border); border-radius: 8px; text-align: left; color: var(--text); font-weight: 400; overflow-wrap: anywhere; }
+      .intentions-picker label:has(input:checked) { border-color: var(--accent); background: var(--soft); }
+      .intentions-picker input { flex-shrink: 0; accent-color: var(--accent); }
+      .uploadBtn:disabled { opacity: .5; cursor: default; }
       .is-hidden { display: none; }
 
       .uploadBtn {
@@ -422,6 +427,7 @@
     <script src="i18n/it.js"></script>
     <script src="i18n/pt.js"></script>
     <script src="intentions-nvs.js"></script>
+    <script src="intentions-catalog.js"></script>
     <script type="module" src="https://unpkg.com/esp-web-tools@10.1.0/dist/web/install-button.js"></script>
   </head>
 	  <body>
@@ -514,10 +520,12 @@
       <div class="uploadBox" id="otaIntsBox">
         <h2 id="intentsTitle">Upload intentions via Bluetooth</h2>
         <div style="text-align: center; margin-top: 1em;">
-	          <select id="intentionsFileSelect"></select>
+	          <div id="intentionsFileSelect" class="intentions-picker" role="group" aria-labelledby="intentsTitle" aria-describedby="intentionsFileSelectSummary"></div>
+          <p class="hint" id="intentionsFileSelectSummary" aria-live="polite"></p>
+          <button type="button" data-intentions-retry hidden>Retry</button>
 	        </div>
         <div style="text-align: center; margin-top: 1em;">
-          <button id="uploadIntentionsBtn" class="uploadBtn">Connect & Upload</button>
+          <button id="uploadIntentionsBtn" class="uploadBtn" disabled>Connect & Upload</button>
         </div>
       </div>
 
@@ -552,11 +560,11 @@
               </td>
             </tr>
             <tr>
-              <td><label for="intentions" id="intentionsLabel">Intentions:</label></td>
+              <td><span id="intentionsLabel">Intentions:</span></td>
               <td>
-	                <select id="intentions">
-	                  <option value="none">None</option>
-	                </select>
+	                <div id="intentions" class="intentions-picker" role="group" aria-labelledby="intentionsLabel" aria-describedby="intentionsSummary"></div>
+                  <p class="hint" id="intentionsSummary" aria-live="polite"></p>
+                  <button type="button" data-intentions-retry hidden>Retry</button>
 	              </td>
 	            </tr>
             <tr>
@@ -749,8 +757,9 @@
       };
       let audioManifest = null;
       let audioManifestLoadPromise = null;
-      let intentionsManifest = null;
-      let intentionsManifestLoadPromise = null;
+      let intentionsCatalog = null;
+      let intentionsCatalogLoadPromise = null;
+      let intentionsCatalogFailed = false;
 
       // ---------- 1) UI i18n ----------
       const localeFactories = window.SmartRosaryLocales || {};
@@ -900,8 +909,7 @@
         const changelogVersionLabel = document.getElementById("changelogVersionLabel");
         if (changelogVersionLabel) changelogVersionLabel.textContent = dict.changelogVersionLabel || i18n.en.changelogVersionLabel;
 
-        const noneOption = document.querySelector('#intentions option[value="none"]');
-        if (noneOption) noneOption.textContent = dict.noneOption;
+        updateIntentionsSummaries();
 
         const statusBar = document.getElementById("globalStatus");
         if (statusBar) statusBar.textContent = dict.statusReady;
@@ -1020,70 +1028,80 @@
         updateAudioVersionHint();
       }
 
-      async function loadIntentionsManifest() {
-        if (intentionsManifest) return intentionsManifest;
-        if (intentionsManifestLoadPromise) return intentionsManifestLoadPromise;
-        intentionsManifestLoadPromise = fetch('intentions/manifest.json', { cache: 'no-cache' })
+      async function loadIntentionsCatalog() {
+        if (intentionsCatalog) return intentionsCatalog;
+        if (intentionsCatalogLoadPromise) return intentionsCatalogLoadPromise;
+        intentionsCatalogFailed = false;
+        updateIntentionsSummaries();
+        intentionsCatalogLoadPromise = fetch(IntentionsCatalog.url, { cache: 'no-cache' })
           .then(resp => {
-            if (!resp.ok) throw new Error('Intentions manifest missing');
+            if (!resp.ok) throw new Error('intentionsCatalogError');
             return resp.json();
           })
           .then(json => {
-            intentionsManifest = json;
+            intentionsCatalog = IntentionsCatalog.validateCatalog(json);
             populateIntentionsSelectors();
-            return intentionsManifest;
+            return intentionsCatalog;
           })
           .catch(err => {
-            console.warn('[INTENTIONS] Manifest load failed:', err);
-            intentionsManifestLoadPromise = null;
+            console.warn('[INTENTIONS] Catalog load failed:', err);
+            intentionsCatalogFailed = true;
+            intentionsCatalogLoadPromise = null;
+            updateIntentionsSummaries();
             return null;
           });
-        return intentionsManifestLoadPromise;
+        return intentionsCatalogLoadPromise;
       }
 
-      function intentionsItems() {
-        return intentionsManifest && Array.isArray(intentionsManifest.items) ? intentionsManifest.items : [];
+      function selectedIntentionsIds(selectId) {
+        return Array.from(document.getElementById(selectId).querySelectorAll('input:checked'), input => input.value);
+      }
+
+      function selectedIntentionsBundle(selectId) {
+        const ids = selectedIntentionsIds(selectId);
+        return ids.length ? IntentionsCatalog.buildSelection(intentionsCatalog, ids) : null;
+      }
+
+      function updateIntentionsSummaries() {
+        for (const id of ['intentionsFileSelect', 'intentions']) {
+          const summary = document.getElementById(id + 'Summary');
+          let bundle = null;
+          try {
+            bundle = selectedIntentionsBundle(id);
+            summary.textContent = !intentionsCatalog
+              ? t(intentionsCatalogFailed ? 'intentionsCatalogError' : 'intentionsCatalogLoading')
+              : bundle ? t('intentionsSelected').replace('{count}', bundle.model.numIntentions)
+                : t(id === 'intentions' ? 'intentionsOptional' : 'intentionsChoose');
+          } catch (error) {
+            summary.textContent = t(error.message) || t('errorIntentionsFailed');
+          }
+          if (id === 'intentionsFileSelect') document.getElementById('uploadIntentionsBtn').disabled = !bundle;
+        }
+        document.querySelectorAll('[data-intentions-retry]').forEach(button => {
+          button.hidden = !intentionsCatalogFailed;
+          button.textContent = t('intentionsRetry');
+        });
       }
 
       function populateIntentionsSelectors() {
-        const items = intentionsItems();
-        const bleSelect = document.getElementById('intentionsFileSelect');
-        if (bleSelect) {
-          const previous = bleSelect.value;
-          bleSelect.innerHTML = '';
-          items.forEach(item => {
-            const option = document.createElement('option');
-            option.value = item.path;
-            option.textContent = item.label || item.id || item.path;
-            bleSelect.appendChild(option);
-          });
-          bleSelect.value = items.some(item => item.path === previous) ? previous : (items[0]?.path || '');
+        for (const id of ['intentionsFileSelect', 'intentions']) {
+          const picker = document.getElementById(id);
+          const previous = new Set(selectedIntentionsIds(id));
+          picker.replaceChildren();
+          for (const item of intentionsCatalog.items) {
+            const label = document.createElement('label');
+            const input = document.createElement('input');
+            input.type = 'checkbox';
+            input.value = item.id;
+            input.checked = previous.has(item.id);
+            const text = document.createElement('span');
+            text.textContent = `${item.label} (${item.count})`;
+            label.append(input, text);
+            picker.appendChild(label);
+          }
+          picker.dispatchEvent(new Event('change', { bubbles: true }));
         }
-
-        const usbSelect = document.getElementById('intentions');
-        if (usbSelect) {
-          const previous = usbSelect.value;
-          const dict = getTranslation();
-          usbSelect.innerHTML = '';
-          const none = document.createElement('option');
-          none.value = 'none';
-          none.textContent = dict.noneOption || i18n.en.noneOption || 'None';
-          usbSelect.appendChild(none);
-          items.forEach(item => {
-            const option = document.createElement('option');
-            option.value = item.id;
-            option.textContent = item.label || item.id || item.path;
-            usbSelect.appendChild(option);
-          });
-          usbSelect.value = previous === 'none' || items.some(item => item.id === previous) ? previous : 'none';
-        }
-      }
-
-      function selectedIntentionsItem(selectId) {
-        const select = document.getElementById(selectId);
-        if (!select || select.value === 'none') return null;
-        const items = intentionsItems();
-        return items.find(item => item.id === select.value || item.path === select.value) || null;
+        updateIntentionsSummaries();
       }
 
 	      (() => {
@@ -1092,6 +1110,13 @@
 	        populateChangelog();
 	        setLanguage(initialLang);
 	        loadAudioManifest();
+        for (const id of ['intentionsFileSelect', 'intentions']) {
+          document.getElementById(id).addEventListener('change', updateIntentionsSummaries);
+        }
+        document.querySelectorAll('[data-intentions-retry]').forEach(button => {
+          button.addEventListener('click', loadIntentionsCatalog);
+        });
+        loadIntentionsCatalog();
 	        document.getElementById('audioFileSelect')?.addEventListener('change', () => syncAudioSelects('audioFileSelect'));
 	        document.getElementById('audioLanguage')?.addEventListener('change', () => syncAudioSelects('audioLanguage'));
 
@@ -1161,7 +1186,6 @@
           const selLang = document.getElementById("language");
           const selInt  = document.getElementById("intentions");
           const selAudio = document.getElementById("audioLanguage");
-          const origin  = window.location.origin;
 
           const languages = {
             pl: { name: "Polski",  path: "lang/nvs-lang-pl.bin" },
@@ -1177,12 +1201,24 @@
           function absoluteParts(rawParts) {
             return rawParts.map(p => ({
               offset: p.offset,
-              path: p.path.startsWith("http") ? p.path : `${origin}/smartrosary-web-installer/${p.path}`
+              path: new URL(p.path, document.baseURI).href
             }));
           }
 
           function buildManifest() {
             if (btn._blobUrl) URL.revokeObjectURL(btn._blobUrl);
+            if (btn._intentionsBlobUrl) URL.revokeObjectURL(btn._intentionsBlobUrl);
+            btn._blobUrl = null;
+            btn._intentionsBlobUrl = null;
+            btn.manifest = '';
+            if (activateBtn) activateBtn.disabled = true;
+            let intent;
+            try {
+              intent = selectedIntentionsBundle('intentions');
+            } catch (error) {
+              updateIntentionsSummaries();
+              return;
+            }
 
             const target = FIRMWARE_TARGETS[selHardware?.value] || FIRMWARE_TARGETS['esp32-c3-01'];
             const rawParts = [...target.parts];
@@ -1192,9 +1228,9 @@
             rawParts.splice(1, 0, { path: lang.path, offset: target.languageOffset });
 
             // include chosen intentions (optional)
-            const intent = selectedIntentionsItem('intentions');
             if (intent) {
-              rawParts.push({ path: intent.path, offset: target.intentionsOffset });
+              btn._intentionsBlobUrl = URL.createObjectURL(new Blob([intent.data], { type: 'application/octet-stream' }));
+              rawParts.push({ path: btn._intentionsBlobUrl, offset: target.intentionsOffset });
             }
 
             const audio = selectedAudioItem('audioLanguage');
@@ -1218,6 +1254,7 @@
             const blobUrl = URL.createObjectURL(new Blob([JSON.stringify(manifest)], { type: "application/json" }));
             btn._blobUrl = blobUrl;
             btn.manifest = blobUrl;
+            if (activateBtn) activateBtn.disabled = false;
             console.log("Using manifest blob URL:", blobUrl);
           }
 
@@ -1226,7 +1263,7 @@
           selInt .addEventListener("change", buildManifest);
           selAudio?.addEventListener("change", buildManifest);
           loadAudioManifest().then(buildManifest);
-          loadIntentionsManifest().then(buildManifest);
+          loadIntentionsCatalog().then(buildManifest);
           buildManifest();
         });
       })();
@@ -1604,25 +1641,10 @@
       }
 
       async function startIntentionsBluetooth(btn){
-        await loadIntentionsManifest();
-        const selected = selectedIntentionsItem('intentionsFileSelect');
-        if (!selected) {
-          const msg = t('errorIntentionsMissing');
-          if (window.GlobalUI) GlobalUI.error(msg);
-          alert(msg);
-          return;
-        }
-        const path=selected.path;
-        const resp=await fetch(path);
-        if(!resp.ok){
-          const msg = t('errorIntentionsMissing');
-          if (window.GlobalUI) GlobalUI.error(msg);
-          alert(msg);
-          return;
-        }
-        const data=new Uint8Array(await resp.arrayBuffer());
-        const model = window.IntentionsNVS.parseIntentions(data);
-        const filename = selected.filename || path.split('/').pop();
+        await loadIntentionsCatalog();
+        const bundle = selectedIntentionsBundle('intentionsFileSelect');
+        if (!bundle) throw new Error(t('intentionsChoose'));
+        const { data, model, filename } = bundle;
 
         // Connect first, then show progress
         const transfer = await connectBLE(SERVICE_UUID,INFO_INTENT_ENTRY_UUID, {
