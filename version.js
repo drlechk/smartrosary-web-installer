@@ -1,4 +1,4 @@
-window.SMARTROSARY_VERSION = "v1.71";
+window.SMARTROSARY_VERSION = "v1.72";
 window.SMARTROSARY_LANG_VERSION = "v1.47";
 window.SMARTROSARY_BREAKING_CHANGES = {
   "versions": { "before": "v1.49" },
@@ -12,11 +12,11 @@ window.SMARTROSARY_BREAKING_CHANGES = {
   }
 };
 window.SMARTROSARY_RELEASE_MESSAGE = {
-  "en": "Firmware v1.71 preserves Polish and other UTF-8 characters when downloading intentions for backup. Previously damaged intention text must be replaced from a clean preset before creating a new backup.",
-  "de": "Firmware v1.71 erhält polnische und andere UTF-8-Zeichen beim Herunterladen von Intentionen für Sicherungen. Bereits beschädigte Texte müssen vor einer neuen Sicherung durch eine unveränderte Vorlage ersetzt werden.",
-  "pl": "Firmware v1.71 zachowuje polskie i inne znaki UTF-8 podczas pobierania intencji do kopii zapasowej. Przed utworzeniem nowej kopii należy zastąpić wcześniej uszkodzony tekst intencji poprawnym wzorcem.",
-  "fr": "Le firmware v1.71 préserve les caractères polonais et UTF-8 lors du téléchargement des intentions pour la sauvegarde. Remplacez les textes déjà endommagés par un modèle intact avant de créer une nouvelle sauvegarde.",
-  "es": "El firmware v1.71 conserva los caracteres polacos y UTF-8 al descargar intenciones para una copia de seguridad. Sustituya los textos ya dañados por una plantilla intacta antes de crear una nueva copia.",
-  "it": "Il firmware v1.71 preserva i caratteri polacchi e UTF-8 durante il download delle intenzioni per il backup. Sostituire i testi già danneggiati con un modello integro prima di creare un nuovo backup.",
-  "pt": "O firmware v1.71 preserva caracteres polacos e UTF-8 ao transferir intenções para cópias de segurança. Substitua os textos já danificados por um modelo intacto antes de criar uma nova cópia."
+  "en": "Firmware v1.72 fixes on-device statistics pie charts after restoring a backup. Missing mystery-set totals are recovered from part counts, matching the dashboard. Existing restored statistics are corrected without restoring the backup again.",
+  "de": "Firmware v1.72 korrigiert die Kreisdiagramme der Gerätestatistik nach dem Wiederherstellen einer Sicherung. Fehlende Summen der Geheimnisgruppen werden wie im Dashboard aus den Teilzählern ermittelt. Bereits wiederhergestellte Statistiken werden ohne erneute Wiederherstellung korrekt angezeigt.",
+  "pl": "Firmware v1.72 poprawia wykresy kołowe statystyk na urządzeniu po przywróceniu kopii zapasowej. Brakujące sumy zestawów tajemnic są odtwarzane z liczników poszczególnych tajemnic, tak jak w panelu. Nie trzeba ponownie przywracać kopii zapasowej.",
+  "fr": "Le firmware v1.72 corrige les diagrammes circulaires des statistiques sur l’appareil après la restauration d’une sauvegarde. Les totaux manquants des groupes de mystères sont reconstitués à partir des compteurs détaillés, comme dans le tableau de bord. Il n’est pas nécessaire de restaurer à nouveau la sauvegarde.",
+  "es": "El firmware v1.72 corrige los gráficos circulares de estadísticas del dispositivo tras restaurar una copia de seguridad. Los totales de grupos de misterios que faltan se recuperan de los contadores individuales, como en el panel. No es necesario restaurar la copia de nuevo.",
+  "it": "Il firmware v1.72 corregge i grafici a torta delle statistiche sul dispositivo dopo il ripristino di un backup. I totali mancanti dei gruppi di misteri vengono ricostruiti dai contatori dettagliati, come nella dashboard. Non è necessario ripristinare nuovamente il backup.",
+  "pt": "O firmware v1.72 corrige os gráficos circulares das estatísticas no dispositivo após restaurar uma cópia de segurança. Os totais em falta dos conjuntos de mistérios são recuperados dos contadores individuais, tal como no painel. Não é necessário restaurar a cópia novamente."
 };

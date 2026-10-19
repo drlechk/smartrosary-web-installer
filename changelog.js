@@ -1,6 +1,24 @@
 // Generated from /Users/lech/Projects/PlatformIO/esp32c3-rosary release commits after 622ef97.
 window.SmartRosaryChangelog = [
   {
+  "version": "v1.72",
+  "releaseCommit": "a828bf3",
+  "changes": [
+    {
+      "hash": "a828bf3",
+      "text": "Fixes on-device statistics pie charts after backup restore by recovering missing mystery-set totals from part counts and preserving unclassified decades."
+    },
+    {
+      "hash": "0911cd9",
+      "text": "Refreshes factory wallpaper images from the pinned PMKDUS artwork source."
+    },
+    {
+      "hash": "f6cf716",
+      "text": "Aligns firmware audio builds with the pinned Chatterbox and OmniVoice source layout."
+    }
+  ]
+},
+  {
   "version": "v1.71",
   "releaseCommit": "e315e97",
   "changes": [
