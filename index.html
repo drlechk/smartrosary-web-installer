@@ -1498,47 +1498,39 @@
 
       async function readFirmwareVersion(svc) {
         connectedHardwareId = '';
+        let fwVersion = '';
         try {
           const settingsChar = await svc.getCharacteristic(INFO_SETTINGS_UUID);
           const value = await settingsChar.readValue();
           const bytes = new Uint8Array(value.buffer);
           const text = new TextDecoder().decode(bytes).split('\0')[0].trim();
           console.log(`[BLE OTA] INFO_SETTINGS_UUID payload:`, text);
-          
-          if (!text || text === '{}') {
-             console.warn(`[BLE OTA] Empty settings payload; hardware target is unknown.`);
-             if (window.GlobalUI) GlobalUI.setDevice(t('unknownHardwareLabel'));
-             updateBleAudioCardVisibility();
-             return '';
-          }
-          let fwVersion = '';
 
-          try {
-            const json = JSON.parse(text);
-            if (json && json.hardwareId) {
-              connectedHardwareId = String(json.hardwareId);
+          if (text && text !== '{}') {
+            try {
+              const json = JSON.parse(text);
+              if (json && json.hardwareId) connectedHardwareId = String(json.hardwareId);
+              if (json && json.fwVersion) fwVersion = String(json.fwVersion);
+            } catch (e) {
+              console.warn("[BLE OTA] JSON parse failed, likely due to MTU truncation. Attempting regex extraction...");
+              const hwMatch = text.match(/"hardwareId"\s*:\s*"([^"]+)"/);
+              if (hwMatch) connectedHardwareId = hwMatch[1];
+              const fwMatch = text.match(/"fwVersion"\s*:\s*"([^"]+)"/);
+              if (fwMatch) fwVersion = fwMatch[1];
             }
-            if (json && json.fwVersion) fwVersion = String(json.fwVersion);
-          } catch (e) {
-            console.warn("[BLE OTA] JSON parse failed, likely due to MTU truncation. Attempting regex extraction...");
-            const hwMatch = text.match(/"hardwareId"\s*:\s*"([^"]+)"/);
-            if (hwMatch) {
-              connectedHardwareId = hwMatch[1];
-            }
-            const fwMatch = text.match(/"fwVersion"\s*:\s*"([^"]+)"/);
-            if (fwMatch) fwVersion = fwMatch[1];
           }
-
-          console.log(`[BLE OTA] Parsed hardwareId:`, connectedHardwareId);
-          if (window.GlobalUI) GlobalUI.setDevice(connectedHardwareId || t('unknownHardwareLabel'));
-          updateBleAudioCardVisibility();
-          
-          return fwVersion;
         } catch (err) {
           console.error("[BLE OTA] Failed to read firmware version:", err);
-          if (window.GlobalUI) GlobalUI.setDevice(t('unknownHardwareLabel'));
-          return '';
         }
+
+        if (!Object.hasOwn(FIRMWARE_TARGETS, connectedHardwareId)) {
+          console.warn(`[BLE OTA] Unknown hardware target; assuming ESP32-C3.`);
+          connectedHardwareId = 'esp32-c3-01';
+        }
+        console.log(`[BLE OTA] Hardware target:`, connectedHardwareId);
+        if (window.GlobalUI) GlobalUI.setDevice(connectedHardwareId);
+        updateBleAudioCardVisibility();
+        return fwVersion;
       }
 
       // More robust BLE discovery: prefer service filter, fallback to acceptAllDevices

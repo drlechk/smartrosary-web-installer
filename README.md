@@ -3,6 +3,14 @@
 [Visit installer website](https://drlechk.github.io/smartrosary-web-installer/)
 
 
+## Hardware detection
+
+Bluetooth assumes **ESP32-C3** (`esp32-c3-01`) when device settings are empty,
+unavailable, missing a hardware ID, or report an unrecognized ID. Firmware
+updates then use the C3 image. Recognized S3 hardware keeps its specific image;
+audio uploads still require a recognized S3 AMOLED ID and its audio characteristic.
+USB also defaults to C3 unless another hardware target is selected.
+
 ## Intentions selection
 
 Both USB and Bluetooth offer checkboxes for multiple packages and single
